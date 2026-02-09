@@ -1,0 +1,57 @@
+# Instructions
+
+c'est un projet (formation Développer de manière sécurisée et agile) avec slidev , vérifiez si le contenu d'une diapositive est trop long pour s'adapter confortablement sur une seule diapositive.
+Si c'est le cas, divisez le contenu en plusieurs diapositives tout en conservant toutes les informations.
+Utilisez la syntaxe Slidev Markdown (par exemple, '--- pour séparer les diapositives).
+Assurez-vous que le contenu divisé circule logiquement et ne perturbe pas le récit.
+
+ET NE SUPPRIME ABSOLUMENT RIEN de toi même !
+ne supprime aucun routeAlias non plus , ne supprime RIEN
+
+attention je précise : certains bloc de code sont tellement gros qu'il dépasse une slide complète,
+dans ce cas : divise le en plusieurs slides MAIS EN GARDANT TOUT LE CODE , NE SUPPRIME RIEN , l'idée est juste d'avoir donc deux (ou plusieurs) bloc de code à la place quand le code est trop long
+
+après un bloc de code, passe directement à la slide d'après
+
+# Règles de formatage pour les présentations Slidev
+
+## Structure du projet
+- Maintenir un sommaire central dans slides.md avec des liens vers les modules
+- Utiliser des routeAlias uniquement pour les slides d'introduction de modules
+- Organiser les pages dans le dossier pages/ avec une numérotation cohérente
+- Suivre la convention de nommage : XX-nom-du-module.md
+
+## Navigation et Sommaire
+- Créer un sommaire principal avec des liens vers les modules
+- Utiliser le composant <Link to="routeAlias"> pour la navigation
+- Placer les routeAlias uniquement sur les slides d'introduction de modules et <a href="le_meme_nom_de_la_page"> pour les liens internes via pdf
+- Maintenir une structure de navigation cohérente
+
+## Formatage des diapositives
+- Vérifier la longueur du contenu de chaque diapositive
+- Diviser le contenu trop long en plusieurs diapositives
+- Utiliser la syntaxe Slidev Markdown ('---' pour séparer les diapositives)
+- Conserver toutes les informations lors de la division
+
+## Gestion des blocs de code
+- Diviser les blocs de code trop longs en plusieurs diapositives
+- Ne jamais supprimer de code lors de la division
+- Placer chaque bloc de code sur une diapositive dédiée
+- Ne pas ajouter de texte après un bloc de code (utiliser une nouvelle diapositive)
+
+## Structure des modules
+- Chaque module doit avoir :
+  - Une slide d'introduction avec routeAlias
+  - Un contenu principal
+  - Des exercices pratiques (si applicable)
+  - Un QCM de validation (si applicable)
+
+## Exercices et QCM
+- Inclure des exercices pratiques pour chaque module technique
+- Ajouter des QCM pour valider les connaissances
+- Maintenir une progression de difficulté cohérente
+- Fournir des solutions détaillées
+
+n'oublie pas le sujet de formation est :
+
+Développer de manière sécurisée et agile // 12 au 13 mars 2026
