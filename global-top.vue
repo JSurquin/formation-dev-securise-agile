@@ -15,10 +15,5 @@
         <logos-linkedin />{{ $slidev.themeConfigs.twitter }}
       </a>
     </div>
-    <div>
-      <Link to="sommaire" class="text-primary dark:text-white hover:underline">
-        Revenir au sommaire
-      </Link>
-    </div>
   </footer>
 </template>
