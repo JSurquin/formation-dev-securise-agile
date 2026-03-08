@@ -26,13 +26,6 @@
         <img src="/ascent.png" alt="Logo Ascent" class="rounded-full" />
         <!-- src="https://www.andromed.fr/andromedark.png" -->
       </div>
-      <div style="width: 32px; height: 32px">
-        <img
-          src="/minarm.png"
-          alt="Logo Ministère des Armées"
-          class="rounded-full"
-        />
-      </div>
     </div>
   </div>
 </template>
