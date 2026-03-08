@@ -5,7 +5,7 @@ layout: intro
 highlighter: shiki
 title: Formation Développer de manière sécurisée et agile 2026
 #transition: slide-left
-download: "https://dev-securise-agile.andromed.fr/slides.pdf"
+download: "https://agile.andromed.fr/slides.pdf"
 themeConfig:
   logoHeader: "/avatar.png"
   eventLogo: "https://img2.storyblok.com/352x414/f/84560/2388x414/23d8eb4b8d/vue-amsterdam-with-name.png"
