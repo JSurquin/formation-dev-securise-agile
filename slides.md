@@ -12,7 +12,7 @@ themeConfig:
   eventUrl: "https://vuejs.amsterdam/"
 ---
 
-# Développer de manière sécurisée et agile
+## Développer de manière sécurisée et agile
 
 🔐 Une formation présentée par Ascent et Andromed.
 
