@@ -6,9 +6,39 @@ routeAlias: 'gestion-vulnerabilites'
 <a name="gestion-vulnerabilites" id="gestion-vulnerabilites"></a>
 
 # 🔍 Module 7
-## Gestion des vulnérabilités
+## Suivi, audit & gestion des risques agiles
 
-### CVE, CVSS, triaging et Incident Response
+### Surveillance continue, audit agile et protection des données sensibles
+
+---
+
+# Surveillance continue de la sécurité 📡
+
+**Dans un projet agile, la sécurité ne s'arrête pas au déploiement.**
+
+**Outils de surveillance continue :**
+- **SIEM** (Security Information and Event Management) : corrélation de logs
+- **IDS/IPS** : détection d'intrusions en temps réel
+- **Monitoring applicatif** : alertes sur comportements anormaux
+- **Dependency tracking** : Dependabot, Renovate, Snyk
+
+**Métriques à surveiller :**
+- Nombre de tentatives de connexion échouées
+- Temps de réponse anormal (potentiel DoS)
+- Accès à des ressources sensibles hors horaires
+
+---
+
+# Outils de gestion des risques 🛠️
+
+| Outil | Usage | Type |
+|-------|-------|------|
+| **OWASP Threat Dragon** | Modélisation des menaces | Gratuit |
+| **Jira + plugins sécu** | Gestion du backlog risques | Payant |
+| **OWASP ZAP** | Scan DAST automatique | Gratuit |
+| **Snyk** | Surveillance des dépendances | Freemium |
+| **Dependabot** | Alertes CVE sur dépendances | Intégré GitHub |
+| **SonarQube** | Qualité & sécurité du code | Freemium |
 
 ---
 
@@ -147,12 +177,80 @@ Le CVSS seul ne suffit pas. Considérer aussi :
 
 ---
 
-# En résumé : Gestion des vulnérabilités 📝
+# Audit agile de la sécurité 🔎
 
-- **CVE** : identifiant unique de chaque vulnérabilité
-- **CVSS** : score de sévérité (0-10)
-- **CWE** : classification des types de faiblesses
-- **Triaging** : prioriser selon CVSS + contexte business
-- **Patch management** : politique de délais par sévérité
-- **Incident Response** : plan en 6 phases
+**L'audit agile** est une revue régulière de la posture sécurité du projet, intégrée dans le cycle Scrum.
+
+**Quand auditer ?**
+- À chaque fin de sprint (audit léger - Security Review)
+- Tous les 3 mois (audit approfondi)
+- Avant chaque release majeure
+
+**Ce qu'on audite :**
+- Code source (SAST + revue manuelle)
+- Dépendances (SCA)
+- Infrastructure & configuration (IaC audit)
+- Processus et documentation
+
+---
+
+# Amélioration continue de la sécurité 🔁
+
+**La sécurité agile suit le cycle PDCA :**
+
+| Phase | Action |
+|-------|--------|
+| **Plan** | Identifier les risques, planifier les mitigations |
+| **Do** | Implémenter les correctifs dans le sprint |
+| **Check** | Vérifier l'efficacité (re-test, audit) |
+| **Act** | Ajuster les processus en rétrospective |
+
+**Métriques d'amélioration continue :**
+- MTTR (Mean Time To Remediate) : tendance à la baisse
+- Taux de vulnérabilités détectées en CI vs prod
+- Couverture des tests de sécurité
+
+---
+
+# Protection des données sensibles 🔒
+
+**Dans le cycle de vie d'un projet agile, les données sensibles sont partout :**
+
+- **En développement** : données de test (ne jamais utiliser de vraies données)
+- **Dans le code** : credentials, clés API → utiliser les secrets managers
+- **Dans les logs** : ne jamais logguer de mots de passe, numéros de carte
+- **En base de données** : chiffrer les données sensibles (AES-256)
+- **En transit** : HTTPS/TLS obligatoire
+
+**Conformité RGPD dans un projet agile :**
+- Privacy by Design dès les User Stories
+- Minimisation des données collectées
+- Droit à l'effacement pris en compte dans le backlog
+
+---
+
+# Stratégie de gestion des données sensibles 📋
+
+**Catégorisation des données :**
+
+| Niveau | Exemples | Mesures |
+|--------|----------|---------|
+| **Public** | Nom du produit | Aucune mesure spéciale |
+| **Interne** | Métriques business | Authentification requise |
+| **Confidentiel** | Données clients | Chiffrement + audit logs |
+| **Critique** | Données bancaires, santé | Chiffrement + MFA + accès restreint |
+
+**Bonne pratique :** Classifier les données dès le Sprint Planning.
+
+---
+
+# En résumé : Suivi, audit & gestion des risques 📝
+
+- **Surveillance continue** : SIEM, monitoring, alertes temps réel
+- **CVE/CVSS/CWE** : comprendre et prioriser les vulnérabilités
+- **Triaging** : CVSS + contexte business
+- **Audit agile** : intégré au cycle Scrum (sprint + release)
+- **Amélioration continue** : cycle PDCA + métriques
+- **Données sensibles** : classifier, chiffrer, minimiser
+- **Patch management** : 24h critiques, 7j hautes
 - **Post-mortem blameless** : améliorer sans blâmer

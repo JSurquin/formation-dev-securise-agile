@@ -1,6 +1,6 @@
 ---
 
-# Exercices Module 7 : Gestion des vulnérabilités 🎯
+# Exercices Module 7 : Suivi, audit & gestion des risques agiles 🎯
 
 ---
 
@@ -68,3 +68,48 @@
 4. ✅ Formation équipe sur la gestion des secrets
 5. ✅ Rotation automatique des clés API (tous les 90 jours)
 6. ✅ Alerting sur usage anormal des API de paiement
+
+---
+
+# Exercice 3 : Audit de sécurité d'un projet agile (20 min)
+
+**Contexte :** Vous auditez un projet agile au Sprint 6. Voici ce que vous observez :
+
+- La DoD ne mentionne aucun critère de sécurité
+- 5 CVE "haute" ouvertes depuis 3 sprints dans le backlog
+- Les logs contiennent des numéros de téléphone clients
+- L'environnement de staging utilise les mêmes credentials que la prod
+- Aucun scan automatique dans la CI/CD
+
+**Consigne :** Rédigez un rapport d'audit structuré avec risques et recommandations priorisées.
+
+---
+
+# Exercice 3 : Solution ✅
+
+**Rapport d'audit - Projet Sprint 6**
+
+| Risque | Sévérité | Recommandation | Sprint cible |
+|--------|----------|----------------|-------------|
+| Credentials partagés staging/prod | Critique | Rotation immédiate + secrets séparés | En cours |
+| CVE haute non traitées (x5) | Haute | Planifier dans ce sprint (au moins les 2 critiques) | En cours |
+| PII dans les logs | Haute | Masquer les champs sensibles + purger les logs | Sprint +1 |
+| Absence de CI/CD sécurisé | Haute | Intégrer Semgrep + npm audit dans GitLab CI | Sprint +1 |
+| DoD sans sécurité | Moyenne | Mettre à jour la DoD en rétrospective | Sprint +1 |
+
+---
+
+# Exercice 3 : Solution (plan d'action) ✅
+
+**Plan d'amélioration continue :**
+
+1. **Immédiat** : rotation des credentials, isolation staging/prod
+2. **Ce sprint** : traiter les CVE haute les plus exposées
+3. **Rétrospective** : adopter une DoD sécurisée
+4. **Sprint suivant** : pipeline CI/CD avec security gates
+5. **Dans 1 mois** : audit de suivi pour vérifier la progression
+
+**Métriques à suivre :**
+- Nombre de CVE ouvertes par sprint (objectif : tendance à la baisse)
+- MTTR des vulnérabilités hautes (objectif : < 7 jours)
+- Couverture SAST (objectif : 100% du code)

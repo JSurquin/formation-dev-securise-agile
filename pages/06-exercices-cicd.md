@@ -1,6 +1,6 @@
 ---
 
-# Exercices Module 6 : CI/CD sécurisé 🎯
+# Exercices Module 6 : Pratiques de sécurité dans les outils agiles 🎯
 
 ---
 
@@ -124,3 +124,67 @@ CMD ["node", "index.js"]
 ```
 
 **Corrections :** Alpine, multi-stage, non-root, pas de secret en dur, healthcheck
+
+---
+
+# Exercice 3 : GitLab CI pour un projet agile (20 min)
+
+**Contexte :** Votre équipe Scrum utilise GitLab. Votre CI actuel ne fait que lancer les tests unitaires. Le Security Champion (vous) doit mettre en place un pipeline sécurisé.
+
+**Consigne :** Rédigez un `.gitlab-ci.yml` incluant :
+1. Scan de secrets (Gitleaks)
+2. SAST (Semgrep)
+3. SCA (npm audit)
+4. Build et scan Docker (Trivy)
+5. Déploiement conditionnel sur la branche `main`
+
+---
+
+# Exercice 3 : Solution ✅
+
+```yaml
+stages: [secrets, sast, sca, build, deploy]
+
+gitleaks:
+  stage: secrets
+  image: zricethezav/gitleaks
+  script:
+    - gitleaks detect --source . -v
+  allow_failure: false
+
+semgrep:
+  stage: sast
+  image: returntocorp/semgrep
+  script:
+    - semgrep --config=p/owasp-top-ten .
+  allow_failure: false
+```
+
+---
+
+# Exercice 3 : Solution (suite)
+
+```yaml
+sca:
+  stage: sca
+  script:
+    - npm ci
+    - npm audit --audit-level=high
+  allow_failure: false
+
+trivy:
+  stage: build
+  script:
+    - docker build -t myapp:latest .
+    - trivy image
+        --exit-code 1
+        --severity CRITICAL,HIGH
+        myapp:latest
+  allow_failure: false
+
+deploy:
+  stage: deploy
+  script: [./deploy.sh]
+  only: [main]
+  when: on_success
+```

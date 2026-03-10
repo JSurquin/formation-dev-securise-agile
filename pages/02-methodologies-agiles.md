@@ -6,9 +6,96 @@ routeAlias: 'methodologies-agiles'
 <a name="methodologies-agiles" id="methodologies-agiles"></a>
 
 # 🔄 Module 2
-## Méthodologies Agiles & Sécurité
+## Intégration de la sécurité dans les projets agiles
 
-### Intégrer la sécurité dans les pratiques Agile
+### Principes, méthodologies et bonnes pratiques
+
+---
+
+# Les méthodologies agiles 🔄
+
+**L'Agile** est une famille de méthodes de développement logiciel basées sur des cycles courts et itératifs.
+
+**Valeurs du Manifeste Agile (2001) :**
+- Les individus et leurs interactions > les processus et les outils
+- Un logiciel fonctionnel > une documentation exhaustive
+- La collaboration avec le client > la négociation contractuelle
+- L'adaptation au changement > le suivi d'un plan
+
+---
+
+# Scrum : le cadre le plus utilisé 🏈
+
+**Scrum** est un framework agile basé sur des **sprints** de 1 à 4 semaines.
+
+**Les rôles Scrum :**
+- **Product Owner** : responsable du backlog et de la valeur
+- **Scrum Master** : garant du processus
+- **Équipe de développement** : auto-organisée et pluridisciplinaire
+
+**Les artefacts :**
+- **Product Backlog** : liste priorisée de fonctionnalités
+- **Sprint Backlog** : travail sélectionné pour le sprint
+- **Incrément** : produit livrable à la fin du sprint
+
+---
+
+# Scrum : les cérémonies ⏰
+
+| Cérémonie | Fréquence | Durée | Objectif |
+|-----------|-----------|-------|----------|
+| Sprint Planning | Début de sprint | 4-8h | Planifier le sprint |
+| Daily Standup | Quotidien | 15 min | Synchronisation équipe |
+| Sprint Review | Fin de sprint | 2-4h | Démonstration |
+| Rétrospective | Fin de sprint | 1-2h | Amélioration continue |
+
+---
+
+# Kanban : flux continu 📌
+
+**Kanban** est une méthode agile basée sur la visualisation du flux de travail.
+
+**Principes :**
+- Visualiser le flux de travail (tableau Kanban)
+- Limiter le Work In Progress (WIP)
+- Gérer et améliorer le flux continuellement
+
+**Colonnes typiques :**
+
+| À faire | En cours (WIP: 3) | En revue | Terminé |
+|---------|-------------------|----------|---------|
+| Tâche A | Tâche C | Tâche E | Tâche F |
+| Tâche B | Tâche D | | |
+
+---
+
+# Scrum vs Kanban vs Traditionnel 📊
+
+| Critère | Waterfall | Scrum | Kanban |
+|---------|-----------|-------|--------|
+| Livraison | En fin de projet | Chaque sprint | Continue |
+| Planification | Figée au départ | Par sprint | Au fil de l'eau |
+| Changement | Difficile | Sprint suivant | À tout moment |
+| Équipe | Silos | Cross-fonctionnelle | Cross-fonctionnelle |
+| Sécurité | Phase finale | Intégrée au sprint | Intégrée au flux |
+
+> **Constat :** En Waterfall, la sécurité arrive trop tard. En Agile, elle peut être intégrée dès le début.
+
+---
+
+# Comparaison : approche traditionnelle vs agile 🆚
+
+**Waterfall (approche traditionnelle) :**
+- Cycle en V ou en cascade
+- Phases séquentielles : Analyse → Conception → Dev → Test → Déploiement
+- Sécurité testée uniquement en phase "Test"
+- Coût de correction très élevé en fin de cycle
+
+**Agile (approche itérative) :**
+- Cycles courts et répétés
+- Feedback continu du client
+- Sécurité intégrée à chaque sprint
+- Correction rapide et moins coûteuse
 
 ---
 

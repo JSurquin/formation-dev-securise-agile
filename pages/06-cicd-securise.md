@@ -6,9 +6,45 @@ routeAlias: 'cicd-securise'
 <a name="cicd-securise" id="cicd-securise"></a>
 
 # 🚀 Module 6
-## CI/CD sécurisé
+## Pratiques de sécurité dans les outils agiles
 
-### Intégrer la sécurité dans le pipeline de déploiement
+### Sécurisation des environnements, CI/CD et gestion des vulnérabilités
+
+---
+
+# Sécurisation des environnements 🌍
+
+**Dans un projet agile, on distingue plusieurs environnements :**
+
+| Environnement | Usage | Risques principaux |
+|---------------|-------|-------------------|
+| **Dev** | Développement quotidien | Secrets exposés, dépendances non vérifiées |
+| **Staging** | Tests & validation | Config proche prod, données de test sensibles |
+| **Production** | Utilisateurs finaux | Exposition maximale, impact réel |
+
+**Bonnes pratiques :**
+- Configurations séparées par environnement (`.env.dev`, `.env.prod`)
+- Aucun secret en dur dans le code ou dans git
+- Accès à la prod restreint (least privilege)
+
+---
+
+# Gestion des configurations sécurisée 🔧
+
+**Le problème des configurations non sécurisées :**
+- Variables d'env commitées dans git → exposition de secrets
+- Mêmes credentials en dev et prod
+- Ports et services ouverts inutilement
+
+**Solution : Configuration as Code sécurisée**
+
+```bash
+# ❌ À ne jamais faire
+DATABASE_URL=postgres://admin:superpassword@prod-db:5432/myapp
+
+# ✅ Bonne pratique : référencer un secret manager
+DATABASE_URL=${VAULT_DB_URL}
+```
 
 ---
 
@@ -168,11 +204,127 @@ git log --show-signature
 
 ---
 
-# En résumé : CI/CD sécurisé 📝
+# Jenkins : Pipeline sécurisé 🏗️
 
-- Intégrer **SAST, SCA, DAST** dans le pipeline
-- **GitHub Secrets** pour les données sensibles
+**Jenkins** est l'outil CI/CD le plus répandu en entreprise.
+
+```groovy
+// Jenkinsfile - Pipeline déclaratif
+pipeline {
+  agent any
+  stages {
+    stage('SAST') {
+      steps {
+        sh 'semgrep --config=p/owasp-top-ten .'
+      }
+    }
+    stage('SCA') {
+      steps {
+        sh 'npm audit --audit-level=high'
+      }
+    }
+  }
+}
+```
+
+---
+
+# Jenkins : Scan Docker & Security Gate
+
+```groovy
+    stage('Docker Scan') {
+      steps {
+        sh 'docker build -t myapp:latest .'
+        sh 'trivy image --exit-code 1 \
+            --severity CRITICAL,HIGH \
+            myapp:latest'
+      }
+    }
+    stage('Deploy') {
+      when {
+        expression {
+          currentBuild.result == null ||
+          currentBuild.result == 'SUCCESS'
+        }
+      }
+      steps {
+        sh './deploy.sh'
+      }
+    }
+```
+
+---
+
+# GitLab CI : Pipeline sécurisé 🦊
+
+```yaml
+# .gitlab-ci.yml
+stages:
+  - sast
+  - sca
+  - build
+  - dast
+
+semgrep:
+  stage: sast
+  image: returntocorp/semgrep
+  script:
+    - semgrep --config=p/owasp-top-ten .
+  allow_failure: false
+
+dependency_check:
+  stage: sca
+  script:
+    - npm audit --audit-level=high
+  allow_failure: false
+```
+
+---
+
+# GitLab CI : DAST & Secrets
+
+```yaml
+dast:
+  stage: dast
+  image: owasp/zap2docker-stable
+  script:
+    - zap-baseline.py
+        -t $APP_URL
+        -r zap-report.html
+  artifacts:
+    paths: [zap-report.html]
+
+variables:
+  DATABASE_URL: $DATABASE_URL
+  JWT_SECRET: $JWT_SECRET
+```
+
+> **GitLab** intègre nativement SAST, DAST et Secret Detection dans ses templates CI/CD.
+
+---
+
+# Gestion des vulnérabilités dans le pipeline 🔍
+
+**Dans un cadre agile, les vulnérabilités détectées en CI/CD doivent :**
+
+1. **Être signalées** automatiquement au Security Champion
+2. **Créer un ticket** dans le backlog (avec priorité CVSS)
+3. **Bloquer le déploiement** si critique ou haute
+4. **Être résolues** dans le sprint courant (critique) ou suivant (haute)
+
+**Outils d'intégration backlog :**
+- Jenkins → Jira (webhook)
+- GitLab → GitLab Issues (natif)
+- GitHub Actions → GitHub Issues
+
+---
+
+# En résumé : Pratiques de sécurité dans les outils agiles 📝
+
+- **Séparer les environnements** dev / staging / prod
+- **Configurations sécurisées** : jamais de secrets en dur
+- Intégrer **SAST, SCA, DAST** dans le pipeline (Jenkins ou GitLab CI)
+- **GitHub/GitLab Secrets** pour les données sensibles
 - **Scanner les images Docker** (Trivy)
 - **Security Gates** : bloquer sur les vulnérabilités critiques
-- **Signer** les commits et les artefacts
-- **Dockerfile sécurisé** : multi-stage, non-root
+- **Relier les alertes** au backlog agile

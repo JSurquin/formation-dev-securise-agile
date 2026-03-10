@@ -1,6 +1,6 @@
 ---
 
-# Exercices Module 2 : Agile & Sécurité 🎯
+# Exercices Module 2 : Intégration de la sécurité dans les projets agiles 🎯
 
 ---
 
@@ -88,3 +88,48 @@
 7. ❌ Feature Notifications - 13 pts (Reportée au prochain sprint)
 
 **Total : 32 points** (marge de sécurité pour imprévus)
+
+---
+
+# Exercice 4 : Mise en place d'un projet Scrum sécurisé (20 min)
+
+**Contexte :** Vous montez une nouvelle équipe de 5 personnes pour développer une application de prise de rendez-vous médicaux.
+
+**Consigne :** Définissez la structure complète du projet Scrum avec sécurité intégrée :
+1. Définissez les rôles et leur responsabilité sécurité
+2. Rédigez 3 User Stories + leur Evil User Story correspondante
+3. Rédigez la Definition of Done sécurisée
+4. Listez les Security Requirements à inclure dans le backlog initial
+
+---
+
+# Exercice 4 : Solution - Rôles & Evil Stories ✅
+
+**Rôles :**
+- PO : priorise les stories sécurité, valide la conformité RGPD
+- Scrum Master : intègre la Security Review dans les cérémonies
+- Security Champion (1 dev) : revue de code sécurisée, veille CVE
+
+**Evil User Stories :**
+- US "Prendre RDV" → Evil : "En tant qu'attaquant, je veux réserver tous les créneaux pour bloquer le service" → Mitigation : rate limiting + CAPTCHA
+- US "Voir mes RDV" → Evil : "En tant qu'attaquant, je veux accéder aux RDV d'autres patients via l'ID" → Mitigation : IDOR protection + RBAC
+- US "S'inscrire" → Evil : "En tant qu'attaquant, je veux créer des faux comptes médecins" → Mitigation : validation email + vérification RPPS
+
+---
+
+# Exercice 4 : Solution - DoD & Security Requirements ✅
+
+**Definition of Done sécurisée :**
+- ✅ Code reviewé (checklist sécurité incluse)
+- ✅ SAST sans vulnérabilité critique/haute
+- ✅ Données médicales chiffrées (AES-256)
+- ✅ Logs sans données personnelles
+- ✅ Tests unitaires + tests de sécurité passent
+- ✅ Dépendances sans CVE critique (SCA)
+
+**Security Requirements backlog initial :**
+- Authentification MFA pour les médecins
+- Chiffrement des données patients au repos et en transit
+- Journalisation des accès aux dossiers médicaux
+- Conformité RGPD : consentement + droit à l'effacement
+- Rate limiting sur toutes les API publiques

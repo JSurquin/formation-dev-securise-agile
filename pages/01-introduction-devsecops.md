@@ -6,9 +6,9 @@ routeAlias: 'introduction-devsecops'
 <a name="introduction-devsecops" id="introduction-devsecops"></a>
 
 # 🔐 Module 1
-## Introduction au DevSecOps
+## Introduction au développement agile sécurisé
 
-### Intégrer la sécurité dès le début du cycle de développement
+### Méthodologies agiles, principes de l'agilité et DevSecOps
 
 ---
 

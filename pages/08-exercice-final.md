@@ -6,21 +6,23 @@ routeAlias: 'exercice-final'
 <a name="exercice-final" id="exercice-final"></a>
 
 # 🎯 Module 8
-## Exercice final : Audit & Remédiation
+## Exercice final : Audit de sécurité agile
 
-### Mettre en pratique tout ce qu'on a appris
+### Auditer un projet agile en cours, identifier les risques et proposer des corrections
 
 ---
 
 # Exercice final : Contexte 📋
 
-**Vous êtes Security Champion** dans une startup qui développe une application de e-commerce.
+**Vous êtes Security Champion** dans une startup qui développe une application de e-commerce en mode Scrum.
+
+L'équipe est au **Sprint 8**. Le projet a accumulé de la dette technique et de sécurité.
 
 L'application utilise :
 - **Backend** : Node.js + Express
 - **Base de données** : PostgreSQL
 - **Frontend** : React
-- **CI/CD** : GitHub Actions
+- **CI/CD** : GitLab CI
 - **Hébergement** : Docker sur AWS
 
 ---
@@ -139,35 +141,94 @@ app.post('/api/login', loginLimiter,
 
 ---
 
-# Partie 3 : Pipeline CI/CD (15 min)
+# Partie 3 : Audit agile du projet (20 min)
 
-**Consigne :** Concevez un pipeline DevSecOps complet pour cette application.
+**Contexte :** Le projet n'a pas de Security Review dans ses sprints. Voici l'état actuel :
 
-**Dessinez ou listez :**
-- Les étapes du pipeline
-- Les outils à chaque étape
-- Les security gates
+| Élément | État constaté |
+|---------|--------------|
+| DoD | Pas de critère sécurité |
+| Backlog | 3 CVE haute non traitées depuis 2 sprints |
+| CI/CD (GitLab) | Pas de scan SAST ni SCA |
+| Secrets | `.env.prod` commité dans le repo |
+| Logs | Mots de passe loggués en clair |
+| Données clients | Non chiffrées en base |
+
+**Consigne :** Rédigez un rapport d'audit avec les risques identifiés et vos recommandations de correction priorisées.
 
 ---
 
 # Partie 3 : Solution ✅
 
-**Pipeline DevSecOps :**
+**Rapport d'audit - Synthèse des risques :**
 
-1. **Pre-commit** : git-secrets + lint
-2. **PR** : Semgrep (SAST) + npm audit (SCA)
-3. **Build** : Docker build + Trivy scan
-4. **Test** : Tests unitaires + tests de sécurité
-5. **Staging** : OWASP ZAP (DAST)
-6. **Security Gate** : bloquer si critique/haute
-7. **Production** : deploy si tout vert
-8. **Post-deploy** : monitoring + alerting
+| Risque | Sévérité | Action recommandée | Sprint |
+|--------|----------|--------------------|--------|
+| Secrets dans git | Critique | Rotation immédiate + git-secrets | En cours |
+| CVE haute non traitées | Haute | Patch dans ce sprint | En cours |
+| Mots de passe en logs | Haute | Masquer les champs sensibles | En cours |
+| Pas de SAST/SCA en CI | Haute | Intégrer Semgrep + npm audit | Sprint +1 |
+| Données non chiffrées | Haute | Chiffrement AES-256 | Sprint +1 |
+| DoD sans sécurité | Moyenne | Mettre à jour la DoD | Sprint +1 |
 
-**Gates :**
-- Critique → BLOQUE
-- Haute → BLOQUE (sauf exception)
-- Moyenne → WARNING
-- Basse → INFO
+---
+
+# Partie 4 : Pipeline GitLab CI sécurisé (15 min)
+
+**Consigne :** Rédigez le fichier `.gitlab-ci.yml` pour sécuriser le pipeline de ce projet.
+
+**Inclure :**
+- Scan SAST (Semgrep)
+- Scan SCA (npm audit)
+- Scan Docker (Trivy)
+- Security Gate
+
+---
+
+# Partie 4 : Solution ✅
+
+```yaml
+# .gitlab-ci.yml
+stages: [sast, sca, build, deploy]
+
+sast:
+  stage: sast
+  image: returntocorp/semgrep
+  script:
+    - semgrep --config=p/owasp-top-ten .
+  allow_failure: false
+
+sca:
+  stage: sca
+  script:
+    - npm audit --audit-level=high
+  allow_failure: false
+```
+
+---
+
+# Partie 4 : Solution (suite)
+
+```yaml
+docker_scan:
+  stage: build
+  script:
+    - docker build -t myapp:latest .
+    - trivy image
+        --exit-code 1
+        --severity CRITICAL,HIGH
+        myapp:latest
+  allow_failure: false
+
+deploy:
+  stage: deploy
+  script:
+    - ./deploy.sh
+  environment: production
+  only:
+    - main
+  when: on_success
+```
 
 ---
 
@@ -176,8 +237,9 @@ app.post('/api/login', loginLimiter,
 Vous avez complété l'exercice final.
 
 **Compétences validées :**
-- Audit de code sécurité
-- Remédiation de vulnérabilités
-- Conception de pipeline DevSecOps
-- Application des principes OWASP
-- Gestion des secrets et de l'authentification
+- Audit de code sécurité (vulnérabilités + contexte agile)
+- Remédiation de vulnérabilités priorisée par sprint
+- Réalisation d'un rapport d'audit agile
+- Conception d'un pipeline GitLab CI sécurisé
+- Protection des données sensibles
+- Gestion de la dette sécurité dans le backlog
