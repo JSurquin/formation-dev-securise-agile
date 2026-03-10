@@ -25,6 +25,8 @@ routeAlias: 'owasp-top10'
 
 # OWASP Top 10 - Vue d'ensemble 📊
 
+<div class="text-xs">
+
 | # | Vulnérabilité |
 |---|--------------|
 | A01 | Broken Access Control |
@@ -37,6 +39,8 @@ routeAlias: 'owasp-top10'
 | A08 | Software & Data Integrity Failures |
 | A09 | Security Logging Failures |
 | A10 | Server-Side Request Forgery (SSRF) |
+
+</div>
 
 ---
 

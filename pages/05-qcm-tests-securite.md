@@ -149,9 +149,13 @@ D) Un vol de mot de passe
 # Réponses du Module 5 📝
 
 **Réponse 1 :** B) Static Application Security Testing
+
 **Réponse 2 :** B) OWASP ZAP
+
 **Réponse 3 :** B) Les dépendances tierces
+
 **Réponse 4 :** B) npm audit
+
 **Réponse 5 :** B) Détection avant l'exécution du code
 
 ---
@@ -159,9 +163,13 @@ D) Un vol de mot de passe
 # Réponses du Module 5 (suite) 📝
 
 **Réponse 6 :** C) 80%
+
 **Réponse 7 :** B) Semgrep
+
 **Réponse 8 :** C) 3 (SAST, DAST, SCA)
+
 **Réponse 9 :** B) À chaque commit/PR
+
 **Réponse 10 :** B) Via une dépendance tierce compromise
 
 ---

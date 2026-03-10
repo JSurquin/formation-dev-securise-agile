@@ -63,6 +63,8 @@
 
 **Contexte :** Votre backlog contient les éléments suivants. Priorisez-les pour le prochain sprint (capacité : 40 story points).
 
+<small>
+
 | Item | Type | Points | Sévérité |
 |------|------|--------|----------|
 | Feature : Export PDF | Feature | 8 | - |
@@ -72,6 +74,8 @@
 | Mise à jour dépendances | Tech | 5 | Moyenne |
 | Feature : Notifications | Feature | 13 | - |
 | XSS sur la page profil | Bug sécu | 3 | Haute |
+
+</small>
 
 ---
 
@@ -114,10 +118,12 @@
 - US "Prendre RDV" → Evil : "En tant qu'attaquant, je veux réserver tous les créneaux pour bloquer le service" → Mitigation : rate limiting + CAPTCHA
 - US "Voir mes RDV" → Evil : "En tant qu'attaquant, je veux accéder aux RDV d'autres patients via l'ID" → Mitigation : IDOR protection + RBAC
 - US "S'inscrire" → Evil : "En tant qu'attaquant, je veux créer des faux comptes médecins" → Mitigation : validation email + vérification RPPS
-
+Exercice 4 : Solution
 ---
 
 # Exercice 4 : Solution - DoD & Security Requirements ✅
+
+<div class="text-xs">
 
 **Definition of Done sécurisée :**
 - ✅ Code reviewé (checklist sécurité incluse)
@@ -133,3 +139,5 @@
 - Journalisation des accès aux dossiers médicaux
 - Conformité RGPD : consentement + droit à l'effacement
 - Rate limiting sur toutes les API publiques
+
+</div>

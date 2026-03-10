@@ -149,9 +149,13 @@ D) `eval()`
 # Réponses du Module 4 📝
 
 **Réponse 1 :** B) Whitelist
+
 **Réponse 2 :** C) Côté client ET côté serveur
+
 **Réponse 3 :** B) git-secrets / GitLeaks
+
 **Réponse 4 :** A) Ne donner que les permissions strictement nécessaires
+
 **Réponse 5 :** B) Logger en interne, message générique au client
 
 ---
@@ -159,9 +163,13 @@ D) `eval()`
 # Réponses du Module 4 (suite) 📝
 
 **Réponse 6 :** B) Zod
+
 **Réponse 7 :** B) Les fichiers .env et les secrets
+
 **Réponse 8 :** B) HTML Entity Encoding
+
 **Réponse 9 :** B) Plusieurs couches de sécurité indépendantes
+
 **Réponse 10 :** B) textContent
 
 ---

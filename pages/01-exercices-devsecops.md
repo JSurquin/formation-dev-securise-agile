@@ -112,6 +112,8 @@
 | **Scrum Master** | S'assurer que la sécurité est dans les cérémonies |
 | **Ops** | Maintenir le pipeline CI/CD sécurisé, monitoring |
 
+---
+
 **Cérémonies :**
 - **Planning** : inclure stories sécurité
 - **Daily** : mentionner les alertes sécurité

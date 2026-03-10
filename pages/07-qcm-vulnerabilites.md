@@ -149,9 +149,13 @@ D) Kubernetes
 # Réponses du Module 7 📝
 
 **Réponse 1 :** B) Common Vulnerabilities and Exposures
+
 **Réponse 2 :** D) 9.0-10.0
+
 **Réponse 3 :** B) 24-48 heures
+
 **Réponse 4 :** B) Classification des types de faiblesses
+
 **Réponse 5 :** B) Préparation
 
 ---
@@ -159,9 +163,13 @@ D) Kubernetes
 # Réponses du Module 7 (suite) 📝
 
 **Réponse 6 :** B) Améliorer les processus sans blâmer
+
 **Réponse 7 :** B) Non, il faut aussi l'exploitabilité et l'impact
+
 **Réponse 8 :** B) Inventaire des composants logiciels
+
 **Réponse 9 :** B) Limiter la propagation
+
 **Réponse 10 :** B) Dependabot / Renovate
 
 ---

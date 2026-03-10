@@ -149,9 +149,13 @@ D) Crée un fichier de configuration
 # Réponses du Module 6 📝
 
 **Réponse 1 :** B) GitHub Secrets
+
 **Réponse 2 :** B) Trivy
+
 **Réponse 3 :** B) Bloquer le déploiement
+
 **Réponse 4 :** B) Garantir l'identité et l'intégrité
+
 **Réponse 5 :** B) Un utilisateur non-root dédié
 
 ---
@@ -159,9 +163,13 @@ D) Crée un fichier de configuration
 # Réponses du Module 6 (suite) 📝
 
 **Réponse 6 :** B) Point de contrôle qui bloque sur les vulnérabilités
+
 **Réponse 7 :** B) Lint sécurité + détection de secrets
+
 **Réponse 8 :** B) Image plus petite et plus sécurisée
+
 **Réponse 9 :** B) Alpine (minimal)
+
 **Réponse 10 :** B) Uniquement les dépendances de production
 
 ---

@@ -218,6 +218,8 @@ Ajouter des critères de sécurité à votre DoD :
 | Moyenne | Moyen | Backlog priorisé |
 | Basse | Faible | Backlog |
 
+---
+
 **Utiliser le CVSS (Common Vulnerability Scoring System) :**
 - 9.0-10.0 : Critique
 - 7.0-8.9 : Haute
