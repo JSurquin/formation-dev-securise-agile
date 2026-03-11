@@ -235,7 +235,7 @@ deploy:
 
 - 🔄 **Module 1** : Scrum, Kanban, agilité et projet sécurisé
 - 🔐 **Module 2** : Accès, crypto, vulnérabilités et DevSecOps dans les sprints
-- 🚀 **Module 6** : Environnements, CI/CD, Jenkins et GitLab CI sécurisés
+- 🚀 **Module 6** : Environnements, configurations et GitLab CI sécurisé
 - 🔍 **Module 7** : Surveillance continue, audit agile, données sensibles
 
 > **La sécurité n'est pas un sprint en plus. C'est une dimension de chaque sprint.**
