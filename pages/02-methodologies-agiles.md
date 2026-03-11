@@ -5,251 +5,224 @@ routeAlias: 'methodologies-agiles'
 
 <a name="methodologies-agiles" id="methodologies-agiles"></a>
 
-# 🔄 Module 2
+# 🔐 Module 2
 ## Intégration de la sécurité dans les projets agiles
 
-### Principes, méthodologies et bonnes pratiques
+### Gestion des accès, cryptographie, vulnérabilités et DevSecOps
 
 ---
 
-# Les méthodologies agiles 🔄
+# Les 3 piliers de la sécurité logicielle 🏛️
 
-**L'Agile** est une famille de méthodes de développement logiciel basées sur des cycles courts et itératifs.
+> **Analogie :** Sécuriser une appli, c'est comme sécuriser une banque : qui entre (accès), est-ce que les coffres sont protégés (crypto), et qui surveille les failles (vulnérabilités).
 
-**Valeurs du Manifeste Agile (2001) :**
-- Les individus et leurs interactions > les processus et les outils
-- Un logiciel fonctionnel > une documentation exhaustive
-- La collaboration avec le client > la négociation contractuelle
-- L'adaptation au changement > le suivi d'un plan
-
----
-
-# Scrum : le cadre le plus utilisé 🏈
-
-**Scrum** est un framework agile basé sur des **sprints** de 1 à 4 semaines.
-
-**Les rôles Scrum :**
-- **Product Owner** : responsable du backlog et de la valeur
-- **Scrum Master** : garant du processus
-- **Équipe de développement** : auto-organisée et pluridisciplinaire
-
-**Les artefacts :**
-- **Product Backlog** : liste priorisée de fonctionnalités
-- **Sprint Backlog** : travail sélectionné pour le sprint
-- **Incrément** : produit livrable à la fin du sprint
+**CIA Triad :**
+- **Confidentialité** : seules les bonnes personnes accèdent aux données
+- **Intégrité** : les données ne sont pas altérées sans autorisation
+- **Disponibilité** : le service reste accessible même sous attaque
 
 ---
 
-# Scrum : les cérémonies ⏰
+# Gestion des accès (AAA) 🔑
 
-| Cérémonie | Fréquence | Durée | Objectif |
-|-----------|-----------|-------|----------|
-| Sprint Planning | Début de sprint | 4-8h | Planifier le sprint |
-| Daily Standup | Quotidien | 15 min | Synchronisation équipe |
-| Sprint Review | Fin de sprint | 2-4h | Démonstration |
-| Rétrospective | Fin de sprint | 1-2h | Amélioration continue |
+> **Analogie :** Comme un immeuble avec badge, interphone et registre des entrées.
 
----
+**3 concepts clés :**
+- **Authentification** : *qui es-tu ?* → mot de passe, MFA, OAuth
+- **Autorisation** : *que peux-tu faire ?* → RBAC, permissions
+- **Audit** : *qu'as-tu fait ?* → logs, traçabilité
 
-# Kanban : flux continu 📌
-
-**Kanban** est une méthode agile basée sur la visualisation du flux de travail.
-
-**Principes :**
-- Visualiser le flux de travail (tableau Kanban)
-- Limiter le Work In Progress (WIP)
-- Gérer et améliorer le flux continuellement
-
-**Colonnes typiques :**
-
-| À faire | En cours (WIP: 3) | En revue | Terminé |
-|---------|-------------------|----------|---------|
-| Tâche A | Tâche C | Tâche E | Tâche F |
-| Tâche B | Tâche D | | |
+**Principe du moindre privilège :**
+> Chaque utilisateur (et chaque service) ne doit avoir accès qu'à ce dont il a strictement besoin.
 
 ---
 
-# Scrum vs Kanban vs Traditionnel 📊
+# RBAC : Role-Based Access Control 👥
 
-| Critère | Waterfall | Scrum | Kanban |
-|---------|-----------|-------|--------|
-| Livraison | En fin de projet | Chaque sprint | Continue |
-| Planification | Figée au départ | Par sprint | Au fil de l'eau |
-| Changement | Difficile | Sprint suivant | À tout moment |
-| Équipe | Silos | Cross-fonctionnelle | Cross-fonctionnelle |
-| Sécurité | Phase finale | Intégrée au sprint | Intégrée au flux |
+> **Analogie :** Dans un hôpital, l'infirmière peut voir les dossiers patients, pas les données financières. Le comptable voit les finances, pas les dossiers médicaux.
 
-> **Constat :** En Waterfall, la sécurité arrive trop tard. En Agile, elle peut être intégrée dès le début.
+**Modèle RBAC :**
 
----
+| Rôle | Lecture | Écriture | Admin |
+|------|---------|----------|-------|
+| Visiteur | ✅ public | ❌ | ❌ |
+| Utilisateur | ✅ ses données | ✅ ses données | ❌ |
+| Admin | ✅ tout | ✅ tout | ✅ |
 
-# Comparaison : approche traditionnelle vs agile 🆚
-
-**Waterfall (approche traditionnelle) :**
-- Cycle en V ou en cascade
-- Phases séquentielles : Analyse → Conception → Dev → Test → Déploiement
-- Sécurité testée uniquement en phase "Test"
-- Coût de correction très élevé en fin de cycle
-
-**Agile (approche itérative) :**
-- Cycles courts et répétés
-- Feedback continu du client
-- Sécurité intégrée à chaque sprint
-- Correction rapide et moins coûteuse
+**En code :** vérifier le rôle à chaque requête, côté serveur.
 
 ---
 
-# Agile et Sécurité : le mariage 💍
+# Cryptographie : les bases 🔒
 
-**Le problème historique :**
-- L'Agile prône la vitesse et l'itération
-- La sécurité est perçue comme un frein
-- Résultat : la sécurité est souvent ignorée dans les sprints
+> **Analogie :** La crypto, c'est transformer une lettre en charabia pour que seul le destinataire puisse la lire, avec la bonne clé.
 
-**La solution DevSecOps :**
-- Intégrer la sécurité **dans** le processus Agile
-- Pas de sprint sans considération sécuritaire
-- La sécurité fait partie de la Definition of Done
+**Chiffrement symétrique :**
+- Même clé pour chiffrer et déchiffrer (AES-256)
+- Rapide → utilisé pour les données au repos
+
+**Chiffrement asymétrique :**
+- Clé publique (chiffre) + clé privée (déchiffre) (RSA, EC)
+- Lent → utilisé pour les échanges (HTTPS, JWT signé)
+
+**Hachage :**
+- Empreinte unique et irréversible (SHA-256, bcrypt)
+- Utilisé pour les mots de passe : on stocke le hash, jamais le mdp
+
+---
+
+# Cryptographie appliquée au développement 💻
+
+**Mots de passe :**
+```javascript
+// ❌ Ne jamais stocker en clair
+user.password = "monmotdepasse"
+
+// ✅ Toujours hasher avec bcrypt
+const hash = await bcrypt.hash("monmotdepasse", 12)
+```
+
+**Données sensibles en base :**
+- Chiffrer avec AES-256 les données critiques (numéros de carte, données de santé)
+- Utiliser HTTPS (TLS 1.3) pour toutes les communications
+
+---
+
+# Gestion des vulnérabilités : c'est quoi ? 🐛
+
+> **Analogie :** Une vulnérabilité, c'est une fenêtre entrouverte dans une maison. Le CVE, c'est le rapport du serrurier qui dit "fenêtre au 2e étage, modèle X, facile à ouvrir". Le CVSS, c'est son estimation du danger : 9/10 si la maison est en ville, 3/10 si elle est dans les champs.
+
+**Vocabulaire clé :**
+- **CVE** : identifiant unique d'une vulnérabilité (CVE-2021-44228)
+- **CVSS** : score de sévérité de 0 à 10
+- **Patch** : correctif qui ferme la fenêtre
+
+---
+
+# Scores CVSS et actions agiles 📊
+
+| Score | Sévérité | Délai recommandé | Action Scrum |
+|-------|----------|-----------------|--------------|
+| 9.0-10.0 | Critique | 24-48h | Hotfix immédiat |
+| 7.0-8.9 | Haute | < 7 jours | Sprint en cours |
+| 4.0-6.9 | Moyenne | < 30 jours | Backlog priorisé |
+| 0.1-3.9 | Basse | Prochain cycle | Backlog |
+
+---
+
+# La sécurité dans les sprints agiles 🏃
+
+**Le problème :** dans un sprint de 2 semaines, tout va vite. La sécurité doit être automatisée et intégrée, pas ajoutée à la fin.
+
+**Intégration dans chaque cérémonie :**
+
+| Cérémonie | Action sécurité |
+|-----------|----------------|
+| **Sprint Planning** | Inclure les stories sécurité, estimer le temps |
+| **Daily Standup** | Signaler les alertes de sécurité |
+| **Sprint Review** | Démontrer les améliorations sécurité |
+| **Rétrospective** | Analyser les incidents, améliorer le process |
+
+---
+
+# Tests de sécurité intégrés au cycle de dev 🧪
+
+> **Analogie :** Les tests de sécurité automatiques, c'est comme un détecteur de fumée. Il tourne en permanence, il sonne si quelque chose cloche, et il ne te demande pas de le surveiller manuellement.
+
+**Types de tests :**
+- **SAST** (Static) : analyse le code sans l'exécuter → détecte les injections, secrets exposés
+- **SCA** (Composition) : scanne les dépendances → détecte les CVE dans tes libs
+- **DAST** (Dynamic) : teste l'appli en cours d'exécution → simule un attaquant
+
+---
+
+# DevSecOps : la sécurité en continu 🔄
+
+> **Analogie :** Le DevSecOps, c'est un contrôle qualité intégré à la chaîne de montage automobile. Pas de QC en toute fin de chaîne — chaque poste vérifie, chaque poste corrige.
+
+**Shift-Left Security :**
+- Détecter les failles le plus tôt possible
+- Plus tôt = moins cher à corriger
+
+| Phase | Coût relatif de correction |
+|-------|---------------------------|
+| Conception | ×1 |
+| Développement | ×6 |
+| Test | ×15 |
+| Production | ×30 à ×100 |
+
+---
+
+# DevSecOps : les 3 piliers 🏛️
+
+**1. Culture**
+- Sécurité = responsabilité partagée (pas seulement l'équipe sécu)
+- **Security Champion** : un dev référent sécurité dans chaque équipe
+- Post-mortem blameless : on cherche des processus à améliorer, pas des coupables
+
+**2. Automatisation**
+- SAST, SCA, DAST dans la pipeline CI/CD
+- Security gates : le build échoue si une vuln critique est détectée
+
+**3. Mesure**
+- MTTR (Mean Time To Remediate) : objectif < 24h sur critique
+- Taux de vulnérabilités par sprint : tendance à la baisse
 
 ---
 
 # Les Evil User Stories 😈
 
-Une **Evil User Story** décrit ce qu'un attaquant pourrait faire.
+> **Analogie :** Pour chaque porte qu'on installe, on demande à un cambrioleur ce qu'il ferait. C'est ça, une Evil User Story.
 
-**Format classique :**
-> En tant que [attaquant], je veux [action malveillante] afin de [objectif malveillant]
+**Format :**
+> En tant que **[attaquant]**, je veux **[action malveillante]** afin de **[objectif malveillant]**
 
-**Exemples :**
-- "En tant qu'attaquant, je veux injecter du SQL dans le formulaire de login afin d'accéder aux données des utilisateurs"
-- "En tant qu'attaquant, je veux voler le token JWT afin d'usurper l'identité d'un admin"
+**Exemple concret :**
 
----
-
-# Abuser Stories vs User Stories ⚔️
-
-| User Story | Abuser Story |
-|-----------|-------------|
-| En tant qu'utilisateur, je veux me connecter | En tant qu'attaquant, je veux brute-forcer le login |
-| En tant qu'admin, je veux gérer les utilisateurs | En tant qu'attaquant, je veux escalader mes privilèges |
-| En tant qu'utilisateur, je veux uploader un fichier | En tant qu'attaquant, je veux uploader un webshell |
-
-**Bonne pratique :** Pour chaque User Story, écrire au moins 1 Abuser Story.
+| User Story normale | Evil User Story |
+|-------------------|-----------------|
+| Je veux me connecter avec mon email | Je veux tenter 10 000 mots de passe sur chaque compte |
+| Je veux uploader une photo de profil | Je veux uploader un fichier `.php` exécutable |
+| Je veux partager un document | Je veux accéder au document d'un autre utilisateur |
 
 ---
 
 # Definition of Done sécurisée ✅
 
-Ajouter des critères de sécurité à votre DoD :
+La **DoD** définit ce que "terminé" veut dire. Sans critère sécurité, une story peut être "done" avec une injection SQL dedans.
 
-**DoD standard :**
-- ✅ Code reviewé
-- ✅ Tests unitaires passent
-- ✅ Documentation à jour
-
-**DoD + Sécurité :**
-- ✅ Code reviewé **avec checklist sécurité**
-- ✅ Tests unitaires **+ tests de sécurité** passent
-- ✅ Pas de vulnérabilité critique (SAST)
-- ✅ Dépendances scannées (SCA)
-- ✅ Secrets non exposés dans le code
-- ✅ Inputs validés côté serveur
-
----
-
-# Sprint Security Review 🔍
-
-**Quand ?** À chaque fin de sprint (avant la review)
-
-**Qui ?** Security Champion + 1 dev minimum
-
-**Quoi vérifier :**
-- Nouveau code : respect des guidelines de sécurité
-- Nouvelles dépendances : vulnérabilités connues ?
-- Nouvelles API : authentification/autorisation en place ?
-- Configuration : secrets bien gérés ?
-
----
-
-# Scrum adapté DevSecOps 🏈
-
-**Sprint Planning :**
-- Inclure les stories de sécurité dans le backlog
-- Estimer le travail de sécurité (story points)
-
-**Daily Standup :**
-- Mentionner les blocages de sécurité
-
-**Sprint Review :**
-- Démontrer les améliorations de sécurité
-
-**Rétrospective :**
-- Discuter des incidents de sécurité
-- Améliorer les processus
-
----
-
-# Le Backlog Sécurité 📋
-
-**Types d'items sécurité dans le backlog :**
-
-1. **Stories de sécurité** : nouvelles fonctionnalités sécuritaires
-   - "Implémenter le rate limiting sur /api/login"
-
-2. **Bugs de sécurité** : vulnérabilités à corriger
-   - "Corriger l'injection SQL sur le endpoint /search"
-
-3. **Tâches techniques** : amélioration de l'infrastructure
-   - "Mettre à jour la lib crypto obsolète"
-
-4. **Spike** : investigation de sécurité
-   - "Évaluer l'impact du CVE-2025-XXXX"
-
----
-
-# Priorisation des vulnérabilités 📊
-
-**Matrice de priorisation :**
-
-| Sévérité | Impact Business | Action |
-|----------|----------------|--------|
-| Critique | Élevé | Sprint en cours (hotfix) |
-| Haute | Élevé | Prochain sprint |
-| Moyenne | Moyen | Backlog priorisé |
-| Basse | Faible | Backlog |
-
----
-
-**Utiliser le CVSS (Common Vulnerability Scoring System) :**
-- 9.0-10.0 : Critique
-- 7.0-8.9 : Haute
-- 4.0-6.9 : Moyenne
-- 0.1-3.9 : Basse
+**DoD standard + sécurité :**
+- ✅ Code reviewé avec **checklist sécurité**
+- ✅ Tests unitaires + **tests de sécurité** passent
+- ✅ Scan SAST : **zéro vulnérabilité critique ou haute**
+- ✅ Dépendances scannées (SCA) : **pas de CVE critique**
+- ✅ **Aucun secret** dans le code (clé API, mot de passe)
+- ✅ Inputs **validés côté serveur**
 
 ---
 
 # Security Champions Program 🏆
 
-**Objectif :** Avoir un référent sécurité dans chaque équipe Scrum.
+> **Analogie :** Le Security Champion, c'est le secouriste de l'équipe. Il n'est pas médecin, mais il connaît les gestes de base et il peut appeler les secours au bon moment.
 
-**Profil du Security Champion :**
-- Développeur motivé par la sécurité
-- Formé aux bonnes pratiques (OWASP, etc.)
-- Lien entre l'équipe dev et l'équipe sécurité
+**Rôle :**
+- Développeur avec **20% de son temps** dédié à la sécurité
+- Fait le lien entre l'équipe dev et l'équipe sécu
+- Anime les revues de code orientées sécurité
+- Fait la veille CVE pour l'équipe
 
-**Responsabilités :**
-- Revue de code orientée sécurité
-- Veille sur les vulnérabilités
-- Formation des collègues
-- Participation aux audits
+**Sans Security Champion :**
+- Les alertes de sécurité passent inaperçues
+- Les CVE s'accumulent dans le backlog sans être traitées
 
 ---
 
-# En résumé : Agile & Sécurité 📝
+# En résumé : Module 2 📝
 
-- Les **Evil User Stories** anticipent les attaques
-- La **DoD** doit inclure des critères de sécurité
-- **Sprint Security Review** à chaque sprint
-- Le **backlog sécurité** est priorisé par CVSS
-- Les **Security Champions** sont essentiels
-- La sécurité est une **feature**, pas un frein
+- **Accès** : authentification + autorisation (RBAC) + audit → principe du moindre privilège
+- **Crypto** : hasher les mots de passe (bcrypt), chiffrer les données sensibles (AES-256), HTTPS
+- **Vulnérabilités** : CVE + CVSS → délais de correction selon sévérité
+- **Sprints sécurisés** : sécurité dans chaque cérémonie Scrum
+- **Tests intégrés** : SAST, SCA, DAST dans la CI/CD
+- **DevSecOps** : Shift-Left + automatisation + culture partagée
+- **Evil User Stories** + **DoD sécurisée** = outils concrets pour chaque sprint

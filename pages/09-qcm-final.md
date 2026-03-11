@@ -6,321 +6,321 @@ routeAlias: 'qcm-final'
 <a name="qcm-final" id="qcm-final"></a>
 
 # ✅ QCM Final
-## Validation des acquis - Développer de manière sécurisée et agile
+## Validation des acquis — Développer de manière sécurisée et agile
 
 ---
 
-# Question 1
+# Question 1 — Bloc 1
 
-Quel est le concept central du DevSecOps ?
+Dans Scrum, qui décide de ce que l'équipe fait pendant le sprint ?
 
-A) Séparer la sécurité du développement
+A) Le Scrum Master
 
-B) Intégrer la sécurité dans chaque étape du cycle de développement
+B) Le manager
+
+C) Le Product Owner définit les priorités, l'équipe s'engage sur ce qu'elle peut livrer
+
+D) Le Security Champion
+
+---
+
+# Question 2 — Bloc 1
+
+Quelle est la principale limite du Waterfall pour la sécurité ?
+
+A) Il est trop rapide
+
+B) La sécurité n'est testée qu'en fin de cycle, quand les corrections sont très coûteuses
+
+C) Il n'a pas de phase de test
+
+D) Il ne permet pas d'écrire des tests unitaires
+
+---
+
+# Question 3 — Bloc 1
+
+Quelle notion Kanban empêche l'équipe de commencer trop de tâches simultanément ?
+
+A) Definition of Done
+
+B) Sprint Planning
+
+C) WIP (Work In Progress) limité
+
+D) Daily Standup
+
+---
+
+# Question 4 — Bloc 1
+
+Qu'est-ce que l'incrément dans Scrum ?
+
+A) Une augmentation de salaire à chaque sprint
+
+B) Le produit fonctionnel et livrable produit à la fin d'un sprint
+
+C) La liste des tâches planifiées
+
+D) La durée d'un sprint
+
+---
+
+# Question 5 — Bloc 2
+
+Quel est l'objectif du principe AAA ?
+
+A) Automatiser, Auditer, Alerter
+
+B) Vérifier qui est l'utilisateur (Authentification), ce qu'il peut faire (Autorisation), et tracer ses actions (Audit)
+
+C) Accélérer le développement
+
+D) Analyser, Appliquer, Archiver
+
+---
+
+# Question 6 — Bloc 2
+
+Pourquoi ne faut-il pas stocker les mots de passe avec MD5 ?
+
+A) MD5 n'est pas compatible avec les bases de données modernes
+
+B) MD5 est trop lent
+
+C) MD5 est cassable en quelques secondes avec des rainbow tables
+
+D) MD5 prend trop de place en base
+
+---
+
+# Question 7 — Bloc 2
+
+Comment intégrer la sécurité dans le Sprint Planning ?
+
+A) Ajouter un sprint entier dédié à la sécurité en fin de projet
+
+B) Inclure les stories de sécurité et les bugs CVE dans le backlog, estimés en story points comme les autres
 
 C) Déléguer la sécurité à une équipe externe
 
-D) Tester la sécurité uniquement en production
+D) Ne pas inclure la sécurité dans le planning pour ne pas ralentir
 
 ---
 
-# Question 2
+# Question 8 — Bloc 2
 
-Qu'est-ce que le Shift-Left ?
+Qu'est-ce que le "Shift-Left Security" ?
 
-A) Utiliser Git revert
+A) Déplacer les tests de sécurité après la mise en production
 
-B) Déplacer les contrôles de sécurité le plus tôt possible
+B) Intégrer les contrôles de sécurité le plus tôt possible dans le cycle de développement
 
-C) Changer de branche Git
+C) Supprimer la phase de test de sécurité
 
-D) Déployer à gauche du dashboard
-
----
-
-# Question 3
-
-Quelle est la vulnérabilité OWASP #1 ?
-
-A) Injection SQL
-
-B) XSS
-
-C) Broken Access Control
-
-D) CSRF
+D) Confier la sécurité à un prestataire externe
 
 ---
 
-# Question 4
+# Question 9 — Bloc 3
 
-Quel algorithme utiliser pour hasher les mots de passe ?
+Pourquoi faut-il séparer les configurations des environnements dev, staging et prod ?
 
-A) MD5
+A) Pour aller plus vite en développement
 
-B) SHA-256
+B) Pour éviter qu'une compromission de staging expose les credentials de prod
 
-C) Bcrypt ou Argon2
+C) Pour économiser de la mémoire
 
-D) Base64
-
----
-
-# Question 5
-
-Que signifie SAST ?
-
-A) Secure Application Software Testing
-
-B) Static Application Security Testing
-
-C) System And Server Testing
-
-D) Simple API Security Tool
+D) Les configurations séparées ne sont pas nécessaires
 
 ---
 
-# Question 6
+# Question 10 — Bloc 3
 
-Quel est le format d'un identifiant CVE ?
+Dans quel ordre les étapes d'un pipeline DevSecOps doivent-elles être exécutées ?
 
-A) CVE-numéro
+A) Deploy → Test → Build → Scan
 
-B) CVE-ANNÉE-NUMÉRO
+B) Scan secrets → SAST → SCA → Build + scan image → Deploy
 
-C) VULN-ID
+C) Deploy → DAST → SAST → Build
 
-D) SEC-ANNÉE
-
----
-
-# Question 7
-
-Comment stocker les secrets en CI/CD ?
-
-A) Dans le code source
-
-B) Dans les GitHub Secrets ou un vault
-
-C) Dans un fichier README
-
-D) En commentaire YAML
+D) Build → Deploy → Scan
 
 ---
 
-# Question 8
+# Question 11 — Bloc 3
 
-Qu'est-ce qu'une Evil User Story ?
+Quel est le comportement d'un security gate face à une vulnérabilité critique ?
 
-A) Une story écrite par un mauvais développeur
+A) Envoyer un email d'information et continuer le déploiement
 
-B) Une story décrivant le comportement d'un attaquant
+B) Bloquer automatiquement le déploiement
 
-C) Une story avec un bug
+C) Créer un ticket Jira et déployer quand même
 
-D) Une story rejetée
-
----
-
-# Question 9
-
-Quel score CVSS indique une vulnérabilité critique ?
-
-A) 1.0-3.9
-
-B) 4.0-6.9
-
-C) 7.0-8.9
-
-D) 9.0-10.0
+D) Ignorer jusqu'au prochain sprint
 
 ---
 
-# Question 10
+# Question 12 — Bloc 3
 
-Quel outil scanne les images Docker pour les vulnérabilités ?
+Pourquoi utilise-t-on un utilisateur non-root dans un conteneur Docker ?
 
-A) ESLint
+A) Pour des raisons de performance
 
-B) Trivy
+B) Pour que si l'application est compromise, l'attaquant n'ait pas les droits root sur l'hôte
 
-C) Jest
+C) Docker exige un utilisateur non-root
 
-D) Prettier
-
----
-
-# Question 11
-
-Que doit contenir la Definition of Done en DevSecOps ?
-
-A) Uniquement des tests unitaires
-
-B) Des critères de sécurité (SAST, SCA, validation inputs)
-
-C) Uniquement la review du PO
-
-D) Le nombre de lignes de code
+D) Pour économiser de la mémoire
 
 ---
 
-# Question 12
+# Question 13 — Bloc 4
 
-Quel header HTTP empêche le clickjacking ?
+Quelle est la fréquence recommandée pour la Sprint Security Review ?
 
-A) Content-Type
+A) Une fois par an
 
-B) X-Frame-Options: DENY
+B) À chaque fin de sprint
 
-C) Accept
+C) Seulement avant une release majeure
 
-D) Authorization
-
----
-
-# Question 13
-
-Quelle approche de validation est recommandée ?
-
-A) Blacklist
-
-B) Whitelist
-
-C) Pas de validation
-
-D) Validation côté client uniquement
+D) Uniquement quand il y a un incident
 
 ---
 
-# Question 14
+# Question 14 — Bloc 4
 
-Quel est le MTTR ?
+Que signifie MTTR et quelle est l'objectif pour une vulnérabilité critique ?
 
-A) Le temps de build
+A) Mean Time To Release — objectif < 1 mois
 
-B) Le temps moyen pour corriger une vulnérabilité
+B) Mean Time To Remediate — objectif < 24h pour les critiques
 
-C) Le temps de déploiement
+C) Maximum Time To Rollback — objectif < 1 semaine
 
-D) Le temps de réponse de l'API
-
----
-
-# Question 15
-
-En Incident Response, quelle est la 3ème phase ?
-
-A) Identification
-
-B) Préparation
-
-C) Containment
-
-D) Recovery
+D) Mean Time To Restart — objectif < 1 heure
 
 ---
 
-# Question 16
+# Question 15 — Bloc 4
 
-Pourquoi utiliser un multi-stage build Docker ?
+Quelle donnée ne doit jamais être présente dans les logs applicatifs ?
 
-A) Pour un build plus lent
+A) Les codes HTTP de réponse
 
-B) Pour une image plus petite et sécurisée (sans outils de build)
+B) Les timestamps des requêtes
 
-C) Pour plus de dépendances
+C) Les mots de passe et données personnelles des utilisateurs
 
-D) Pour supporter plus d'OS
-
----
-
-# Question 17
-
-Qu'est-ce que le SCA ?
-
-A) Scan du code source
-
-B) Scan des dépendances tierces
-
-C) Scan du réseau
-
-D) Scan des performances
+D) Les noms des routes appelées
 
 ---
 
-# Question 18
+# Question 16 — Bloc 4
 
-Quel est le principe de moindre privilège ?
+Que cherche à faire un post-mortem "blameless" ?
 
-A) Donner tous les droits à tout le monde
+A) Identifier et sanctionner le développeur responsable
 
-B) Ne donner que les permissions strictement nécessaires
+B) Analyser les causes systémiques et améliorer les processus sans blâmer les individus
 
-C) Ne donner aucun droit
+C) Documenter l'incident uniquement pour les assurances
 
-D) Donner les droits admin par défaut
-
----
-
-# Question 19
-
-Quelle est la meilleure protection contre l'injection SQL ?
-
-A) Filtrer les guillemets
-
-B) Requêtes paramétrées (prepared statements)
-
-C) Chiffrer la requête
-
-D) Utiliser NoSQL
+D) Rassurer les clients par un communiqué de presse
 
 ---
 
-# Question 20
+# Question 17 — Bloc 4
 
-Que signifie "blameless" dans un post-mortem ?
+Dans le cycle PDCA appliqué à la sécurité, que fait la phase "Check" ?
 
-A) Ne pas faire de rapport
+A) Planifier les mitigations du prochain sprint
 
-B) Chercher à améliorer les processus sans blâmer les individus
+B) Implémenter les correctifs
 
-C) Blâmer tout le monde également
+C) Vérifier l'efficacité des corrections : re-scanner, mesurer le MTTR
 
-D) Ne pas documenter l'incident
+D) Présenter les résultats à la direction
+
+---
+
+# Question 18 — Bloc 2 & 4
+
+Selon le RGPD, quand la protection des données personnelles doit-elle être intégrée dans un projet agile ?
+
+A) Après la mise en production lors du premier audit CNIL
+
+B) Dès la conception, dans les User Stories (Privacy by Design)
+
+C) Uniquement si le projet traite des données bancaires
+
+D) Une fois par an lors du renouvellement de la certification
+
+---
+
+# Question 19 — Bloc 3 & 4
+
+Lorsqu'un scanner CI/CD détecte une CVE haute sur une dépendance, quelle est la réaction correcte ?
+
+A) Supprimer le scan pour débloquer le pipeline
+
+B) Créer un ticket dans le backlog, prioriser dans le sprint en cours ou suivant, patcher et re-scanner
+
+C) Attendre la prochaine réunion mensuelle sécu
+
+D) Ignorer si l'application fonctionne correctement
+
+---
+
+# Question 20 — Tous blocs
+
+Quelle est la bonne définition de "DevSecOps" ?
+
+A) Une équipe dédiée à la sécurité, séparée du développement
+
+B) L'intégration de la sécurité comme responsabilité partagée à chaque étape du cycle de développement agile
+
+C) Un outil de scan automatique
+
+D) Une certification de sécurité logicielle
 
 ---
 
 # Réponses QCM Final 📝
 
-| Question | Réponse |
-|----------|---------|
-| 1 | B) Intégrer la sécurité dans chaque étape |
-| 2 | B) Déplacer les contrôles le plus tôt possible |
-| 3 | C) Broken Access Control |
-| 4 | C) Bcrypt ou Argon2 |
-| 5 | B) Static Application Security Testing |
-| 6 | B) CVE-ANNÉE-NUMÉRO |
-| 7 | B) GitHub Secrets ou vault |
-| 8 | B) Story décrivant un attaquant |
-| 9 | D) 9.0-10.0 |
-| 10 | B) Trivy |
+| Q | Réponse | Bloc |
+|---|---------|------|
+| 1 | C) PO priorise, équipe s'engage | 1 |
+| 2 | B) Sécurité testée trop tard | 1 |
+| 3 | C) WIP limité | 1 |
+| 4 | B) Produit livrable fin de sprint | 1 |
+| 5 | B) Authentification / Autorisation / Audit | 2 |
+| 6 | C) MD5 cassable avec rainbow tables | 2 |
+| 7 | B) Stories sécurité dans le backlog | 2 |
+| 8 | B) Contrôles le plus tôt possible | 2 |
+| 9 | B) Éviter la compromission croisée | 3 |
+| 10 | B) Secrets → SAST → SCA → Image → Deploy | 3 |
 
 ---
 
 # Réponses QCM Final (suite) 📝
 
-| Question | Réponse |
-|----------|---------|
-| 11 | B) Critères de sécurité |
-| 12 | B) X-Frame-Options: DENY |
-| 13 | B) Whitelist |
-| 14 | B) Temps moyen pour corriger une vulnérabilité |
-| 15 | C) Containment |
-| 16 | B) Image plus petite et sécurisée |
-| 17 | B) Scan des dépendances tierces |
-| 18 | B) Permissions strictement nécessaires |
-| 19 | B) Requêtes paramétrées |
-| 20 | B) Améliorer sans blâmer |
+| Q | Réponse | Bloc |
+|---|---------|------|
+| 11 | B) Bloquer automatiquement | 3 |
+| 12 | B) Pas de droits root si compromis | 3 |
+| 13 | B) À chaque fin de sprint | 4 |
+| 14 | B) Mean Time To Remediate < 24h | 4 |
+| 15 | C) Mots de passe et données perso | 4 |
+| 16 | B) Améliorer sans blâmer | 4 |
+| 17 | C) Vérifier l'efficacité des corrections | 4 |
+| 18 | B) Dès la conception (Privacy by Design) | 2 & 4 |
+| 19 | B) Ticket backlog + patch + re-scan | 3 & 4 |
+| 20 | B) Sécurité partagée à chaque étape | Tous |
 
 ---
 
@@ -328,7 +328,7 @@ D) Ne pas documenter l'incident
 
 Comptez vos bonnes réponses sur 20 :
 
-- **18-20** : Expert DevSecOps ! 🏆
+- **18-20** : Expert DevSecOps Agile ! 🏆
 - **15-17** : Très bien ! ⭐⭐⭐
 - **12-14** : Bien ! ⭐⭐
 - **9-11** : À revoir ⭐
@@ -340,8 +340,11 @@ Comptez vos bonnes réponses sur 20 :
 
 **Formation Développer de manière sécurisée et agile**
 
-Contacts et ressources :
+**12 - 13 Mars 2026**
+
+Ressources pour aller plus loin :
 - OWASP : https://owasp.org/
-- NIST : https://nvd.nist.gov/
+- NIST / NVD : https://nvd.nist.gov/
 - Semgrep : https://semgrep.dev/
 - Snyk : https://snyk.io/
+- GitLab CI security docs : https://docs.gitlab.com/ee/user/application_security/

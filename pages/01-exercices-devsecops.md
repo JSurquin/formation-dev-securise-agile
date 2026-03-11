@@ -1,121 +1,117 @@
 ---
 
-# Exercices Module 1 : Introduction DevSecOps 🎯
+# Travaux pratiques Module 1 🎯
+## Mise en place d'un projet agile simple avec Scrum et sécurité intégrée
 
 ---
 
-# Exercice 1 : Threat Modeling STRIDE (20 min)
+# TP 1 : Constituer une équipe Scrum sécurisée (10 min)
 
-**Contexte :** Vous concevez une application de gestion de notes collaboratives (type Notion simplifié) avec :
-- Authentification par email/mot de passe
-- Partage de notes entre utilisateurs
-- Export PDF des notes
-- API REST publique
+**Contexte :** Vous montez une équipe pour développer une appli de **réservation de salles** en entreprise.
 
-**Consigne :** Appliquez la méthode STRIDE sur les 3 composants principaux et proposez des mitigations.
+**Équipe disponible :** 5 développeurs, 1 représentant métier, 1 chef de projet.
 
----
-
-# Exercice 1 : Solution ✅
-
-**Composant 1 : Endpoint d'authentification `/api/auth/login`**
-
-| Menace | Risque | Mitigation |
-|--------|--------|------------|
-| **Spoofing** | Usurpation d'identité via brute force | Rate limiting (5 tentatives/15 min) + MFA |
-| **Tampering** | Modification du JWT en transit | HTTPS obligatoire + signature RS256 |
-| **Repudiation** | Nier une connexion frauduleuse | Logs d'audit horodatés + IP |
-| **Info Disclosure** | Message "email non trouvé" | Message générique "Identifiants incorrects" |
-| **DoS** | Flood de requêtes login | WAF + CAPTCHA après 3 échecs |
-| **Elevation** | JWT avec rôle admin modifié | Signature côté serveur, vérification à chaque requête |
+**Consigne :**
+1. Attribuez les rôles Scrum (PO, Scrum Master, équipe dev)
+2. Identifiez qui sera **Security Champion** et pourquoi
+3. Listez 2 responsabilités sécurité spécifiques pour chaque rôle
 
 ---
 
-# Exercice 1 : Solution (suite)
+# TP 1 : Solution ✅
 
-**Composant 2 : Partage de notes `/api/notes/:id/share`**
+| Rôle | Personne | Responsabilités sécurité |
+|------|----------|--------------------------|
+| **Product Owner** | Représentant métier | Rédiger les Evil User Stories, prioriser les stories sécurité |
+| **Scrum Master** | Chef de projet | Intégrer la Security Review dans les cérémonies |
+| **Security Champion** | Dev le plus expérimenté en sécu | Code review orientée sécu, veille CVE |
+| **Équipe dev** | 4 développeurs | Respecter la DoD sécurisée, signaler les alertes |
 
-| Menace | Risque | Mitigation |
-|--------|--------|------------|
-| **Spoofing** | Partager au nom d'un autre | Vérifier ownership via token |
-| **Tampering** | Modifier les droits de partage | Validation côté serveur des permissions |
-| **Info Disclosure** | IDOR : accéder à une note via son ID | UUID au lieu d'ID séquentiel + vérification d'accès |
-| **Elevation** | Passer de "lecture" à "écriture" | RBAC strict, vérification à chaque requête |
-
----
-
-# Exercice 1 : Solution (fin)
-
-**Composant 3 : Export PDF `/api/notes/:id/export`**
-
-| Menace | Risque | Mitigation |
-|--------|--------|------------|
-| **Tampering** | Injection de contenu malveillant dans le PDF | Sanitization du HTML avant export |
-| **Info Disclosure** | Export d'une note d'un autre | Vérification d'ownership |
-| **DoS** | Export de notes très volumineuses | Limite de taille + file d'attente |
-| **SSRF** | Images dans la note pointant vers des URLs internes | Whitelist des domaines d'images |
+**Security Champion :** choisir le dev avec le plus d'appétence sécurité — pas forcément le plus senior. 20% de son temps dédié.
 
 ---
 
-# Exercice 2 : Calcul du ROI de la sécurité (10 min)
+# TP 2 : Construire le Product Backlog sécurisé (15 min)
 
-**Scénario :** Votre entreprise hésite à investir dans un programme DevSecOps.
+**Contexte :** L'appli de réservation de salles doit permettre :
+- La connexion avec son compte entreprise
+- La réservation d'une salle pour une plage horaire
+- La consultation des réservations de son équipe
+- La gestion des salles par les admins
 
-**Données :**
-- Coût annuel moyen d'un data breach : **4.45M$ (IBM 2023)**
-- Coût d'un programme DevSecOps : **150K$/an** (outils + formation)
-- Nombre de vulnérabilités critiques détectées/an sans programme : **12**
-- Avec programme DevSecOps : **2** (et détectées plus tôt)
-
-**Question :** Calculez le ROI et préparez un argumentaire pour la direction.
-
----
-
-# Exercice 2 : Solution ✅
-
-**Calcul simplifié :**
-- Risque sans DevSecOps : 12 vulnérabilités critiques
-- Probabilité d'exploitation : ~10% → 1.2 incident/an
-- Coût moyen par incident : ~500K$ (PME)
-- **Coût du risque : 600K$/an**
-
-**Avec DevSecOps :**
-- 2 vulnérabilités résiduelles, détectées en amont
-- Probabilité exploitation : ~2% → 0.04 incident/an
-- Coût du risque : 20K$/an
-- **Investissement : 150K$/an**
-
-**ROI = (600K - 20K - 150K) / 150K = 286%**
-
-**Argumentaire :** Pour 1$ investi en DevSecOps, on économise 2.86$ en risque. Sans compter la réputation, la conformité RGPD et la confiance client.
+**Consigne :**
+1. Rédigez **4 User Stories** (une par fonctionnalité)
+2. Pour chacune, rédigez **1 Evil User Story** avec sa mitigation
+3. Estimez la priorité (Haute / Moyenne / Basse)
 
 ---
 
-# Exercice 3 : Cartographie des rôles DevSecOps (10 min)
+# TP 2 : Solution — User Stories & Evil Stories ✅
 
-**Consigne :** Pour une équipe de 8 personnes (5 devs, 1 PO, 1 Scrum Master, 1 ops), définissez :
-1. Qui devient Security Champion ?
-2. Quelles responsabilités sécurité pour chaque rôle ?
-3. Comment intégrer la sécurité dans les cérémonies Scrum ?
-
----
-
-# Exercice 3 : Solution ✅
-
-**Security Champion :** 1 des 5 développeurs (le plus motivé/expérimenté en sécurité), avec 20% de son temps dédié.
-
-| Rôle | Responsabilités sécurité |
-|------|-------------------------|
-| **Security Champion** | Code review sécu, veille CVE, formation équipe |
-| **Développeurs** | Écrire du code sécurisé, respecter la DoD |
-| **PO** | Prioriser les stories de sécurité, écrire les Evil User Stories |
-| **Scrum Master** | S'assurer que la sécurité est dans les cérémonies |
-| **Ops** | Maintenir le pipeline CI/CD sécurisé, monitoring |
+| # | User Story | Evil User Story | Mitigation |
+|---|-----------|-----------------|------------|
+| 1 | Je veux me connecter avec mon compte entreprise | Je veux brute-forcer les comptes | Rate limiting + MFA |
+| 2 | Je veux réserver une salle | Je veux réserver toutes les salles pour bloquer les autres | Limite de réservations par utilisateur |
+| 3 | Je veux voir les réservations de mon équipe | Je veux voir les réservations de toute l'entreprise | Filtrage par équipe côté serveur (RBAC) |
+| 4 | Je veux gérer les salles (admin) | Je veux escalader mes privilèges pour devenir admin | Vérification du rôle à chaque requête |
 
 ---
 
-**Cérémonies :**
-- **Planning** : inclure stories sécurité
-- **Daily** : mentionner les alertes sécurité
-- **Review** : démontrer les améliorations sécu
-- **Rétro** : discuter les incidents et améliorations
+# TP 3 : Définir la Definition of Done sécurisée (10 min)
+
+**Consigne :** Rédigez la DoD complète de votre équipe pour ce projet.
+
+**Contraintes :**
+- Minimum 4 critères techniques classiques
+- Minimum 4 critères de sécurité
+- Réaliste : applicable à chaque story, chaque sprint
+
+---
+
+# TP 3 : Solution ✅
+
+**Definition of Done — Projet Réservation de salles :**
+
+- ✅ Code reviewé par au moins 1 pair
+- ✅ Tests unitaires écrits et passent (couverture > 80%)
+- ✅ Feature démontrée et validée par le PO
+- ✅ Documentation API à jour
+- 🔐 Scan SAST : zéro vulnérabilité critique ou haute
+- 🔐 Dépendances vérifiées : pas de CVE critique (npm audit)
+- 🔐 Aucun secret dans le code (détecté par Gitleaks)
+- 🔐 Inputs validés côté serveur
+- 🔐 RBAC vérifié : chaque endpoint vérifie les permissions
+
+---
+
+# TP 4 : Planifier un Sprint 1 sécurisé (15 min)
+
+**Capacité de l'équipe :** 40 story points sur 2 semaines.
+
+| Story | Points | Priorité |
+|-------|--------|---------|
+| Authentification SSO entreprise | 8 | Haute |
+| Evil Story : rate limiting login | 3 | Haute |
+| Réservation d'une salle | 8 | Haute |
+| Consultation des réservations | 5 | Haute |
+| Evil Story : limite de réservations | 3 | Haute |
+| Gestion des salles (admin) | 13 | Moyenne |
+| Mise en place pipeline CI/CD sécurisé | 5 | Haute |
+
+**Consigne :** Sélectionnez les stories pour le Sprint 1 en justifiant.
+
+---
+
+# TP 4 : Solution ✅
+
+**Sprint 1 sélectionné (37 points) :**
+
+1. 🔴 **Authentification SSO** — 8 pts *(base de tout le reste)*
+2. 🔴 **Evil Story : rate limiting login** — 3 pts *(sécurité dès le départ)*
+3. 🔴 **Pipeline CI/CD sécurisé** — 5 pts *(socle technique)*
+4. 🟠 **Réservation d'une salle** — 8 pts *(fonctionnalité principale)*
+5. 🟠 **Evil Story : limite de réservations** — 3 pts *(liée à la story ci-dessus)*
+6. 🟠 **Consultation des réservations** — 5 pts *(complète le MVP)*
+7. ❌ **Gestion admin** — 13 pts *(reportée au Sprint 2)*
+
+> **Philosophie :** on intègre les stories de sécurité au même titre que les fonctionnalités. Elles ne sont pas optionnelles.

@@ -1,143 +1,113 @@
 ---
 
-# Exercices Module 2 : Intégration de la sécurité dans les projets agiles 🎯
+# Travaux pratiques Module 2 🎯
+## User stories liées à la sécurité dans un projet agile
 
 ---
 
-# Exercice 1 : Evil User Stories (15 min)
+# TP 1 : Gestion des accès — RBAC (15 min)
 
-**Contexte :** Vous développez une application de gestion de notes en ligne (type Notion).
+**Contexte :** Vous développez une plateforme RH en ligne. Les utilisateurs peuvent être : **employé**, **manager**, **RH**, **admin**.
 
-**Consigne :** Pour chaque User Story ci-dessous, rédigez une Evil User Story correspondante avec une mitigation.
-
-1. "En tant qu'utilisateur, je veux créer un compte avec mon email"
-2. "En tant qu'utilisateur, je veux partager mes notes avec d'autres utilisateurs"
-3. "En tant qu'admin, je veux pouvoir supprimer un utilisateur"
-
----
-
-# Exercice 1 : Solution ✅
-
-**1. Création de compte :**
-- Evil : "En tant qu'attaquant, je veux créer des milliers de comptes pour spammer"
-- Mitigation : CAPTCHA, rate limiting, vérification email
-
-**2. Partage de notes :**
-- Evil : "En tant qu'attaquant, je veux accéder aux notes privées des autres"
-- Mitigation : Vérification des permissions, IDOR protection
-
-**3. Suppression utilisateur :**
-- Evil : "En tant qu'attaquant, je veux escalader mes privilèges pour supprimer des admins"
-- Mitigation : RBAC strict, audit logging, confirmation 2FA
+**Consigne :** Concevez la matrice RBAC pour ces fonctionnalités :
+- Voir sa fiche de paie
+- Voir la fiche de paie de son équipe
+- Modifier les salaires
+- Créer/supprimer des comptes utilisateurs
 
 ---
 
-# Exercice 2 : Definition of Done sécurisée (10 min)
+# TP 1 : Solution ✅
 
-**Consigne :** Créez une Definition of Done complète pour votre équipe incluant les aspects sécurité.
+| Action | Employé | Manager | RH | Admin |
+|--------|---------|---------|-----|-------|
+| Voir sa propre fiche de paie | ✅ | ✅ | ✅ | ✅ |
+| Voir la fiche de paie de son équipe | ❌ | ✅ | ✅ | ✅ |
+| Modifier les salaires | ❌ | ❌ | ✅ | ✅ |
+| Créer / supprimer des comptes | ❌ | ❌ | ❌ | ✅ |
 
-**Contraintes :**
-- Minimum 5 critères classiques
-- Minimum 5 critères de sécurité
-- Doit être réaliste et applicable à chaque sprint
+**Principe du moindre privilège appliqué :** chaque rôle n'a accès qu'à ce dont il a strictement besoin.
 
----
-
-# Exercice 2 : Solution ✅
-
-**DoD complète :**
-- ✅ Code reviewé par au moins 1 pair
-- ✅ Tests unitaires écrits et passent (couverture > 80%)
-- ✅ Tests d'intégration passent
-- ✅ Documentation mise à jour
-- ✅ Feature démontrée au PO
-- 🔐 Scan SAST sans vulnérabilité critique/haute
-- 🔐 Dépendances vérifiées (pas de CVE critique)
-- 🔐 Inputs validés côté serveur
-- 🔐 Pas de secrets dans le code (détecté par git-secrets)
-- 🔐 Logs de sécurité implémentés (login, erreurs)
+**Point critique à implémenter :** vérifier les permissions **côté serveur** à chaque requête — jamais côté client uniquement.
 
 ---
 
-# Exercice 3 : Sprint Planning sécurisé (15 min)
+# TP 2 : Cryptographie appliquée (15 min)
 
-**Contexte :** Votre backlog contient les éléments suivants. Priorisez-les pour le prochain sprint (capacité : 40 story points).
+**Contexte :** La plateforme RH stocke des données sensibles. Vous devez décider comment les protéger.
 
-<small>
-
-| Item | Type | Points | Sévérité |
-|------|------|--------|----------|
-| Feature : Export PDF | Feature | 8 | - |
-| CVE critique sur la lib auth | Bug sécu | 5 | Critique |
-| Evil Story : brute force login | Story sécu | 8 | Haute |
-| Feature : Dark mode | Feature | 3 | - |
-| Mise à jour dépendances | Tech | 5 | Moyenne |
-| Feature : Notifications | Feature | 13 | - |
-| XSS sur la page profil | Bug sécu | 3 | Haute |
-
-</small>
+**Consigne :** Pour chaque donnée, choisissez la protection adaptée et justifiez :
+1. Mot de passe de connexion
+2. Numéro de sécurité sociale
+3. Données en transit (API REST)
+4. Fichiers de bulletins de paie (PDF)
 
 ---
 
-# Exercice 3 : Solution ✅
+# TP 2 : Solution ✅
 
-**Sprint priorisé (40 points) :**
-
-1. 🔴 CVE critique lib auth - 5 pts (Critique = immédiat)
-2. 🔴 XSS page profil - 3 pts (Haute = ce sprint)
-3. 🟠 Evil Story brute force - 8 pts (Haute = ce sprint)
-4. 🟡 Mise à jour dépendances - 5 pts (Prévention)
-5. 🟢 Feature Export PDF - 8 pts (Business value)
-6. 🟢 Feature Dark mode - 3 pts (Quick win)
-7. ❌ Feature Notifications - 13 pts (Reportée au prochain sprint)
-
-**Total : 32 points** (marge de sécurité pour imprévus)
+| Donnée | Protection | Pourquoi |
+|--------|------------|---------|
+| **Mot de passe** | Hachage bcrypt (coût 12) | Irréversible → même si la DB est volée, le mdp est inutilisable |
+| **Numéro SS** | Chiffrement AES-256 | Réversible → on a besoin de le lire, mais pas de le chercher |
+| **API en transit** | HTTPS / TLS 1.3 | Chiffre les échanges entre client et serveur |
+| **PDFs** | Chiffrement AES-256 + accès signé (S3) | Stockage sécurisé + URL temporaire à usage unique |
 
 ---
 
-# Exercice 4 : Mise en place d'un projet Scrum sécurisé (20 min)
+# TP 3 : Evil User Stories & mitigations (20 min)
 
-**Contexte :** Vous montez une nouvelle équipe de 5 personnes pour développer une application de prise de rendez-vous médicaux.
+**Contexte :** Votre équipe Scrum travaille sur une app de **gestion de notes médicales**.
 
-**Consigne :** Définissez la structure complète du projet Scrum avec sécurité intégrée :
-1. Définissez les rôles et leur responsabilité sécurité
-2. Rédigez 3 User Stories + leur Evil User Story correspondante
-3. Rédigez la Definition of Done sécurisée
-4. Listez les Security Requirements à inclure dans le backlog initial
+**User Stories existantes :**
+1. "Je veux me connecter avec mon email et mot de passe"
+2. "Je veux consulter le dossier médical d'un patient"
+3. "Je veux envoyer un message à un autre praticien"
+4. "Je veux exporter le dossier d'un patient en PDF"
+
+**Consigne :** Rédigez une Evil User Story + mitigation pour chacune.
 
 ---
 
-# Exercice 4 : Solution - Rôles & Evil Stories ✅
+# TP 3 : Solution ✅
 
-**Rôles :**
-- PO : priorise les stories sécurité, valide la conformité RGPD
-- Scrum Master : intègre la Security Review dans les cérémonies
-- Security Champion (1 dev) : revue de code sécurisée, veille CVE
+| User Story | Evil User Story | Mitigation |
+|-----------|-----------------|------------|
+| Me connecter | "Je veux tenter 50 000 mots de passe via l'API" | Rate limiting (5 essais/15 min) + MFA obligatoire |
+| Consulter un dossier | "Je veux accéder au dossier d'un autre patient en changeant l'ID dans l'URL" | Vérifier que l'ID demandé appartient bien à l'utilisateur connecté (IDOR protection) |
+| Envoyer un message | "Je veux injecter du HTML/JS dans le message" | Sanitization + CSP |
+| Exporter en PDF | "Je veux générer un PDF avec des URLs internes pour faire du SSRF" | Whitelist des ressources autorisées dans le PDF |
 
-**Evil User Stories :**
-- US "Prendre RDV" → Evil : "En tant qu'attaquant, je veux réserver tous les créneaux pour bloquer le service" → Mitigation : rate limiting + CAPTCHA
-- US "Voir mes RDV" → Evil : "En tant qu'attaquant, je veux accéder aux RDV d'autres patients via l'ID" → Mitigation : IDOR protection + RBAC
-- US "S'inscrire" → Evil : "En tant qu'attaquant, je veux créer des faux comptes médecins" → Mitigation : validation email + vérification RPPS
-Exercice 4 : Solution
 ---
 
-# Exercice 4 : Solution - DoD & Security Requirements ✅
+# TP 4 : Construire un Sprint avec sécurité intégrée (15 min)
 
-<div class="text-xs">
+**Contexte :** Sprint 3 de la plateforme RH. Backlog disponible :
 
-**Definition of Done sécurisée :**
-- ✅ Code reviewé (checklist sécurité incluse)
-- ✅ SAST sans vulnérabilité critique/haute
-- ✅ Données médicales chiffrées (AES-256)
-- ✅ Logs sans données personnelles
-- ✅ Tests unitaires + tests de sécurité passent
-- ✅ Dépendances sans CVE critique (SCA)
+| Story | Points | Type |
+|-------|--------|------|
+| Upload de documents RH | 8 | Feature |
+| Evil Story : limite type de fichier | 3 | Sécu |
+| CVE critique sur multer (lib upload) | 2 | Bug sécu |
+| Notifications par email | 5 | Feature |
+| XSS sur la page de profil | 3 | Bug sécu |
+| Tableau de bord manager | 8 | Feature |
+| Mise à jour dépendances | 3 | Tech |
 
-**Security Requirements backlog initial :**
-- Authentification MFA pour les médecins
-- Chiffrement des données patients au repos et en transit
-- Journalisation des accès aux dossiers médicaux
-- Conformité RGPD : consentement + droit à l'effacement
-- Rate limiting sur toutes les API publiques
+**Capacité : 30 points. Consigne :** composez le sprint en justifiant l'ordre de priorité.
 
-</div>
+---
+
+# TP 4 : Solution ✅
+
+**Sprint 3 sélectionné (28 points) :**
+
+1. 🔴 **CVE critique multer** — 2 pts *(exploit possible sur la fonctionnalité d'upload → traiter avant de l'activer)*
+2. 🔴 **XSS page de profil** — 3 pts *(haute sévérité, exposition directe)*
+3. 🟠 **Upload de documents RH** — 8 pts *(fonctionnalité principale du sprint)*
+4. 🟠 **Evil Story : limite type de fichier** — 3 pts *(doit accompagner l'upload)*
+5. 🟠 **Mise à jour dépendances** — 3 pts *(prévention, effort faible)*
+6. 🟢 **Notifications par email** — 5 pts *(valeur business)*
+7. ❌ **Tableau de bord manager** — 8 pts *(reporté au Sprint 4)*
+
+> **Règle :** les bugs de sécurité passent avant les nouvelles fonctionnalités.

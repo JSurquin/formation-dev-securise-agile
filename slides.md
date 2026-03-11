@@ -24,27 +24,6 @@ themeConfig:
   </span>
 </div>
 
-
-<div class="absolute flex gap-x-2 bottom-0 left-0 p-4 z-50">
-      <SlideCurrentNo
-        class="dark:!text-white !text-[8px] p-1 w-5 h-5 items-center justify-center flex rounded-full bg-white/10 backdrop-blur-sm border border-gray-600 opacity-80"
-      />
-      <span class="text-gray-400">/</span>
-  <SlideTotal
-        class="dark:!text-white !text-[8px] p-1 w-5 h-5 items-center justify-center flex rounded-full bg-white/10 backdrop-blur-sm border border-gray-600 opacity-80"
-      />
-</div>
-
-
-<div class="absolute bottom-0 right-0 z-50 flex flex-col gap-y-2 p-2">
-<div class="hover:bg-white hover:bg-opacity-10 neon-border border-2 rounded-xl w-[200px] p-2 flex flex-col gap-y-2">
-  <img src="/ascent.png" alt="Ascent" class="w-6 h-6 mx-auto rounded-full"></img>
-  <span class="text-gray-400 text-xs">Programme : <b>2-024</b></span>
-  <span class="text-gray-400 text-xs">Lot: <b>2</b></span>
-</div>
-</div>
-
-
 ---
 layout: presenter
 eventLogo: 'https://img2.storyblok.com/352x0/f/84560/2388x414/23d8eb4b8d/vue-amsterdam-with-name.png'
@@ -82,24 +61,24 @@ routeAlias: 'sommaire'
 
 # SOMMAIRE 📜
 
-### Jour 1 : Fondamentaux
+### Jour 1
 
 <div class="flex flex-col gap-2">
-<Link to="introduction-devsecops">🔐 1. Introduction au DevSecOps</Link>
-<Link to="methodologies-agiles">🔄 2. Méthodologies Agiles & Sécurité</Link>
+<Link to="introduction-devsecops">🔄 1. Introduction au développement agile (3h)</Link>
+<Link to="methodologies-agiles">🔐 2. Intégration de la sécurité dans les projets agiles (3h)</Link>
 <Link to="owasp-top10">🛡️ 3. OWASP Top 10 (2025)</Link>
 <Link to="secure-coding">💻 4. Secure Coding Practices</Link>
 </div>
 
 ::right::
 
-### Jour 2 : Pratique avancée
+### Jour 2
 
 <div class="flex flex-col gap-2">
 <Link to="tests-securite">🧪 5. Tests de sécurité automatisés</Link>
-<Link to="cicd-securise">🚀 6. CI/CD sécurisé</Link>
-<Link to="gestion-vulnerabilites">🔍 7. Gestion des vulnérabilités</Link>
-<Link to="exercice-final">🎯 8. Exercice final : Audit & Remédiation</Link>
+<Link to="cicd-securise">🚀 6. Pratiques de sécurité dans les outils agiles (3h)</Link>
+<Link to="gestion-vulnerabilites">🔍 7. Suivi, audit & gestion des risques agiles (3h)</Link>
+<Link to="exercice-final">🎯 8. Exercice final : Audit de sécurité agile</Link>
 <Link to="qcm-final">✅ QCM de validation finale</Link>
 </div>
 
@@ -118,17 +97,17 @@ layout: two-cols
 
 <small>
 
-**Module 1 - Introduction DevSecOps**
-- Qu'est-ce que le DevSecOps ?
-- Shift-Left Security
-- Culture de la sécurité
-- Threat Modeling
+**Module 1 - Introduction au développement agile (3h)**
+- Scrum, Kanban : application dans le dev logiciel
+- Principes de l'agilité appliqués à un projet sécurisé
+- Comparaison agile vs traditionnel (Waterfall)
+- TP : projet agile Scrum avec processus sécurisés
 
-**Module 2 - Agile & Sécurité**
-- Scrum et sécurité
-- User Stories de sécurité (Evil User Stories)
-- Definition of Done sécurisée
-- Sprint Security Review
+**Module 2 - Intégration de la sécurité dans les projets agiles (3h)**
+- Gestion des accès, cryptographie, vulnérabilités
+- Sécurité dans les sprints : tests intégrés au cycle
+- Méthodes DevSecOps : surveillance continue
+- TP : user stories liées à la sécurité
 
 </small>
 
@@ -160,16 +139,14 @@ layout: two-cols
 <small>
 
 **Module 5 - Tests de sécurité**
-- SAST (Static Application Security Testing)
-- DAST (Dynamic Application Security Testing)
-- SCA (Software Composition Analysis)
+- SAST, DAST, SCA
 - Pentesting automatisé
 
-**Module 6 - CI/CD sécurisé**
-- Pipeline DevSecOps
-- GitHub Actions & sécurité
-- Scanning automatique
-- Gestion des secrets en CI/CD
+**Module 6 - Pratiques de sécurité dans les outils agiles (3h)**
+- Sécurisation des environnements dev/prod, configurations
+- Tests de sécurité automatisés dans les pipelines CI/CD
+- Gestion des vulnérabilités dans un cadre agile
+- TP : tests automatisés avec Jenkins ou GitLab CI
 
 </small>
 
@@ -177,16 +154,16 @@ layout: two-cols
 
 <small>
 
-**Module 7 - Gestion des vulnérabilités**
-- CVE, CWE, CVSS
-- Triaging et priorisation
-- Patch management
-- Incident Response
+**Module 7 - Suivi, audit & gestion des risques agiles (3h)**
+- Surveillance continue : outils de gestion des risques
+- Audit agile & amélioration continue (PDCA)
+- Sécurité des données sensibles sur tout le cycle de vie
+- TP : audit d'un projet agile, identification & recommandations
 
-**Module 8 - Exercice final**
-- Audit d'une application vulnérable
-- Identification des failles
-- Plan de remédiation
+**Module 8 - Exercice final : Audit de sécurité agile**
+- Audit d'un projet agile en cours
+- Identification des risques
+- Recommandations de correction
 - Mise en place d'un pipeline sécurisé
 
 **QCM Final** ✅

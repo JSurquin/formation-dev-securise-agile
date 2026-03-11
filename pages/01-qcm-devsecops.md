@@ -1,6 +1,6 @@
 ---
 
-# QCM Module 1 : Introduction DevSecOps ✅
+# QCM Module 1 : Introduction au développement agile ✅
 
 **10 questions pour valider vos acquis**
 
@@ -8,179 +8,179 @@
 
 # Question 1
 
-Que signifie "Shift-Left" en DevSecOps ?
+Quelle valeur du Manifeste Agile est correctement formulée ?
 
-A) Déplacer la sécurité à la fin du projet
+A) Un logiciel parfaitement documenté > un logiciel fonctionnel
 
-B) Intégrer la sécurité le plus tôt possible dans le cycle de développement
+B) Les individus et leurs interactions > les processus et les outils
 
-C) Utiliser uniquement des outils open source
+C) Le suivi d'un plan > l'adaptation au changement
 
-D) Confier toute la sécurité à une équipe dédiée
+D) La négociation contractuelle > la collaboration avec le client
 
 ---
 
 # Question 2
 
-Quel est le coût relatif de correction d'une faille détectée en production ?
+Dans Scrum, qui est responsable de prioriser le Product Backlog ?
 
-A) x2
+A) Le Scrum Master
 
-B) x10
+B) L'équipe de développement
 
-C) x30 à x100
+C) Le Product Owner
 
-D) x5
+D) Le Security Champion
 
 ---
 
 # Question 3
 
-Que signifie le "S" dans STRIDE ?
+Quelle est la durée typique d'un sprint Scrum ?
 
-A) Security
+A) 1 jour
 
-B) Spoofing
+B) 6 mois
 
-C) Scanning
+C) 1 à 4 semaines
 
-D) Software
+D) 1 an
 
 ---
 
 # Question 4
 
-Quel est le rôle d'un Security Champion ?
+Quelle cérémonie Scrum sert à améliorer le fonctionnement de l'équipe ?
 
-A) Le directeur de la sécurité informatique
+A) Sprint Planning
 
-B) Un référent sécurité intégré dans l'équipe de développement
+B) Daily Standup
 
-C) Un pentesteur externe
+C) Sprint Review
 
-D) Le responsable des sauvegardes
+D) Rétrospective
 
 ---
 
 # Question 5
 
-DevSecOps repose sur 3 piliers. Lesquels ?
+Quelle est la principale différence entre Scrum et Kanban ?
 
-A) Code, Test, Deploy
+A) Kanban utilise des sprints fixes, Scrum non
 
-B) Culture, Automatisation, Mesure
+B) Scrum utilise des sprints fixes, Kanban fonctionne en flux continu
 
-C) Plan, Do, Check
+C) Kanban n'est pas une méthode agile
 
-D) Dev, Sec, Ops
+D) Scrum n'a pas de tableau de tâches
 
 ---
 
 # Question 6
 
-Qu'est-ce que le MTTR ?
+Dans l'approche Waterfall, quand la sécurité est-elle généralement testée ?
 
-A) Mean Time To Release
+A) Dès la conception
 
-B) Mean Time To Remediate
+B) À chaque sprint
 
-C) Maximum Time To Resolve
+C) Uniquement en phase de test, avant livraison
 
-D) Minimum Test To Run
+D) En continu tout au long du projet
 
 ---
 
 # Question 7
 
-Quelle méthode permet d'identifier les menaces avant le développement ?
+Quel est le principal avantage de l'approche agile sur le Waterfall pour la sécurité ?
 
-A) Pentesting
+A) Elle est plus rapide à mettre en place
 
-B) Code Review
+B) Les failles sont détectées et corrigées à chaque sprint, pas en fin de projet
 
-C) Threat Modeling
+C) Elle ne nécessite pas de tests de sécurité
 
-D) Unit Testing
+D) Elle supprime la phase de conception
 
 ---
 
 # Question 8
 
-Quel est l'objectif principal du DevSecOps ?
+Qu'est-ce que le Product Backlog dans Scrum ?
 
-A) Remplacer les équipes de sécurité
+A) La liste des bugs à corriger
 
-B) Ralentir le développement pour plus de sécurité
+B) La liste priorisée de tout ce que le produit doit faire
 
-C) Intégrer la sécurité comme responsabilité partagée
+C) Le planning des sprints pour l'année
 
-D) Éliminer tous les bugs
+D) Le journal des réunions d'équipe
 
 ---
 
 # Question 9
 
-Quelle est la bonne approche pour les messages d'erreur d'une API ?
+Quelle notion Kanban permet d'éviter que l'équipe fasse trop de tâches en même temps ?
 
-A) Afficher le stack trace complet
+A) Daily Standup
 
-B) Donner des messages d'erreur génériques sans détails techniques
+B) Sprint Planning
 
-C) Ne retourner aucun message
+C) WIP (Work In Progress) limité
 
-D) Logger l'erreur côté client
+D) Definition of Done
 
 ---
 
 # Question 10
 
-Qu'est-ce que "Security as Code" ?
+Pourquoi la sécurité est-elle difficile à intégrer dans les premières années de l'Agile ?
 
-A) Écrire du code uniquement en salle blanche
+A) Les outils agiles ne permettent pas la sécurité
 
-B) Définir et automatiser les politiques de sécurité via du code
+B) La sécurité était perçue comme un frein à la vélocité
 
-C) Utiliser un langage de programmation sécurisé
+C) Les développeurs ne s'intéressent pas à la sécurité
 
-D) Chiffrer tout le code source
+D) Agile interdit les tests de sécurité
 
 ---
 
 # Réponses du Module 1 📝
 
-**Réponse 1 :** B) Intégrer la sécurité le plus tôt possible
-- Le Shift-Left déplace les contrôles de sécurité en amont du cycle
+**Réponse 1 :** B) Les individus et leurs interactions > les processus et les outils
+- L'une des 4 valeurs fondatrices du Manifeste Agile (2001)
 
-**Réponse 2 :** C) x30 à x100
-- Plus une faille est détectée tard, plus elle coûte cher
+**Réponse 2 :** C) Le Product Owner
+- Il représente les intérêts du client et priorise la valeur business
 
-**Réponse 3 :** B) Spoofing
-- STRIDE = Spoofing, Tampering, Repudiation, Information Disclosure, DoS, Elevation of Privilege
+**Réponse 3 :** C) 1 à 4 semaines
+- En pratique, 2 semaines est la durée la plus répandue
 
-**Réponse 4 :** B) Un référent sécurité intégré dans l'équipe
-- Il fait le pont entre dev et sécurité
+**Réponse 4 :** D) Rétrospective
+- La rétro est dédiée à l'amélioration continue du fonctionnement d'équipe
 
-**Réponse 5 :** B) Culture, Automatisation, Mesure
-- Les 3 piliers fondamentaux du DevSecOps
+**Réponse 5 :** B) Scrum = sprints fixes, Kanban = flux continu
+- Kanban n'a pas de timeboxing, les tâches avancent au fil de l'eau
 
 ---
 
 # Réponses du Module 1 (suite) 📝
 
-**Réponse 6 :** B) Mean Time To Remediate
-- Temps moyen pour corriger une vulnérabilité
+**Réponse 6 :** C) Uniquement en phase de test
+- C'est le problème central du Waterfall : la sécurité arrive trop tard
 
-**Réponse 7 :** C) Threat Modeling
-- Technique d'analyse des menaces en phase de conception
+**Réponse 7 :** B) Failles détectées et corrigées à chaque sprint
+- Coût de correction x1 en conception vs x30-100 en production
 
-**Réponse 8 :** C) Intégrer la sécurité comme responsabilité partagée
-- Tout le monde est responsable de la sécurité
+**Réponse 8 :** B) Liste priorisée de tout ce que le produit doit faire
+- C'est l'artefact central de Scrum, maintenu par le Product Owner
 
-**Réponse 9 :** B) Messages d'erreur génériques
-- Pas de détails techniques exposés aux utilisateurs
+**Réponse 9 :** C) WIP (Work In Progress) limité
+- Limiter le WIP force à terminer avant de commencer une nouvelle tâche
 
-**Réponse 10 :** B) Définir et automatiser les politiques de sécurité via du code
-- Infrastructure as Code, Policy as Code, etc.
+**Réponse 10 :** B) La sécurité était perçue comme un frein à la vélocité
+- La solution DevSecOps est de l'intégrer comme une fonctionnalité à part entière
 
 ---
 

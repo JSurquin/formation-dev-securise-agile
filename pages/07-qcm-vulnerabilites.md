@@ -1,176 +1,186 @@
 ---
 
-# QCM Module 7 : Gestion des vulnérabilités ✅
+# QCM Module 7 : Suivi, audit et gestion des risques agiles ✅
 
-**10 questions**
+**10 questions pour valider vos acquis**
 
 ---
 
 # Question 1
 
-Que signifie CVE ?
+Qu'est-ce que la surveillance continue de la sécurité ?
 
-A) Common Vulnerability Enumeration
+A) Un audit annuel réalisé par un prestataire externe
 
-B) Common Vulnerabilities and Exposures
+B) La mise en place d'outils qui détectent en temps réel les comportements anormaux et les nouvelles CVE
 
-C) Critical Vulnerability Exploit
+C) Une réunion mensuelle de l'équipe sécurité
 
-D) Centralized Vulnerability Engine
+D) Un scan manuel hebdomadaire des logs
 
 ---
 
 # Question 2
 
-Quel est le score CVSS d'une vulnérabilité critique ?
+Quel est le format d'un identifiant CVE ?
 
-A) 1.0-3.9
+A) VULN-NUMÉRO
 
-B) 4.0-6.9
+B) CVE-ANNÉE-NUMÉRO
 
-C) 7.0-8.9
+C) SEC-ID-NUMÉRO
 
-D) 9.0-10.0
+D) BUG-ANNÉE
 
 ---
 
 # Question 3
 
-En combien de temps doit-on patcher une vulnérabilité critique ?
+Le score CVSS seul suffit-il à prioriser une vulnérabilité ?
 
-A) 1 mois
+A) Oui, c'est la seule métrique nécessaire
 
-B) 24-48 heures
+B) Non, il faut aussi croiser avec l'exposition en prod et l'existence d'un exploit public
 
-C) 1 an
+C) Oui, si le score dépasse 5.0
 
-D) Au prochain sprint
+D) Non, seul l'impact business compte
 
 ---
 
 # Question 4
 
-Qu'est-ce que le CWE ?
+Qu'est-ce que la Sprint Security Review ?
 
-A) Une base de données de virus
+A) Un audit de sécurité annuel commandé par la direction
 
-B) Une classification des types de faiblesses logicielles
+B) Une vérification légère de la sécurité réalisée à chaque fin de sprint par le Security Champion
 
-C) Un outil de scan
+C) Un test de pénétration réalisé avant chaque déploiement
 
-D) Un protocole réseau
+D) Une réunion entre le RSSI et le PO
 
 ---
 
 # Question 5
 
-Quelle est la première phase de l'Incident Response ?
+Que signifie PDCA dans le contexte de l'amélioration continue de la sécurité ?
 
-A) Identification
+A) Patch, Deploy, Control, Audit
 
-B) Préparation
+B) Plan, Do, Check, Act
 
-C) Recovery
+C) Prevent, Detect, Contain, Analyze
 
-D) Containment
+D) Prioritize, Develop, Check, Approve
 
 ---
 
 # Question 6
 
-Qu'est-ce qu'un post-mortem "blameless" ?
+Quel est le MTTR ?
 
-A) Un rapport qui identifie le coupable
+A) Maximum Time To Release
 
-B) Une analyse qui cherche à améliorer les processus sans blâmer
+B) Mean Time To Remediate : temps moyen pour corriger une vulnérabilité
 
-C) Un document confidentiel
+C) Minimum Test To Run
 
-D) Un rapport pour le management
+D) Mean Time To Rollback
 
 ---
 
 # Question 7
 
-Le CVSS seul suffit-il pour prioriser une vulnérabilité ?
+Quelle donnée ne devrait JAMAIS apparaître dans les logs applicatifs ?
 
-A) Oui, c'est la seule métrique nécessaire
+A) Les codes d'erreur HTTP
 
-B) Non, il faut aussi considérer l'exploitabilité et l'impact business
+B) Les timestamps des requêtes
 
-C) Oui, si le score est > 7
+C) Les mots de passe et données personnelles des utilisateurs
 
-D) Non, seul le contexte business compte
+D) Les noms des endpoints appelés
 
 ---
 
 # Question 8
 
-Qu'est-ce qu'un SBOM ?
+Quelle est la bonne approche pour les données de test dans un environnement de staging ?
 
-A) Un type d'attaque
+A) Utiliser les vraies données de production pour des tests réalistes
 
-B) Un inventaire de tous les composants logiciels
+B) Utiliser des données fictives ou anonymisées
 
-C) Un protocole de sécurité
+C) Dupliquer la base de prod intégralement
 
-D) Un scanner de vulnérabilités
+D) Ne pas utiliser de données de test
 
 ---
 
 # Question 9
 
-Que signifie "Containment" dans l'Incident Response ?
+Qu'est-ce qu'un post-mortem "blameless" ?
 
-A) Supprimer la cause
+A) Un rapport qui identifie le développeur responsable de la faille
 
-B) Limiter la propagation de l'incident
+B) Une analyse d'incident qui cherche à améliorer les processus sans blâmer les individus
 
-C) Restaurer les services
+C) Un document confidentiel réservé au management
 
-D) Préparer l'équipe
+D) Un rapport uniquement pour les incidents critiques
 
 ---
 
 # Question 10
 
-Quel outil automatise les mises à jour de dépendances ?
+Selon le principe du Privacy by Design (RGPD), quand faut-il intégrer la protection des données ?
 
-A) Docker
+A) Après la mise en production, lors du premier audit
 
-B) Dependabot / Renovate
+B) Dès la conception, dans les User Stories et le backlog
 
-C) Nginx
+C) Uniquement si l'entreprise traite des données bancaires
 
-D) Kubernetes
+D) Une fois par an lors de la revue de conformité
 
 ---
 
 # Réponses du Module 7 📝
 
-**Réponse 1 :** B) Common Vulnerabilities and Exposures
+**Réponse 1 :** B) Outils qui détectent en temps réel
+- Dependabot, Snyk, SIEM — la sécurité ne s'arrête pas au déploiement
 
-**Réponse 2 :** D) 9.0-10.0
+**Réponse 2 :** B) CVE-ANNÉE-NUMÉRO
+- Exemple : CVE-2021-44228 (Log4Shell, score 10.0)
 
-**Réponse 3 :** B) 24-48 heures
+**Réponse 3 :** B) Non, croiser avec l'exposition et l'exploit public
+- Une CVE 9.0 non exposée en prod est moins urgente qu'une CVE 7.0 exploitée activement
 
-**Réponse 4 :** B) Classification des types de faiblesses
+**Réponse 4 :** B) Vérification légère à chaque fin de sprint
+- Réalisée en 30-60 min par le Security Champion + 1 dev
 
-**Réponse 5 :** B) Préparation
+**Réponse 5 :** B) Plan, Do, Check, Act
+- Le cycle PDCA est la base de l'amélioration continue en sécurité agile
 
 ---
 
 # Réponses du Module 7 (suite) 📝
 
-**Réponse 6 :** B) Améliorer les processus sans blâmer
+**Réponse 6 :** B) Mean Time To Remediate
+- Objectif : < 24h pour les critiques, < 7j pour les hautes
 
-**Réponse 7 :** B) Non, il faut aussi l'exploitabilité et l'impact
+**Réponse 7 :** C) Mots de passe et données personnelles
+- Violation RGPD + risque de fuite si les logs sont accessibles
 
-**Réponse 8 :** B) Inventaire des composants logiciels
+**Réponse 8 :** B) Données fictives ou anonymisées
+- Les données réelles en staging = risque de fuite + violation RGPD
 
-**Réponse 9 :** B) Limiter la propagation
+**Réponse 9 :** B) Améliorer les processus sans blâmer
+- Analogie : l'enquête après un crash d'avion cherche les défaillances système
 
-**Réponse 10 :** B) Dependabot / Renovate
+**Réponse 10 :** B) Dès la conception, dans les User Stories
+- Art. 25 RGPD : Privacy by Design et Privacy by Default
 
 ---
 
