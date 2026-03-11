@@ -217,12 +217,218 @@ La **DoD** définit ce que "terminé" veut dire. Sans critère sécurité, une s
 
 ---
 
+# Cas réel : la faille d'Equifax (2017) 💥
+
+> **Ce qui s'est passé :** Equifax, agence de crédit américaine, subit une fuite de données touchant **147 millions de personnes**. Coût : **4 milliards de dollars**.
+
+**Cause racine :**
+- Une CVE critique sur Apache Struts publiée en **mars 2017**
+- Un patch existait — il n'a pas été appliqué
+- La faille a été exploitée en **mai 2017** (2 mois plus tard)
+
+**Ce qu'un processus DevSecOps aurait évité :**
+- Dependabot/Snyk aurait créé un ticket automatiquement
+- La CVE critique aurait été traitée en 24-48h (politique de patch)
+- La fuite n'aurait pas eu lieu
+
+---
+
+# Cas réel : Log4Shell (2021) 🔥
+
+**CVE-2021-44228 — Score CVSS : 10.0 (maximum)**
+
+> **Log4j** = bibliothèque de logging Java présente dans des millions d'applications.
+
+**L'attaque :**
+- Une simple ligne dans un champ texte suffit à exécuter du code sur le serveur
+- Exploitable sans authentification
+- Détectée un vendredi soir, exploits en masse le week-end suivant
+
+**Impact :**
+- Apple, Amazon, Tesla, Minecraft touchés
+- Des centaines de milliers de serveurs compromis en 72h
+
+**Leçon agile :** avoir un SBOM (inventaire de dépendances) à jour permet de savoir en 5 minutes si on est exposé.
+
+---
+
+# MFA : pourquoi c'est non négociable 📱
+
+> **Analogie :** Le mot de passe seul, c'est une serrure sans chaîne de sécurité. Le MFA, c'est la serrure + la chaîne + le judas.
+
+**Les statistiques :**
+- 99.9% des attaques sur comptes sont bloquées par le MFA (Microsoft, 2023)
+- 61% des violations de données impliquent des identifiants volés (Verizon DBIR)
+
+**Types de second facteur :**
+| Type | Sécurité | Exemple |
+|------|----------|---------|
+| SMS | ⭐⭐ (SIM swapping possible) | Code par texto |
+| TOTP | ⭐⭐⭐ | Google Authenticator |
+| FIDO2/Passkey | ⭐⭐⭐⭐⭐ | Clé physique YubiKey |
+
+---
+
+# Le chiffrement en pratique : ce qu'on stocke en base 🗄️
+
+**Pour une appli e-commerce typique :**
+
+| Donnée | Stockage | Méthode |
+|--------|----------|---------|
+| Mot de passe | Jamais en clair | `bcrypt(password, 12)` |
+| Email | Clair ou chiffré | AES-256 si RGPD strict |
+| Numéro de carte | **JAMAIS** | Déléguer à Stripe/Braintree |
+| Numéro SS | Chiffré | AES-256 + clé hors BDD |
+| Adresse | Clair ou chiffré | Selon sensibilité |
+| Token JWT | Jamais | Stateless, non stocké |
+
+> **Règle :** si la donnée n'est pas nécessaire, ne pas la collecter.
+
+---
+
+# OAuth 2.0 et authentification déléguée 🔗
+
+> **Analogie :** OAuth, c'est le badge visiteur d'un immeuble. Tu ne donnes pas tes clés à un visiteur — tu lui donnes un badge temporaire avec accès limité.
+
+**Flux OAuth 2.0 simplifié ("Connexion avec Google") :**
+
+```
+1. L'utilisateur clique "Se connecter avec Google"
+2. Redirection vers Google (avec notre client_id)
+3. L'utilisateur autorise sur Google
+4. Google renvoie un code temporaire
+5. Notre serveur échange le code contre un access_token
+6. On récupère l'email/profil via l'API Google
+7. On crée la session → jamais de mot de passe stocké
+```
+
+**Avantage sécurité :** on ne gère pas les mots de passe = pas de risque de fuite de mots de passe.
+
+---
+
+# Les injections : au-delà du SQL 💉
+
+**Les injections ne concernent pas que les bases de données :**
+
+| Type | Cible | Exemple d'attaque |
+|------|-------|------------------|
+| SQL | Base de données | `' OR '1'='1` |
+| NoSQL | MongoDB | `{ "$gt": "" }` |
+| Command | Système OS | `; rm -rf /` |
+| LDAP | Annuaire | `*)(uid=*` |
+| XPath | XML | `' or '1'='1` |
+| Template | Moteur de rendu | `{{7*7}}` (SSTI) |
+
+**Remède universel :** ne jamais concaténer des données utilisateur dans une commande ou requête. Toujours utiliser des paramètres ou des échappements adaptés au contexte.
+
+---
+
+# SAST en action : ce que Semgrep détecte 🔍
+
+**Exemples de règles Semgrep sur du code Node.js :**
+
+```javascript
+// 🔴 Semgrep détecte : hardcoded-secret
+const API_KEY = "sk-1234567890"
+
+// 🔴 Semgrep détecte : sql-injection
+db.query(`SELECT * FROM users WHERE id=${req.params.id}`)
+
+// 🔴 Semgrep détecte : weak-crypto
+crypto.createHash('md5').update(password)
+
+// 🔴 Semgrep détecte : express-xss
+res.send('<div>' + req.query.name + '</div>')
+```
+
+> Semgrep analyse le code **sans l'exécuter** → feedback en secondes dans la CI.
+
+---
+
+# SCA en action : npm audit 📦
+
+```bash
+$ npm audit
+
+# found 3 vulnerabilities (1 moderate, 2 high)
+
+# severity : high
+# Package : express-fileupload
+# Patched in : >=1.4.0
+# CVE : CVE-2022-27261 — prototype pollution
+# Dependency of : myapp > express-fileupload
+
+# Run `npm audit fix` to fix 2 of 3 issues.
+# 1 issue requires manual review (breaking change)
+```
+
+**Dans le contexte agile :**
+- Ce rapport → ticket dans le backlog
+- CVE high → traité dans le sprint en cours
+- Breaking change → spike pour évaluer la migration
+
+---
+
+# Le coût réel d'une faille non corrigée 💰
+
+**IBM Cost of a Data Breach 2023 :**
+
+- Coût moyen mondial d'une violation de données : **4,45 M$**
+- En France : **4,08 M$**
+- Délai moyen avant détection : **204 jours**
+- Délai moyen avant confinement : **73 jours** supplémentaires
+
+**Par type de faille :**
+| Vecteur | Coût moyen |
+|---------|-----------|
+| Identifiants compromis | 4,6 M$ |
+| Phishing | 4,76 M$ |
+| Cloud misconfiguration | 4,0 M$ |
+| Vulnérabilité logicielle | 4,5 M$ |
+
+---
+
+# DevSecOps : les outils par phase 🗺️
+
+| Phase du sprint | Outil | Action |
+|----------------|-------|--------|
+| **IDE (dev)** | Snyk IDE, SonarLint | Alerte en temps réel en codant |
+| **Pre-commit** | Gitleaks, git-secrets | Bloque si secret détecté |
+| **CI - SAST** | Semgrep, CodeQL | Scan du code source |
+| **CI - SCA** | npm audit, Snyk | Scan des dépendances |
+| **CI - Image** | Trivy | Scan Docker |
+| **Staging - DAST** | OWASP ZAP | Test de l'appli en cours d'exécution |
+| **Production** | Snyk Monitor | Surveillance continue |
+
+---
+
+# Threat Modeling express en sprint 🎯
+
+**On n'a pas toujours le temps d'un threat model complet. Version rapide pour un sprint :**
+
+**4 questions à poser pour chaque nouvelle fonctionnalité :**
+
+1. **Qui peut abuser de cette fonctionnalité ?**
+   → Rédiger l'Evil User Story
+
+2. **Quelles données sont exposées ?**
+   → Vérifier le RBAC et le chiffrement
+
+3. **Quels composants tiers sont utilisés ?**
+   → Vérifier les CVE (SCA)
+
+4. **Qu'est-ce qui se passe si ça tombe ?**
+   → Prévoir la gestion d'erreur et le monitoring
+
+---
+
 # En résumé : Module 2 📝
 
-- **Accès** : authentification + autorisation (RBAC) + audit → principe du moindre privilège
-- **Crypto** : hasher les mots de passe (bcrypt), chiffrer les données sensibles (AES-256), HTTPS
-- **Vulnérabilités** : CVE + CVSS → délais de correction selon sévérité
-- **Sprints sécurisés** : sécurité dans chaque cérémonie Scrum
-- **Tests intégrés** : SAST, SCA, DAST dans la CI/CD
-- **DevSecOps** : Shift-Left + automatisation + culture partagée
+- **Accès** : AAA (Authentification + Autorisation + Audit) → RBAC + principe du moindre privilège
+- **Crypto** : bcrypt pour les mots de passe, AES-256 pour les données, HTTPS partout
+- **MFA** : bloque 99.9% des attaques sur comptes — non négociable
+- **Injections** : SQL, NoSQL, Command, Template → requêtes paramétrées toujours
+- **CVE + CVSS** → délais de correction agiles : 24h critique, 7j haute
+- **DevSecOps** : outils à chaque phase du sprint (IDE → pre-commit → CI → staging → prod)
+- **Equifax, Log4Shell** : exemples réels du coût d'une CVE non traitée
 - **Evil User Stories** + **DoD sécurisée** = outils concrets pour chaque sprint
