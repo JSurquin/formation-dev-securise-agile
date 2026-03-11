@@ -8,7 +8,7 @@ routeAlias: 'cicd-securise'
 # 🚀 Module 6
 ## Pratiques de sécurité dans les outils agiles
 
-### Environnements, CI/CD sécurisé, Jenkins & GitLab CI
+### Environnements, configurations sécurisées et GitLab CI (compte gratuit)
 
 ---
 
@@ -40,7 +40,7 @@ routeAlias: 'cicd-securise'
 ```bash
 .env.development  → données fictives, logs verbeux
 .env.staging      → données anonymisées, logs modérés
-.env.production   → secrets via Vault/AWS SSM, logs structurés
+.env.production   → secrets via GitLab CI Variables, logs structurés
 ```
 
 ---
@@ -55,16 +55,14 @@ STRIPE_KEY=sk_live_xxxxxxxxxxxxx
 ```
 
 ```bash
-# ✅ Ce qu'il faut faire : référencer un secret manager
+# ✅ Ce qu'il faut faire : variables GitLab CI
 DATABASE_URL=${DATABASE_URL}
 JWT_SECRET=${JWT_SECRET}
 STRIPE_KEY=${STRIPE_KEY}
 ```
 
-**Outils :**
-- **HashiCorp Vault** : gestion centralisée des secrets
-- **GitHub/GitLab Secrets** : variables chiffrées dans la CI
-- **AWS Secrets Manager / Azure Key Vault** : cloud-native
+**Où stocker les secrets sur GitLab :**
+Settings → CI/CD → Variables → **Masked + Protected**
 
 ---
 
@@ -82,16 +80,29 @@ STRIPE_KEY=${STRIPE_KEY}
 
 ---
 
-# Les étapes d'un pipeline DevSecOps 🛡️
+# Pourquoi GitLab CI ? 🦊
+
+> **GitLab.com** = compte gratuit + **400 minutes CI/CD gratuites par mois** → parfait pour apprendre et pratiquer sans infrastructure à gérer.
+
+**Avantages pour un projet agile :**
+- CI/CD intégrée nativement (pas de serveur séparé à installer)
+- Issues + Merge Requests + Pipeline dans la même interface
+- Templates de sécurité natifs (SAST, Secret Detection)
+- Variables CI chiffrées et masquées en 2 clics
+
+**Pour démarrer :** créer un compte sur [gitlab.com](https://gitlab.com), créer un projet, pousser du code → la CI se déclenche automatiquement.
+
+---
+
+# Les étapes d'un pipeline DevSecOps GitLab 🛡️
 
 | Étape | Outil | Ce qu'on vérifie |
 |-------|-------|-----------------|
 | **Secrets** | Gitleaks | Clés API / mots de passe commités |
 | **SAST** | Semgrep | Failles dans le code source |
-| **SCA** | npm audit / Snyk | CVE dans les dépendances |
+| **SCA** | npm audit | CVE dans les dépendances |
 | **Build** | Docker | Image construite correctement |
 | **Scan image** | Trivy | Vulnérabilités dans l'image Docker |
-| **DAST** | OWASP ZAP | Attaques sur l'appli en cours d'exécution |
 | **Deploy** | — | Seulement si tout est vert |
 
 ---
@@ -100,7 +111,7 @@ STRIPE_KEY=${STRIPE_KEY}
 
 > **Analogie :** Le security gate, c'est le contrôle du passeport à l'aéroport. Si le passeport est invalide, on ne passe pas — peu importe si l'avion est prêt à décoller.
 
-**Principe :** le pipeline échoue automatiquement si une vulnérabilité dépasse le seuil.
+**Dans GitLab CI :** `allow_failure: false` = le pipeline échoue si l'étape échoue.
 
 | Sévérité | Comportement |
 |----------|-------------|
@@ -111,125 +122,28 @@ STRIPE_KEY=${STRIPE_KEY}
 
 ---
 
-# GitHub Actions : pipeline sécurisé (1/2)
+# Structure d'un `.gitlab-ci.yml` 📄
 
 ```yaml
-# .github/workflows/security.yml
-name: Security Pipeline
-on: [push, pull_request]
+# .gitlab-ci.yml — structure de base
+stages:
+  - secrets   # 1. Détecter les secrets commités
+  - sast      # 2. Analyser le code source
+  - sca       # 3. Analyser les dépendances
+  - build     # 4. Builder et scanner l'image Docker
+  - deploy    # 5. Déployer si tout est vert
 
-jobs:
-  secrets-scan:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - uses: gitleaks/gitleaks-action@v2
-
-  sast:
-    runs-on: ubuntu-latest
-    needs: secrets-scan
-    steps:
-      - uses: actions/checkout@v4
-      - uses: returntocorp/semgrep-action@v1
-        with:
-          config: p/owasp-top-ten
+variables:
+  APP_IMAGE: "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA"
 ```
+
+> Chaque `stage` s'exécute dans l'ordre. Si un job échoue avec `allow_failure: false`, les stages suivants ne s'exécutent pas.
 
 ---
 
-# GitHub Actions : pipeline sécurisé (2/2)
+# GitLab CI : scan de secrets et SAST (1/3)
 
 ```yaml
-  sca:
-    runs-on: ubuntu-latest
-    needs: secrets-scan
-    steps:
-      - uses: actions/checkout@v4
-      - run: npm ci
-      - run: npm audit --audit-level=high
-
-  docker-scan:
-    runs-on: ubuntu-latest
-    needs: [sast, sca]
-    steps:
-      - uses: actions/checkout@v4
-      - run: docker build -t myapp:latest .
-      - uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: 'myapp:latest'
-          severity: 'CRITICAL,HIGH'
-          exit-code: '1'
-```
-
----
-
-# Jenkins : pipeline sécurisé (1/2) 🏗️
-
-> **Jenkins** = le couteau suisse de la CI/CD en entreprise. Très répandu, très configurable.
-
-```groovy
-// Jenkinsfile
-pipeline {
-  agent any
-  stages {
-    stage('Secrets Scan') {
-      steps {
-        sh 'gitleaks detect --source . -v'
-      }
-    }
-    stage('SAST') {
-      steps {
-        sh 'semgrep --config=p/owasp-top-ten .'
-      }
-    }
-    stage('SCA') {
-      steps {
-        sh 'npm audit --audit-level=high'
-      }
-    }
-  }
-}
-```
-
----
-
-# Jenkins : pipeline sécurisé (2/2) 🏗️
-
-```groovy
-    stage('Docker Build & Scan') {
-      steps {
-        sh 'docker build -t myapp:latest .'
-        sh '''trivy image \
-          --exit-code 1 \
-          --severity CRITICAL,HIGH \
-          myapp:latest'''
-      }
-    }
-    stage('Deploy') {
-      when {
-        branch 'main'
-        expression {
-          currentBuild.result == null
-        }
-      }
-      steps {
-        sh './deploy.sh'
-      }
-    }
-```
-
----
-
-# GitLab CI : pipeline sécurisé (1/2) 🦊
-
-> **GitLab CI** = CI/CD intégré à GitLab, avec des templates de sécurité natifs (SAST, DAST, Secret Detection inclus dans GitLab Ultimate).
-
-```yaml
-# .gitlab-ci.yml
-stages: [secrets, sast, sca, build, deploy]
-
 gitleaks:
   stage: secrets
   image: zricethezav/gitleaks
@@ -247,11 +161,12 @@ semgrep:
 
 ---
 
-# GitLab CI : pipeline sécurisé (2/2) 🦊
+# GitLab CI : SCA et scan Docker (2/3)
 
 ```yaml
 sca:
   stage: sca
+  image: node:22-alpine
   script:
     - npm ci
     - npm audit --audit-level=high
@@ -259,17 +174,53 @@ sca:
 
 trivy:
   stage: build
+  image: docker:latest
+  services: [docker:dind]
   script:
-    - docker build -t myapp:latest .
+    - docker build -t $APP_IMAGE .
     - trivy image --exit-code 1
-        --severity CRITICAL,HIGH myapp:latest
+        --severity CRITICAL,HIGH $APP_IMAGE
   allow_failure: false
+```
 
+---
+
+# GitLab CI : déploiement conditionnel (3/3)
+
+```yaml
 deploy:
   stage: deploy
-  script: [./deploy.sh]
-  only: [main]
-  when: on_success
+  script:
+    - echo "Déploiement en production"
+    - ./deploy.sh
+  environment:
+    name: production
+    url: https://monapp.example.com
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+      when: on_success
+```
+
+> `rules: when: on_success` = le déploiement ne se lance que si **toutes** les étapes précédentes ont réussi → c'est le security gate final.
+
+---
+
+# Variables CI/CD GitLab : stocker les secrets 🔑
+
+**Dans GitLab : Settings → CI/CD → Variables**
+
+| Option | Effet |
+|--------|-------|
+| **Masked** | La valeur n'apparaît jamais dans les logs |
+| **Protected** | Disponible uniquement sur les branches protégées (main) |
+| **File** | La variable est injectée comme fichier (ex : certificat) |
+
+```yaml
+# Utilisation dans le pipeline
+deploy:
+  script:
+    - echo "$DEPLOY_KEY" > /tmp/key.pem
+    - ssh -i /tmp/key.pem user@server "./deploy.sh"
 ```
 
 ---
@@ -298,23 +249,23 @@ CMD ["node", "server.js"]
 
 # Gestion des vulnérabilités dans le pipeline agile 🔗
 
-**Quand le pipeline détecte une vuln, quelle est la suite ?**
+**Quand GitLab CI détecte une vuln, quelle est la suite ?**
 
-1. **Alerte automatique** → notification au Security Champion
-2. **Ticket créé** dans le backlog (Jira, GitLab Issues)
+1. **Pipeline échoue** → notification automatique au Security Champion
+2. **Issue créée** dans GitLab Issues (avec label `security`)
 3. **Priorisation** selon le CVSS → sprint courant ou suivant
-4. **Correction** → nouveau push → pipeline re-scanné
-5. **Security gate** validé → déploiement autorisé
+4. **Correction** → nouveau commit → pipeline re-déclenché
+5. **Security gate** passe → merge request approuvée → déploiement
 
-> **Objectif :** fermer la boucle entre détection et correction en moins d'un sprint.
+> **Avantage GitLab :** issues, pipeline et merge requests sont dans la même interface → visibilité immédiate pour toute l'équipe.
 
 ---
 
 # En résumé : Module 6 📝
 
 - **3 environnements** (dev / staging / prod) : configurations et accès séparés
-- **Jamais de secrets dans git** : utiliser Vault, GitHub Secrets ou GitLab CI Variables
-- **Pipeline = chaîne de montage** : chaque étape vérifie avant de passer à la suivante
-- **Security gates** : bloquer automatiquement sur les failles critiques/hautes
-- **GitHub Actions, Jenkins, GitLab CI** : tous capables d'intégrer SAST + SCA + scan Docker
-- **Lier le pipeline au backlog** : chaque alerte = ticket priorisé dans le sprint
+- **Jamais de secrets dans git** : utiliser les GitLab CI Variables (Masked + Protected)
+- **Pipeline = chaîne de montage** : chaque stage vérifie avant de passer au suivant
+- **GitLab CI** : gratuit, intégré, 400 min/mois, tout dans une interface
+- **`allow_failure: false`** + `when: on_success` = security gates automatiques
+- **Lier le pipeline aux Issues GitLab** : chaque alerte = ticket priorisé dans le sprint

@@ -146,7 +146,7 @@ layout: two-cols
 - Sécurisation des environnements dev/prod, configurations
 - Tests de sécurité automatisés dans les pipelines CI/CD
 - Gestion des vulnérabilités dans un cadre agile
-- TP : tests automatisés avec Jenkins ou GitLab CI
+- TP : tests automatisés avec GitLab CI (compte gratuit)
 
 </small>
 

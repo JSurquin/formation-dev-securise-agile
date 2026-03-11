@@ -8,11 +8,11 @@
 
 # Question 1
 
-Pourquoi faut-il des configurations séparées entre les environnements dev, staging et prod ?
+Pourquoi faut-il des configurations séparées entre dev, staging et prod ?
 
 A) Pour aller plus vite en développement
 
-B) Pour éviter qu'une compromission de staging donne accès à la prod
+B) Pour éviter qu'une compromission de staging donne accès aux credentials de prod
 
 C) Pour économiser de l'espace disque
 
@@ -22,13 +22,13 @@ D) Les configurations séparées sont inutiles
 
 # Question 2
 
-Où stocker les secrets (clés API, mots de passe) utilisés dans un pipeline CI/CD ?
+Où stocker les secrets dans un pipeline GitLab CI ?
 
-A) Dans le fichier YAML du pipeline
+A) Dans le fichier `.gitlab-ci.yml`
 
 B) Dans un fichier `.env` commité sur git
 
-C) Dans les variables chiffrées du CI (GitHub Secrets, GitLab CI Variables, Vault)
+C) Dans GitLab CI Variables (Settings → CI/CD → Variables)
 
 D) En commentaire dans le code source
 
@@ -36,77 +36,77 @@ D) En commentaire dans le code source
 
 # Question 3
 
-Qu'est-ce qu'une Security Gate dans un pipeline CI/CD ?
+Dans GitLab CI, que fait l'option `allow_failure: false` sur un job de sécurité ?
 
-A) Un pare-feu réseau
+A) Elle ignore les erreurs de ce job
 
-B) Un point de contrôle qui bloque le déploiement si une vulnérabilité critique est détectée
+B) Elle fait échouer tout le pipeline si ce job échoue, bloquant les stages suivants
 
-C) Un certificat SSL
+C) Elle relance le job automatiquement
 
-D) Une étape de revue manuelle obligatoire
+D) Elle envoie un email d'alerte
 
 ---
 
 # Question 4
 
-Quel outil permet de détecter des secrets commités dans un repo git ?
+Quelle option GitLab CI Variable garantit que la valeur n'apparaît jamais dans les logs ?
 
-A) ESLint
+A) Protected
 
-B) Gitleaks
+B) Masked
 
-C) Jest
+C) Hidden
 
-D) Webpack
+D) Encrypted
 
 ---
 
 # Question 5
 
-Dans un Jenkinsfile, comment s'appelle le bloc qui définit les étapes du pipeline ?
+Dans quel ordre les stages d'un pipeline DevSecOps doivent-ils s'exécuter ?
 
-A) `jobs`
+A) deploy → build → sast → secrets
 
-B) `steps`
+B) secrets → sast → sca → build → deploy
 
-C) `stages`
+C) build → deploy → sast → secrets
 
-D) `tasks`
+D) sca → deploy → secrets → sast
 
 ---
 
 # Question 6
 
-Quel est l'avantage du multi-stage build dans un Dockerfile ?
+Quel outil scanne les images Docker à la recherche de CVE ?
 
-A) Le build est plus rapide
+A) SonarQube
 
-B) L'image finale ne contient pas les outils de build, elle est plus petite et moins exposée
+B) Semgrep
 
-C) Il ajoute automatiquement la sécurité
+C) Trivy
 
-D) Il permet de lancer plusieurs conteneurs
+D) npm audit
 
 ---
 
 # Question 7
 
-Quel outil scanne les images Docker à la recherche de CVE ?
+Quelle condition GitLab CI permet de déployer uniquement sur la branche `main` ?
 
-A) SonarQube
+A) `only: [main]` ou `rules: if: $CI_COMMIT_BRANCH == "main"`
 
-B) Trivy
+B) `branch: main`
 
-C) npm audit
+C) `when: main`
 
-D) ESLint
+D) `filter: main`
 
 ---
 
 # Question 8
 
-Quelle est la bonne pratique concernant l'utilisateur d'exécution dans un conteneur Docker ?
+Quelle est la bonne pratique concernant l'utilisateur dans un conteneur Docker ?
 
 A) Utiliser root pour simplifier les permissions
 
@@ -120,27 +120,27 @@ D) Peu importe, le conteneur est isolé
 
 # Question 9
 
-Dans GitLab CI, que fait l'option `allow_failure: false` ?
+Quel est l'avantage du multi-stage build dans un Dockerfile ?
 
-A) Elle ignore les erreurs de cette étape
+A) Le build est plus rapide
 
-B) Elle fait échouer tout le pipeline si cette étape échoue
+B) L'image finale est plus petite et ne contient pas les outils de build
 
-C) Elle relance automatiquement l'étape en cas d'erreur
+C) Il ajoute automatiquement un scan de sécurité
 
-D) Elle envoie un email en cas d'erreur
+D) Il permet de lancer plusieurs services
 
 ---
 
 # Question 10
 
-Quand une vulnérabilité est détectée par la CI/CD dans un contexte agile, quelle est la bonne réaction ?
+Quand GitLab CI détecte une vuln dans le pipeline d'un projet Scrum, quelle est la bonne réaction ?
 
-A) L'ignorer et déployer quand même
+A) Supprimer le job de scan pour débloquer le pipeline
 
-B) Créer un ticket dans le backlog, prioriser selon le CVSS, corriger dans le sprint approprié
+B) Créer une Issue GitLab, la prioriser selon le CVSS, et la traiter dans le sprint approprié
 
-C) Supprimer le scan pour débloquer le pipeline
+C) Ignorer si l'application fonctionne correctement en dev
 
 D) Attendre le prochain audit trimestriel
 
@@ -148,39 +148,39 @@ D) Attendre le prochain audit trimestriel
 
 # Réponses du Module 6 📝
 
-**Réponse 1 :** B) Éviter qu'une compromission de staging donne accès à la prod
+**Réponse 1 :** B) Éviter la compromission croisée staging → prod
 - Des credentials partagés = une seule brèche pour tout compromettre
 
-**Réponse 2 :** C) Variables chiffrées du CI
-- Jamais de secrets dans le code ou les fichiers de config versionnés
+**Réponse 2 :** C) GitLab CI Variables
+- Settings → CI/CD → Variables → Masked + Protected
 
-**Réponse 3 :** B) Point de contrôle qui bloque sur les vulnérabilités critiques
-- Analogie : le contrôle du passeport — si invalide, on ne passe pas
+**Réponse 3 :** B) Fait échouer tout le pipeline
+- C'est ce qui implémente le "security gate" en GitLab CI
 
-**Réponse 4 :** B) Gitleaks
-- Il scanne l'historique git et détecte les patterns de secrets
+**Réponse 4 :** B) Masked
+- La valeur n'apparaît jamais dans les logs, même en cas d'erreur
 
-**Réponse 5 :** C) `stages`
-- La structure Jenkinsfile : `pipeline > stages > stage > steps`
+**Réponse 5 :** B) secrets → sast → sca → build → deploy
+- On détecte les problèmes le plus tôt possible, avant même de builder
 
 ---
 
 # Réponses du Module 6 (suite) 📝
 
-**Réponse 6 :** B) Image plus petite sans outils de build
-- Le multi-stage sépare la phase de build de l'image finale livrée
-
-**Réponse 7 :** B) Trivy
+**Réponse 6 :** C) Trivy
 - Trivy scanne images Docker, systèmes de fichiers et repos git
+
+**Réponse 7 :** A) `only: [main]` ou `rules: if: $CI_COMMIT_BRANCH == "main"`
+- `rules:` est la syntaxe moderne recommandée par GitLab
 
 **Réponse 8 :** B) Utilisateur non-root dédié
 - Si l'appli est compromise, l'attaquant n'a pas les droits root sur l'hôte
 
-**Réponse 9 :** B) Fait échouer tout le pipeline
-- C'est ce qui implémente le "security gate" en GitLab CI
+**Réponse 9 :** B) Image plus petite sans outils de build
+- Le multi-stage sépare la phase de compilation de l'image finale livrée
 
-**Réponse 10 :** B) Ticket backlog + priorisation CVSS + correction dans le sprint
-- La CI/CD alimente le backlog sécurité de l'équipe Scrum
+**Réponse 10 :** B) Issue GitLab + priorisation CVSS + sprint
+- Le pipeline alimente les Issues GitLab = backlog sécurité de l'équipe
 
 ---
 

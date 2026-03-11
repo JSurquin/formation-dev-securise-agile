@@ -1,7 +1,7 @@
 ---
 
 # Travaux pratiques Module 6 🎯
-## Tests de sécurité automatisés dans Jenkins et GitLab CI
+## Tests de sécurité automatisés avec GitLab CI
 
 ---
 
@@ -22,30 +22,29 @@
 
 | Problème | Risque | Correction |
 |---------|--------|------------|
-| `.env.production` dans git | Exposition des secrets | Ajouter au `.gitignore`, rotation des credentials, utiliser GitLab CI Variables |
-| Credentials partagés staging/prod | Compromission staging = accès prod | Credentials séparés par environnement |
+| `.env.production` dans git | Exposition des secrets | Ajouter au `.gitignore`, rotation des credentials, stocker dans GitLab CI Variables |
+| Credentials partagés staging/prod | Compromission staging = accès prod | Variables séparées par environnement dans GitLab |
 | Dockerfile en `root` | Escalade de privilèges si RCE | Utilisateur non-root (`adduser app`) |
-| CI sans scan sécurité | Failles non détectées | Ajouter SAST + SCA + scan Docker |
+| CI sans scan sécurité | Failles non détectées | Ajouter SAST + SCA + scan Docker dans `.gitlab-ci.yml` |
 
 ---
 
 # TP 2 : Écrire un pipeline GitLab CI sécurisé (25 min)
 
-**Contexte :** Votre équipe Scrum utilise GitLab. Le Security Champion (vous) doit mettre en place le pipeline.
+**Contexte :** Votre équipe Scrum vient de créer un projet sur GitLab.com. Le Security Champion (vous) doit mettre en place le pipeline de sécurité.
 
 **Consigne :** Rédigez le `.gitlab-ci.yml` complet incluant :
-- Scan de secrets (Gitleaks)
-- SAST (Semgrep)
-- SCA (npm audit)
-- Build et scan Docker (Trivy)
-- Déploiement conditionnel sur `main` uniquement
+1. Scan de secrets (Gitleaks)
+2. SAST (Semgrep, règles OWASP)
+3. SCA (npm audit)
+4. Build et scan Docker (Trivy)
+5. Déploiement conditionnel sur `main` uniquement
 
 ---
 
-# TP 2 : Solution — Structure et secrets (1/2)
+# TP 2 : Solution — stages et secrets (1/2)
 
 ```yaml
-# .gitlab-ci.yml
 stages:
   - secrets
   - sast
@@ -54,7 +53,7 @@ stages:
   - deploy
 
 variables:
-  APP_IMAGE: "myapp:latest"
+  APP_IMAGE: "$CI_REGISTRY_IMAGE:latest"
 
 gitleaks:
   stage: secrets
@@ -78,6 +77,7 @@ semgrep:
 ```yaml
 sca:
   stage: sca
+  image: node:22-alpine
   script:
     - npm ci
     - npm audit --audit-level=high
@@ -85,6 +85,8 @@ sca:
 
 trivy:
   stage: build
+  image: docker:latest
+  services: [docker:dind]
   script:
     - docker build -t $APP_IMAGE .
     - trivy image --exit-code 1
@@ -93,82 +95,39 @@ trivy:
 
 deploy:
   stage: deploy
-  script:
-    - ./deploy.sh
-  environment: production
-  only:
-    - main
-  when: on_success
+  script: [./deploy.sh]
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+      when: on_success
 ```
 
 ---
 
-# TP 3 : Écrire un Jenkinsfile sécurisé (20 min)
+# TP 3 : Configurer les variables GitLab CI (15 min)
 
-**Contexte :** Une autre équipe utilise Jenkins en entreprise. Même objectif que le TP 2.
+**Contexte :** Votre pipeline est en place. Il faut maintenant stocker les secrets correctement.
 
-**Consigne :** Rédigez le `Jenkinsfile` équivalent avec les mêmes étapes :
-- Scan de secrets
-- SAST
-- SCA
-- Scan Docker
-- Déploiement conditionnel sur la branche `main`
+**Consigne :** Pour chaque secret ci-dessous, indiquez comment le configurer dans GitLab (Settings → CI/CD → Variables) et quelles options cocher :
 
----
-
-# TP 3 : Solution — Jenkinsfile (1/2)
-
-```groovy
-pipeline {
-  agent any
-  stages {
-    stage('Scan Secrets') {
-      steps {
-        sh 'gitleaks detect --source . -v'
-      }
-    }
-    stage('SAST') {
-      steps {
-        sh 'semgrep --config=p/owasp-top-ten .'
-      }
-    }
-    stage('SCA') {
-      steps {
-        sh 'npm ci'
-        sh 'npm audit --audit-level=high'
-      }
-    }
-  }
-}
-```
+| Secret | Masked ? | Protected ? | Pourquoi |
+|--------|----------|-------------|---------|
+| `DATABASE_URL` (prod) | ? | ? | ? |
+| `JWT_SECRET` | ? | ? | ? |
+| `DEPLOY_SSH_KEY` (clé privée) | ? | ? | ? |
+| `DEBUG_MODE=true` (dev seulement) | ? | ? | ? |
 
 ---
 
-# TP 3 : Solution — Jenkinsfile (2/2)
+# TP 3 : Solution ✅
 
-```groovy
-    stage('Docker Scan') {
-      steps {
-        sh 'docker build -t myapp:latest .'
-        sh '''trivy image \
-          --exit-code 1 \
-          --severity CRITICAL,HIGH \
-          myapp:latest'''
-      }
-    }
-    stage('Deploy') {
-      when {
-        branch 'main'
-        expression {
-          currentBuild.result == null ||
-          currentBuild.result == 'SUCCESS'
-        }
-      }
-      steps {
-        sh './deploy.sh'
-      }
-    }
-```
+| Secret | Masked | Protected | Pourquoi |
+|--------|--------|-----------|---------|
+| `DATABASE_URL` (prod) | ✅ | ✅ | Valeur sensible + uniquement sur `main` |
+| `JWT_SECRET` | ✅ | ✅ | Secret crypto + uniquement en prod |
+| `DEPLOY_SSH_KEY` | ✅ | ✅ | Clé privée = valeur la plus sensible |
+| `DEBUG_MODE=true` | ❌ | ❌ | Pas sensible, utile sur toutes les branches |
+
+**Rappel :** une variable **Protected** n'est injectée que dans les pipelines des branches protégées (ex: `main`). Une variable **Masked** n'apparaît jamais dans les logs du pipeline.
 
 ---
 
@@ -209,4 +168,4 @@ HEALTHCHECK --interval=30s --timeout=3s \
 CMD ["node", "index.js"]
 ```
 
-**Corrections :** Alpine (image légère), multi-stage (pas d'outils de build en prod), non-root, pas de secret en dur, healthcheck.
+**Corrections :** Alpine, multi-stage, non-root, secret supprimé, healthcheck.
