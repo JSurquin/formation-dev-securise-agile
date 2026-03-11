@@ -65,7 +65,21 @@ D) La durée d'un sprint
 
 ---
 
-# Question 5 — Bloc 2
+# Question 5 — Bloc 1
+
+Qu'est-ce que la "dette de sécurité" dans un projet agile ?
+
+A) Le budget alloué à la sécurité non dépensé
+
+B) L'accumulation de vulnérabilités non corrigées et de mauvaises pratiques reportées sprint après sprint
+
+C) Le temps passé à rédiger les politiques de sécurité
+
+D) Le nombre de CVE découvertes depuis le début du projet
+
+---
+
+# Question 6 — Bloc 2
 
 Quel est l'objectif du principe AAA ?
 
@@ -79,7 +93,7 @@ D) Analyser, Appliquer, Archiver
 
 ---
 
-# Question 6 — Bloc 2
+# Question 7 — Bloc 2
 
 Pourquoi ne faut-il pas stocker les mots de passe avec MD5 ?
 
@@ -93,7 +107,7 @@ D) MD5 prend trop de place en base
 
 ---
 
-# Question 7 — Bloc 2
+# Question 8 — Bloc 2
 
 Comment intégrer la sécurité dans le Sprint Planning ?
 
@@ -107,7 +121,7 @@ D) Ne pas inclure la sécurité dans le planning pour ne pas ralentir
 
 ---
 
-# Question 8 — Bloc 2
+# Question 9 — Bloc 2
 
 Qu'est-ce que le "Shift-Left Security" ?
 
@@ -121,7 +135,7 @@ D) Confier la sécurité à un prestataire externe
 
 ---
 
-# Question 9 — Bloc 3
+# Question 10 — Bloc 3
 
 Pourquoi faut-il séparer les configurations des environnements dev, staging et prod ?
 
@@ -135,7 +149,7 @@ D) Les configurations séparées ne sont pas nécessaires
 
 ---
 
-# Question 10 — Bloc 3
+# Question 11 — Bloc 3
 
 Dans quel ordre les étapes d'un pipeline DevSecOps doivent-elles être exécutées ?
 
@@ -149,7 +163,7 @@ D) Build → Deploy → Scan
 
 ---
 
-# Question 11 — Bloc 3
+# Question 12 — Bloc 3
 
 Quel est le comportement d'un security gate face à une vulnérabilité critique ?
 
@@ -163,7 +177,7 @@ D) Ignorer jusqu'au prochain sprint
 
 ---
 
-# Question 12 — Bloc 3
+# Question 13 — Bloc 3
 
 Pourquoi utilise-t-on un utilisateur non-root dans un conteneur Docker ?
 
@@ -177,7 +191,7 @@ D) Pour économiser de la mémoire
 
 ---
 
-# Question 13 — Bloc 4
+# Question 14 — Bloc 4
 
 Quelle est la fréquence recommandée pour la Sprint Security Review ?
 
@@ -191,7 +205,7 @@ D) Uniquement quand il y a un incident
 
 ---
 
-# Question 14 — Bloc 4
+# Question 15 — Bloc 4
 
 Que signifie MTTR et quelle est l'objectif pour une vulnérabilité critique ?
 
@@ -205,7 +219,7 @@ D) Mean Time To Restart — objectif < 1 heure
 
 ---
 
-# Question 15 — Bloc 4
+# Question 16 — Bloc 4
 
 Quelle donnée ne doit jamais être présente dans les logs applicatifs ?
 
@@ -219,7 +233,7 @@ D) Les noms des routes appelées
 
 ---
 
-# Question 16 — Bloc 4
+# Question 17 — Bloc 4
 
 Que cherche à faire un post-mortem "blameless" ?
 
@@ -233,7 +247,7 @@ D) Rassurer les clients par un communiqué de presse
 
 ---
 
-# Question 17 — Bloc 4
+# Question 18 — Bloc 4
 
 Dans le cycle PDCA appliqué à la sécurité, que fait la phase "Check" ?
 
@@ -247,7 +261,7 @@ D) Présenter les résultats à la direction
 
 ---
 
-# Question 18 — Bloc 2 & 4
+# Question 19 — Bloc 2 & 4
 
 Selon le RGPD, quand la protection des données personnelles doit-elle être intégrée dans un projet agile ?
 
@@ -261,7 +275,7 @@ D) Une fois par an lors du renouvellement de la certification
 
 ---
 
-# Question 19 — Bloc 3 & 4
+# Question 20 — Bloc 3 & 4
 
 Lorsqu'un scanner CI/CD détecte une CVE haute sur une dépendance, quelle est la réaction correcte ?
 
@@ -297,12 +311,12 @@ D) Une certification de sécurité logicielle
 | 2 | B) Sécurité testée trop tard | 1 |
 | 3 | C) WIP limité | 1 |
 | 4 | B) Produit livrable fin de sprint | 1 |
-| 5 | B) Authentification / Autorisation / Audit | 2 |
-| 6 | C) MD5 cassable avec rainbow tables | 2 |
-| 7 | B) Stories sécurité dans le backlog | 2 |
-| 8 | B) Contrôles le plus tôt possible | 2 |
-| 9 | B) Éviter la compromission croisée | 3 |
-| 10 | B) Secrets → SAST → SCA → Image → Deploy | 3 |
+| 5 | B) Accumulation de vulnérabilités non corrigées | 1 |
+| 6 | B) Authentification / Autorisation / Audit | 2 |
+| 7 | C) MD5 cassable avec rainbow tables | 2 |
+| 8 | B) Stories sécurité dans le backlog | 2 |
+| 9 | B) Contrôles le plus tôt possible | 2 |
+| 10 | B) Éviter la compromission croisée | 3 |
 
 ---
 
@@ -310,16 +324,16 @@ D) Une certification de sécurité logicielle
 
 | Q | Réponse | Bloc |
 |---|---------|------|
-| 11 | B) Bloquer automatiquement | 3 |
-| 12 | B) Pas de droits root si compromis | 3 |
-| 13 | B) À chaque fin de sprint | 4 |
-| 14 | B) Mean Time To Remediate < 24h | 4 |
-| 15 | C) Mots de passe et données perso | 4 |
-| 16 | B) Améliorer sans blâmer | 4 |
-| 17 | C) Vérifier l'efficacité des corrections | 4 |
-| 18 | B) Dès la conception (Privacy by Design) | 2 & 4 |
-| 19 | B) Ticket backlog + patch + re-scan | 3 & 4 |
-| 20 | B) Sécurité partagée à chaque étape | Tous |
+| 11 | B) Secrets → SAST → SCA → Image → Deploy | 3 |
+| 12 | B) Bloquer automatiquement | 3 |
+| 13 | B) Pas de droits root si compromis | 3 |
+| 14 | B) À chaque fin de sprint | 4 |
+| 15 | B) Mean Time To Remediate < 24h | 4 |
+| 16 | C) Mots de passe et données perso | 4 |
+| 17 | B) Améliorer sans blâmer | 4 |
+| 18 | C) Vérifier l'efficacité des corrections | 4 |
+| 19 | B) Dès la conception (Privacy by Design) | 2 & 4 |
+| 20 | B) Ticket backlog + patch + re-scan | 3 & 4 |
 
 ---
 

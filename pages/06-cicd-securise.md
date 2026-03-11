@@ -247,20 +247,6 @@ CMD ["node", "server.js"]
 
 ---
 
-# Gestion des vulnérabilités dans le pipeline agile 🔗
-
-**Quand GitLab CI détecte une vuln, quelle est la suite ?**
-
-1. **Pipeline échoue** → notification automatique au Security Champion
-2. **Issue créée** dans GitLab Issues (avec label `security`)
-3. **Priorisation** selon le CVSS → sprint courant ou suivant
-4. **Correction** → nouveau commit → pipeline re-déclenché
-5. **Security gate** passe → merge request approuvée → déploiement
-
-> **Avantage GitLab :** issues, pipeline et merge requests sont dans la même interface → visibilité immédiate pour toute l'équipe.
-
----
-
 # Pourquoi sécuriser la CI/CD ? L'attaque SolarWinds 🌐
 
 > **2020 :** SolarWinds, éditeur de logiciels réseau, voit sa pipeline de build compromise. Les attaquants insèrent une backdoor directement dans le processus de compilation.

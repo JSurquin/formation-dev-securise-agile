@@ -171,7 +171,7 @@ D) Gérer les déploiements en production
 - Haute = corriger dans la semaine. Critique (9.0-10.0) = 24-48h
 
 **Réponse 7 :** B) Aucun secret dans le code
-- Les clés API et mots de passe en dur sont une faille critique (A02 OWASP)
+- Les clés API et mots de passe en dur sont une faille critique — c'est pourquoi Gitleaks et le SAST les détectent automatiquement
 
 **Réponse 8 :** B) Role-Based Access Control
 - Les droits sont liés au rôle (employé, manager, admin) pas à l'individu
