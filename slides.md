@@ -80,6 +80,7 @@ routeAlias: 'sommaire'
 <Link to="gestion-vulnerabilites">🔍 7. Suivi, audit & gestion des risques agiles (3h)</Link>
 <Link to="exercice-final">🎯 8. Exercice final : Audit de sécurité agile</Link>
 <Link to="qcm-final">✅ QCM de validation finale</Link>
+<Link to="devsecops-pipeline-complet">🏭 10. Pipeline DevSecOps : GitLab + Jenkins (Java & PHP)</Link>
 </div>
 
 <br>
@@ -169,6 +170,12 @@ layout: two-cols
 **QCM Final** ✅
 - Validation des acquis
 - Tous les modules
+
+**Module 10 - Pipeline DevSecOps complet (Bonus)**
+- GitLab + Jenkins en Docker Compose
+- Pipeline Java & PHP de zéro
+- Renovate (dépendances auto)
+- Security gates en pratique
 
 </small>
 
@@ -262,4 +269,16 @@ src: './pages/08-exercice-final.md'
 
 ---
 src: './pages/09-qcm-final.md'
+---
+
+---
+src: './pages/10-devsecops-pipeline-complet.md'
+---
+
+---
+src: './pages/10-qcm-devsecops-pipeline.md'
+---
+
+---
+src: './pages/10-exercices-devsecops-pipeline.md'
 ---
