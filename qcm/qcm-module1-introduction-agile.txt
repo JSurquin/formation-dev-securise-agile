@@ -1,0 +1,144 @@
+============================================================
+QCM Module 1 : Introduction au développement agile
+Développer de manière sécurisée et agile — 12-13 mars 2026
+============================================================
+
+Question 1
+
+Quelle valeur du Manifeste Agile est correctement formulée ?
+
+A) Un logiciel parfaitement documenté > un logiciel fonctionnel
+
+B) Les individus et leurs interactions > les processus et les outils
+
+C) Le suivi d'un plan > l'adaptation au changement
+
+D) La négociation contractuelle > la collaboration avec le client
+
+----------------------------------------
+
+Question 2
+
+Dans Scrum, qui est responsable de prioriser le Product Backlog ?
+
+A) Le Scrum Master
+
+B) L'équipe de développement
+
+C) Le Product Owner
+
+D) Le Security Champion
+
+----------------------------------------
+
+Question 3
+
+Quelle est la durée typique d'un sprint Scrum ?
+
+A) 1 jour
+
+B) 6 mois
+
+C) 1 à 4 semaines
+
+D) 1 an
+
+----------------------------------------
+
+Question 4
+
+Quelle cérémonie Scrum sert à améliorer le fonctionnement de l'équipe ?
+
+A) Sprint Planning
+
+B) Daily Standup
+
+C) Sprint Review
+
+D) Rétrospective
+
+----------------------------------------
+
+Question 5
+
+Quelle est la principale différence entre Scrum et Kanban ?
+
+A) Kanban utilise des sprints fixes, Scrum non
+
+B) Scrum utilise des sprints fixes, Kanban fonctionne en flux continu
+
+C) Kanban n'est pas une méthode agile
+
+D) Scrum n'a pas de tableau de tâches
+
+----------------------------------------
+
+Question 6
+
+Dans l'approche Waterfall, quand la sécurité est-elle généralement testée ?
+
+A) Dès la conception
+
+B) À chaque sprint
+
+C) Uniquement en phase de test, avant livraison
+
+D) En continu tout au long du projet
+
+----------------------------------------
+
+Question 7
+
+Quel est le principal avantage de l'approche agile sur le Waterfall pour la sécurité ?
+
+A) Elle est plus rapide à mettre en place
+
+B) Les failles sont détectées et corrigées à chaque sprint, pas en fin de projet
+
+C) Elle ne nécessite pas de tests de sécurité
+
+D) Elle supprime la phase de conception
+
+----------------------------------------
+
+Question 8
+
+Qu'est-ce que le Product Backlog dans Scrum ?
+
+A) La liste des bugs à corriger
+
+B) La liste priorisée de tout ce que le produit doit faire
+
+C) Le planning des sprints pour l'année
+
+D) Le journal des réunions d'équipe
+
+----------------------------------------
+
+Question 9
+
+Quelle notion Kanban permet d'éviter que l'équipe fasse trop de tâches en même temps ?
+
+A) Daily Standup
+
+B) Sprint Planning
+
+C) WIP (Work In Progress) limité
+
+D) Definition of Done
+
+----------------------------------------
+
+Question 10
+
+Pourquoi la sécurité est-elle difficile à intégrer dans les premières années de l'Agile ?
+
+A) Les outils agiles ne permettent pas la sécurité
+
+B) La sécurité était perçue comme un frein à la vélocité
+
+C) Les développeurs ne s'intéressent pas à la sécurité
+
+D) Agile interdit les tests de sécurité
+
+----------------------------------------

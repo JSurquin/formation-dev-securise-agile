@@ -1,0 +1,144 @@
+============================================================
+QCM Module 2 : Intégration de la sécurité dans les projets agiles
+Développer de manière sécurisée et agile — 12-13 mars 2026
+============================================================
+
+Question 1
+
+Que signifie AAA dans la gestion des accès ?
+
+A) Agile, Automatisation, Audit
+
+B) Authentification, Autorisation, Audit
+
+C) Accès, Admin, Alerte
+
+D) Application, Architecture, Analyse
+
+----------------------------------------
+
+Question 2
+
+Quel algorithme est recommandé pour stocker les mots de passe ?
+
+A) MD5
+
+B) SHA-1
+
+C) Base64
+
+D) Bcrypt ou Argon2
+
+----------------------------------------
+
+Question 3
+
+Qu'est-ce que le principe du moindre privilège ?
+
+A) Donner les droits admin à tout le monde par défaut
+
+B) Ne donner à chaque utilisateur que les accès strictement nécessaires
+
+C) Supprimer tous les droits des utilisateurs
+
+D) Partager les identifiants entre collègues
+
+----------------------------------------
+
+Question 4
+
+Quelle est la différence entre chiffrement symétrique et asymétrique ?
+
+A) Le symétrique est plus sécurisé
+
+B) Le symétrique utilise la même clé pour chiffrer et déchiffrer ; l'asymétrique utilise une paire de clés
+
+C) L'asymétrique est uniquement pour les mots de passe
+
+D) Le symétrique ne peut pas chiffrer les fichiers
+
+----------------------------------------
+
+Question 5
+
+Qu'est-ce qu'une Evil User Story ?
+
+A) Une User Story rédigée par un développeur junior
+
+B) Une story décrivant ce qu'un attaquant pourrait faire, avec une mitigation associée
+
+C) Une User Story rejetée par le Product Owner
+
+D) Une story avec un bug de sécurité connu
+
+----------------------------------------
+
+Question 6
+
+Quel score CVSS indique une vulnérabilité de sévérité haute ?
+
+A) 0.1-3.9
+
+B) 4.0-6.9
+
+C) 7.0-8.9
+
+D) 9.0-10.0
+
+----------------------------------------
+
+Question 7
+
+Quel critère de sécurité doit figurer dans la Definition of Done ?
+
+A) Le design doit être validé par un designer UX
+
+B) Aucun secret (clé API, mot de passe) ne doit être présent dans le code
+
+C) Le code doit être écrit en TypeScript
+
+D) Le sprint doit durer exactement 2 semaines
+
+----------------------------------------
+
+Question 8
+
+Qu'est-ce que le RBAC ?
+
+A) Rapid Build And Compile
+
+B) Role-Based Access Control : les droits sont attribués selon le rôle
+
+C) Remote Backup And Cache
+
+D) Un type d'attaque sur les API
+
+----------------------------------------
+
+Question 9
+
+Que signifie "Shift-Left Security" dans un sprint agile ?
+
+A) Déplacer les tests de sécurité après la mise en production
+
+B) Intégrer les contrôles de sécurité le plus tôt possible dans le cycle de développement
+
+C) Confier la sécurité uniquement à l'équipe ops
+
+D) Supprimer les sprints de sécurité
+
+----------------------------------------
+
+Question 10
+
+Quel est le rôle du Security Champion dans une équipe Scrum ?
+
+A) Faire tous les pentests de l'application
+
+B) Être le référent sécurité de l'équipe, faire la veille CVE et animer les revues de code sécurité
+
+C) Remplacer l'équipe sécurité
+
+D) Gérer les déploiements en production
+
+----------------------------------------
