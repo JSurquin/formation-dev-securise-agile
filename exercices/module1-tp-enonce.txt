@@ -1,0 +1,64 @@
+============================================================
+Module 1 : Introduction au développement agile
+Développer de manière sécurisée et agile — 12-13 mars 2026
+============================================================
+
+[ ÉNONCÉ — À REMETTRE AUX ÉTUDIANTS ]
+
+TP 1 : Constituer une équipe Scrum sécurisée (10 min)
+
+**Contexte :** Vous montez une équipe pour développer une appli de **réservation de salles** en entreprise.
+
+**Équipe disponible :** 5 développeurs, 1 représentant métier, 1 chef de projet.
+
+**Consigne :**
+1. Attribuez les rôles Scrum (PO, Scrum Master, équipe dev)
+2. Identifiez qui sera **Security Champion** et pourquoi
+3. Listez 2 responsabilités sécurité spécifiques pour chaque rôle
+
+--------------------------------------------------
+
+TP 2 : Construire le Product Backlog sécurisé (15 min)
+
+**Contexte :** L'appli de réservation de salles doit permettre :
+- La connexion avec son compte entreprise
+- La réservation d'une salle pour une plage horaire
+- La consultation des réservations de son équipe
+- La gestion des salles par les admins
+
+**Consigne :**
+1. Rédigez **4 User Stories** (une par fonctionnalité)
+2. Pour chacune, rédigez **1 Evil User Story** avec sa mitigation
+3. Estimez la priorité (Haute / Moyenne / Basse)
+
+--------------------------------------------------
+
+TP 3 : Définir la Definition of Done sécurisée (10 min)
+
+**Consigne :** Rédigez la DoD complète de votre équipe pour ce projet.
+
+**Contraintes :**
+- Minimum 4 critères techniques classiques
+- Minimum 4 critères de sécurité
+- Réaliste : applicable à chaque story, chaque sprint
+
+--------------------------------------------------
+
+TP 4 : Planifier un Sprint 1 sécurisé (15 min)
+
+**Capacité de l'équipe :** 40 story points sur 2 semaines.
+
+| Story | Points | Priorité |
+|-------|--------|---------|
+| Authentification SSO entreprise | 8 | Haute |
+| Evil Story : rate limiting login | 3 | Haute |
+| Réservation d'une salle | 8 | Haute |
+| Consultation des réservations | 5 | Haute |
+| Evil Story : limite de réservations | 3 | Haute |
+| Gestion des salles (admin) | 13 | Moyenne |
+| Mise en place pipeline CI/CD sécurisé | 5 | Haute |
+
+**Consigne :** Sélectionnez les stories pour le Sprint 1 en justifiant.
+
+--------------------------------------------------
+

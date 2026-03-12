@@ -1,0 +1,64 @@
+============================================================
+Module 6 : Pratiques de sécurité dans les outils agiles
+Développer de manière sécurisée et agile — 12-13 mars 2026
+============================================================
+
+[ ÉNONCÉ — À REMETTRE AUX ÉTUDIANTS ]
+
+TP 1 : Identifier les failles de configuration (10 min)
+
+**Contexte :** Votre équipe livre une appli Node.js. Voici l'état actuel :
+
+- Le fichier `.env.production` est présent dans le repo git
+- L'environnement de staging utilise les mêmes credentials que la prod
+- Le Dockerfile utilise `FROM node:22` et lance l'appli en `root`
+- La CI fait uniquement `npm test`
+
+**Consigne :** Listez tous les problèmes de sécurité et proposez une correction pour chacun.
+
+--------------------------------------------------
+
+TP 2 : Écrire un pipeline GitLab CI sécurisé (25 min)
+
+**Contexte :** Votre équipe Scrum vient de créer un projet sur GitLab.com. Le Security Champion (vous) doit mettre en place le pipeline de sécurité.
+
+**Consigne :** Rédigez le `.gitlab-ci.yml` complet incluant :
+1. Scan de secrets (Gitleaks)
+2. SAST (Semgrep, règles OWASP)
+3. SCA (npm audit)
+4. Build et scan Docker (Trivy)
+5. Déploiement conditionnel sur `main` uniquement
+
+--------------------------------------------------
+
+TP 3 : Configurer les variables GitLab CI (15 min)
+
+**Contexte :** Votre pipeline est en place. Il faut maintenant stocker les secrets correctement.
+
+**Consigne :** Pour chaque secret ci-dessous, indiquez comment le configurer dans GitLab (Settings → CI/CD → Variables) et quelles options cocher :
+
+| Secret | Masked ? | Protected ? | Pourquoi |
+|--------|----------|-------------|---------|
+| `DATABASE_URL` (prod) | ? | ? | ? |
+| `JWT_SECRET` | ? | ? | ? |
+| `DEPLOY_SSH_KEY` (clé privée) | ? | ? | ? |
+| `DEBUG_MODE=true` (dev seulement) | ? | ? | ? |
+
+--------------------------------------------------
+
+TP 4 : Corriger un Dockerfile non sécurisé (10 min)
+
+**Consigne :** Identifiez les problèmes et réécrivez ce Dockerfile :
+
+```dockerfile
+FROM node:22
+WORKDIR /app
+COPY . .
+RUN npm install
+ENV DB_PASSWORD=SuperSecret123
+EXPOSE 3000
+CMD ["node", "index.js"]
+```
+
+--------------------------------------------------
+

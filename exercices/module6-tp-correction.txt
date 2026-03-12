@@ -1,0 +1,174 @@
+============================================================
+Module 6 : Pratiques de sécurité dans les outils agiles
+Développer de manière sécurisée et agile — 12-13 mars 2026
+============================================================
+
+[ CORRIGÉ — RÉSERVÉ AU FORMATEUR ]
+
+TP 1 : Identifier les failles de configuration (10 min)
+
+**Contexte :** Votre équipe livre une appli Node.js. Voici l'état actuel :
+
+- Le fichier `.env.production` est présent dans le repo git
+- L'environnement de staging utilise les mêmes credentials que la prod
+- Le Dockerfile utilise `FROM node:22` et lance l'appli en `root`
+- La CI fait uniquement `npm test`
+
+**Consigne :** Listez tous les problèmes de sécurité et proposez une correction pour chacun.
+
+--------------------------------------------------
+
+TP 1 : Solution ✅
+
+| Problème | Risque | Correction |
+|---------|--------|------------|
+| `.env.production` dans git | Exposition des secrets | Ajouter au `.gitignore`, rotation des credentials, stocker dans GitLab CI Variables |
+| Credentials partagés staging/prod | Compromission staging = accès prod | Variables séparées par environnement dans GitLab |
+| Dockerfile en `root` | Escalade de privilèges si RCE | Utilisateur non-root (`adduser app`) |
+| CI sans scan sécurité | Failles non détectées | Ajouter SAST + SCA + scan Docker dans `.gitlab-ci.yml` |
+
+--------------------------------------------------
+
+TP 2 : Écrire un pipeline GitLab CI sécurisé (25 min)
+
+**Contexte :** Votre équipe Scrum vient de créer un projet sur GitLab.com. Le Security Champion (vous) doit mettre en place le pipeline de sécurité.
+
+**Consigne :** Rédigez le `.gitlab-ci.yml` complet incluant :
+1. Scan de secrets (Gitleaks)
+2. SAST (Semgrep, règles OWASP)
+3. SCA (npm audit)
+4. Build et scan Docker (Trivy)
+5. Déploiement conditionnel sur `main` uniquement
+
+--------------------------------------------------
+
+TP 2 : Solution — stages et secrets (1/2)
+
+```yaml
+stages:
+  - secrets
+  - sast
+  - sca
+  - build
+  - deploy
+
+variables:
+  APP_IMAGE: "$CI_REGISTRY_IMAGE:latest"
+
+gitleaks:
+  stage: secrets
+  image: zricethezav/gitleaks
+  script:
+    - gitleaks detect --source . -v
+  allow_failure: false
+
+semgrep:
+  stage: sast
+  image: returntocorp/semgrep
+  script:
+    - semgrep --config=p/owasp-top-ten .
+  allow_failure: false
+```
+
+--------------------------------------------------
+
+TP 2 : Solution — SCA, Docker, Deploy (2/2)
+
+```yaml
+sca:
+  stage: sca
+  image: node:22-alpine
+  script:
+    - npm ci
+    - npm audit --audit-level=high
+  allow_failure: false
+
+trivy:
+  stage: build
+  image: docker:latest
+  services: [docker:dind]
+  script:
+    - docker build -t $APP_IMAGE .
+    - trivy image --exit-code 1
+        --severity CRITICAL,HIGH $APP_IMAGE
+  allow_failure: false
+
+deploy:
+  stage: deploy
+  script: [./deploy.sh]
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+      when: on_success
+```
+
+--------------------------------------------------
+
+TP 3 : Configurer les variables GitLab CI (15 min)
+
+**Contexte :** Votre pipeline est en place. Il faut maintenant stocker les secrets correctement.
+
+**Consigne :** Pour chaque secret ci-dessous, indiquez comment le configurer dans GitLab (Settings → CI/CD → Variables) et quelles options cocher :
+
+| Secret | Masked ? | Protected ? | Pourquoi |
+|--------|----------|-------------|---------|
+| `DATABASE_URL` (prod) | ? | ? | ? |
+| `JWT_SECRET` | ? | ? | ? |
+| `DEPLOY_SSH_KEY` (clé privée) | ? | ? | ? |
+| `DEBUG_MODE=true` (dev seulement) | ? | ? | ? |
+
+--------------------------------------------------
+
+TP 3 : Solution ✅
+
+| Secret | Masked | Protected | Pourquoi |
+|--------|--------|-----------|---------|
+| `DATABASE_URL` (prod) | ✅ | ✅ | Valeur sensible + uniquement sur `main` |
+| `JWT_SECRET` | ✅ | ✅ | Secret crypto + uniquement en prod |
+| `DEPLOY_SSH_KEY` | ✅ | ✅ | Clé privée = valeur la plus sensible |
+| `DEBUG_MODE=true` | ❌ | ❌ | Pas sensible, utile sur toutes les branches |
+
+**Rappel :** une variable **Protected** n'est injectée que dans les pipelines des branches protégées (ex: `main`). Une variable **Masked** n'apparaît jamais dans les logs du pipeline.
+
+--------------------------------------------------
+
+TP 4 : Corriger un Dockerfile non sécurisé (10 min)
+
+**Consigne :** Identifiez les problèmes et réécrivez ce Dockerfile :
+
+```dockerfile
+FROM node:22
+WORKDIR /app
+COPY . .
+RUN npm install
+ENV DB_PASSWORD=SuperSecret123
+EXPOSE 3000
+CMD ["node", "index.js"]
+```
+
+--------------------------------------------------
+
+TP 4 : Solution ✅
+
+```dockerfile
+FROM node:22-alpine AS builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --only=production
+
+FROM node:22-alpine
+RUN addgroup -g 1001 app && \
+    adduser -u 1001 -G app -s /bin/sh -D app
+WORKDIR /app
+COPY --from=builder /app/node_modules ./node_modules
+COPY --chown=app:app . .
+USER app
+EXPOSE 3000
+HEALTHCHECK --interval=30s --timeout=3s \
+  CMD wget -qO- http://localhost:3000/health || exit 1
+CMD ["node", "index.js"]
+```
+
+**Corrections :** Alpine, multi-stage, non-root, secret supprimé, healthcheck.
+
+--------------------------------------------------
+

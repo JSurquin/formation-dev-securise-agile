@@ -1,0 +1,60 @@
+============================================================
+Module 7 : Suivi, audit et gestion des risques agiles
+Développer de manière sécurisée et agile — 12-13 mars 2026
+============================================================
+
+[ ÉNONCÉ — À REMETTRE AUX ÉTUDIANTS ]
+
+TP 1 : Triage de vulnérabilités (15 min)
+
+**Contexte :** Votre scanner CI/CD remonte 5 vulnérabilités. Vous avez un sprint en cours.
+
+| # | Vulnérabilité | CVSS | Composant | Exploit public ? |
+|---|--------------|------|-----------|-----------------|
+| 1 | SQL Injection sur `/api/search` | 9.8 | API publique | ✅ Oui |
+| 2 | XSS réfléchi sur `/about` | 6.1 | Page marketing | ❌ Non |
+| 3 | CVE lodash obsolète | 7.5 | Backend | ✅ Oui |
+| 4 | CORS trop permissif | 5.3 | API interne | ❌ Non |
+| 5 | Log4j en environnement de test | 10.0 | Env test | ✅ Oui |
+
+**Consigne :** Priorisez et assignez un délai de correction pour chacune.
+
+--------------------------------------------------
+
+TP 2 : Réaliser un audit Sprint Security Review (20 min)
+
+**Contexte :** Fin du Sprint 5 d'une startup e-commerce. En tant que Security Champion, vous faites la Sprint Security Review.
+
+**Ce que vous observez :**
+- 2 nouvelles dépendances ajoutées : `sharp@0.32.1` et `pdfkit@0.14.0`
+- Un nouveau endpoint `/api/admin/users` créé
+- Un `.env.local` apparaît dans les fichiers modifiés
+- La DoD ne mentionne pas la vérification des dépendances
+
+**Consigne :** Rédigez le compte-rendu de la Sprint Security Review avec actions.
+
+--------------------------------------------------
+
+TP 3 : Audit complet d'un projet agile (25 min)
+
+**Contexte :** Vous auditez un projet agile au Sprint 8. Observations :
+
+- La DoD n'a aucun critère de sécurité
+- 4 CVE "haute" ouvertes depuis 3 sprints dans le backlog
+- Les logs contiennent des numéros de téléphone clients
+- Staging et prod utilisent les mêmes credentials de base de données
+- Aucun scan dans la CI/CD (uniquement `npm test`)
+- Les mots de passe sont stockés en MD5 en base
+
+**Consigne :** Rédigez un rapport d'audit structuré avec les risques priorisés et un plan d'action par sprint.
+
+--------------------------------------------------
+
+TP 4 : Rédiger un post-mortem blameless (15 min)
+
+**Scénario :** Un développeur a commité un fichier `.env` avec une clé API de paiement en production. Le fichier est resté 3 jours sur GitHub public. 150 transactions frauduleuses ont eu lieu (12 000€).
+
+**Consigne :** Rédigez un post-mortem blameless complet avec timeline, cause racine, impact et actions correctives.
+
+--------------------------------------------------
+

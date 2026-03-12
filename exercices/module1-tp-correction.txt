@@ -1,0 +1,120 @@
+============================================================
+Module 1 : Introduction au développement agile
+Développer de manière sécurisée et agile — 12-13 mars 2026
+============================================================
+
+[ CORRIGÉ — RÉSERVÉ AU FORMATEUR ]
+
+TP 1 : Constituer une équipe Scrum sécurisée (10 min)
+
+**Contexte :** Vous montez une équipe pour développer une appli de **réservation de salles** en entreprise.
+
+**Équipe disponible :** 5 développeurs, 1 représentant métier, 1 chef de projet.
+
+**Consigne :**
+1. Attribuez les rôles Scrum (PO, Scrum Master, équipe dev)
+2. Identifiez qui sera **Security Champion** et pourquoi
+3. Listez 2 responsabilités sécurité spécifiques pour chaque rôle
+
+--------------------------------------------------
+
+TP 1 : Solution ✅
+
+| Rôle | Personne | Responsabilités sécurité |
+|------|----------|--------------------------|
+| **Product Owner** | Représentant métier | Rédiger les Evil User Stories, prioriser les stories sécurité |
+| **Scrum Master** | Chef de projet | Intégrer la Security Review dans les cérémonies |
+| **Security Champion** | Dev le plus expérimenté en sécu | Code review orientée sécu, veille CVE |
+| **Équipe dev** | 4 développeurs | Respecter la DoD sécurisée, signaler les alertes |
+
+**Security Champion :** choisir le dev avec le plus d'appétence sécurité — pas forcément le plus senior. 20% de son temps dédié.
+
+--------------------------------------------------
+
+TP 2 : Construire le Product Backlog sécurisé (15 min)
+
+**Contexte :** L'appli de réservation de salles doit permettre :
+- La connexion avec son compte entreprise
+- La réservation d'une salle pour une plage horaire
+- La consultation des réservations de son équipe
+- La gestion des salles par les admins
+
+**Consigne :**
+1. Rédigez **4 User Stories** (une par fonctionnalité)
+2. Pour chacune, rédigez **1 Evil User Story** avec sa mitigation
+3. Estimez la priorité (Haute / Moyenne / Basse)
+
+--------------------------------------------------
+
+TP 2 : Solution — User Stories & Evil Stories ✅
+
+| # | User Story | Evil User Story | Mitigation |
+|---|-----------|-----------------|------------|
+| 1 | Je veux me connecter avec mon compte entreprise | Je veux brute-forcer les comptes | Rate limiting + MFA |
+| 2 | Je veux réserver une salle | Je veux réserver toutes les salles pour bloquer les autres | Limite de réservations par utilisateur |
+| 3 | Je veux voir les réservations de mon équipe | Je veux voir les réservations de toute l'entreprise | Filtrage par équipe côté serveur (RBAC) |
+| 4 | Je veux gérer les salles (admin) | Je veux escalader mes privilèges pour devenir admin | Vérification du rôle à chaque requête |
+
+--------------------------------------------------
+
+TP 3 : Définir la Definition of Done sécurisée (10 min)
+
+**Consigne :** Rédigez la DoD complète de votre équipe pour ce projet.
+
+**Contraintes :**
+- Minimum 4 critères techniques classiques
+- Minimum 4 critères de sécurité
+- Réaliste : applicable à chaque story, chaque sprint
+
+--------------------------------------------------
+
+TP 3 : Solution ✅
+
+**Definition of Done — Projet Réservation de salles :**
+
+- ✅ Code reviewé par au moins 1 pair
+- ✅ Tests unitaires écrits et passent (couverture > 80%)
+- ✅ Feature démontrée et validée par le PO
+- ✅ Documentation API à jour
+- 🔐 Scan SAST : zéro vulnérabilité critique ou haute
+- 🔐 Dépendances vérifiées : pas de CVE critique (npm audit)
+- 🔐 Aucun secret dans le code (détecté par Gitleaks)
+- 🔐 Inputs validés côté serveur
+- 🔐 RBAC vérifié : chaque endpoint vérifie les permissions
+
+--------------------------------------------------
+
+TP 4 : Planifier un Sprint 1 sécurisé (15 min)
+
+**Capacité de l'équipe :** 40 story points sur 2 semaines.
+
+| Story | Points | Priorité |
+|-------|--------|---------|
+| Authentification SSO entreprise | 8 | Haute |
+| Evil Story : rate limiting login | 3 | Haute |
+| Réservation d'une salle | 8 | Haute |
+| Consultation des réservations | 5 | Haute |
+| Evil Story : limite de réservations | 3 | Haute |
+| Gestion des salles (admin) | 13 | Moyenne |
+| Mise en place pipeline CI/CD sécurisé | 5 | Haute |
+
+**Consigne :** Sélectionnez les stories pour le Sprint 1 en justifiant.
+
+--------------------------------------------------
+
+TP 4 : Solution ✅
+
+**Sprint 1 sélectionné (37 points) :**
+
+1. 🔴 **Authentification SSO** — 8 pts *(base de tout le reste)*
+2. 🔴 **Evil Story : rate limiting login** — 3 pts *(sécurité dès le départ)*
+3. 🔴 **Pipeline CI/CD sécurisé** — 5 pts *(socle technique)*
+4. 🟠 **Réservation d'une salle** — 8 pts *(fonctionnalité principale)*
+5. 🟠 **Evil Story : limite de réservations** — 3 pts *(liée à la story ci-dessus)*
+6. 🟠 **Consultation des réservations** — 5 pts *(complète le MVP)*
+7. ❌ **Gestion admin** — 13 pts *(reportée au Sprint 2)*
+
+> **Philosophie :** on intègre les stories de sécurité au même titre que les fonctionnalités. Elles ne sont pas optionnelles.
+
+--------------------------------------------------
+

@@ -1,0 +1,150 @@
+============================================================
+Module 7 : Suivi, audit et gestion des risques agiles
+Développer de manière sécurisée et agile — 12-13 mars 2026
+============================================================
+
+[ CORRIGÉ — RÉSERVÉ AU FORMATEUR ]
+
+TP 1 : Triage de vulnérabilités (15 min)
+
+**Contexte :** Votre scanner CI/CD remonte 5 vulnérabilités. Vous avez un sprint en cours.
+
+| # | Vulnérabilité | CVSS | Composant | Exploit public ? |
+|---|--------------|------|-----------|-----------------|
+| 1 | SQL Injection sur `/api/search` | 9.8 | API publique | ✅ Oui |
+| 2 | XSS réfléchi sur `/about` | 6.1 | Page marketing | ❌ Non |
+| 3 | CVE lodash obsolète | 7.5 | Backend | ✅ Oui |
+| 4 | CORS trop permissif | 5.3 | API interne | ❌ Non |
+| 5 | Log4j en environnement de test | 10.0 | Env test | ✅ Oui |
+
+**Consigne :** Priorisez et assignez un délai de correction pour chacune.
+
+--------------------------------------------------
+
+TP 1 : Solution ✅
+
+| Priorité | # | Raisonnement | Délai |
+|----------|---|-------------|-------|
+| 🔴 1 | 5 | Log4j 10.0 + exploit public — même en test, risque pivot | 24h |
+| 🔴 2 | 1 | SQL Injection 9.8 + exploit public + API publique | 24h |
+| 🟠 3 | 3 | lodash 7.5 + exploit public | Sprint en cours (< 7j) |
+| 🟡 4 | 2 | XSS 6.1 sans exploit, page peu sensible | Sprint suivant |
+| 🟢 5 | 4 | CORS 5.3 sans exploit, API interne | Backlog priorisé |
+
+> **Leçon :** le CVSS seul ne suffit pas. Un composant "en test" peut servir de point d'entrée pour pivoter vers la prod.
+
+--------------------------------------------------
+
+TP 2 : Réaliser un audit Sprint Security Review (20 min)
+
+**Contexte :** Fin du Sprint 5 d'une startup e-commerce. En tant que Security Champion, vous faites la Sprint Security Review.
+
+**Ce que vous observez :**
+- 2 nouvelles dépendances ajoutées : `sharp@0.32.1` et `pdfkit@0.14.0`
+- Un nouveau endpoint `/api/admin/users` créé
+- Un `.env.local` apparaît dans les fichiers modifiés
+- La DoD ne mentionne pas la vérification des dépendances
+
+**Consigne :** Rédigez le compte-rendu de la Sprint Security Review avec actions.
+
+--------------------------------------------------
+
+TP 2 : Solution ✅
+
+**Sprint Security Review — Sprint 5**
+
+| Élément inspecté | Constat | Action | Priorité |
+|-----------------|---------|--------|---------|
+| `sharp@0.32.1` | CVE-2023-4863 connue (CVSS 8.8) | Mettre à jour vers `sharp@0.33+` | Haute — sprint en cours |
+| `pdfkit@0.14.0` | Pas de CVE connue | Surveiller avec Dependabot | Faible |
+| `/api/admin/users` | Aucune vérification de rôle visible | Ajouter vérification RBAC + test | Haute |
+| `.env.local` commité | Secret potentiellement exposé | Supprimer + rotation credentials + `.gitignore` | Critique — immédiat |
+| DoD incomplète | Pas de vérification SCA | Mettre à jour la DoD en rétro | Moyenne |
+
+--------------------------------------------------
+
+TP 3 : Audit complet d'un projet agile (25 min)
+
+**Contexte :** Vous auditez un projet agile au Sprint 8. Observations :
+
+- La DoD n'a aucun critère de sécurité
+- 4 CVE "haute" ouvertes depuis 3 sprints dans le backlog
+- Les logs contiennent des numéros de téléphone clients
+- Staging et prod utilisent les mêmes credentials de base de données
+- Aucun scan dans la CI/CD (uniquement `npm test`)
+- Les mots de passe sont stockés en MD5 en base
+
+**Consigne :** Rédigez un rapport d'audit structuré avec les risques priorisés et un plan d'action par sprint.
+
+--------------------------------------------------
+
+TP 3 : Rapport d'audit (risques) ✅
+
+| Risque | Sévérité | Justification |
+|--------|----------|--------------|
+| Mots de passe en MD5 | 🔴 Critique | MD5 = cassable en secondes avec rainbow tables |
+| Credentials partagés staging/prod | 🔴 Critique | Compromission staging = accès prod direct |
+| CVE haute non traitées (×4) | 🟠 Haute | Accumulation = dette de sécurité, exploitation possible |
+| PII (téléphones) dans les logs | 🟠 Haute | Violation RGPD + fuite en cas d'accès aux logs |
+| CI/CD sans scan sécurité | 🟠 Haute | Failles non détectées à chaque push |
+| DoD sans critère sécurité | 🟡 Moyenne | Aucun filet de sécurité dans le process |
+
+--------------------------------------------------
+
+TP 3 : Plan d'action par sprint ✅
+
+**Sprint en cours (immédiat) :**
+- 🔴 Migrer les mots de passe MD5 → bcrypt (migration progressive)
+- 🔴 Créer des credentials séparés pour staging
+
+**Sprint suivant :**
+- 🟠 Traiter les 4 CVE haute (patch + re-test)
+- 🟠 Masquer les données perso dans les logs
+- 🟠 Intégrer Semgrep + npm audit dans la CI/CD
+
+**Rétrospective :**
+- 🟡 Mettre à jour la DoD avec les critères sécurité
+- 🟡 Nommer un Security Champion
+
+**Métriques de suivi :** MTTR par sprint, nombre de CVE ouvertes, couverture SAST
+
+--------------------------------------------------
+
+TP 4 : Rédiger un post-mortem blameless (15 min)
+
+**Scénario :** Un développeur a commité un fichier `.env` avec une clé API de paiement en production. Le fichier est resté 3 jours sur GitHub public. 150 transactions frauduleuses ont eu lieu (12 000€).
+
+**Consigne :** Rédigez un post-mortem blameless complet avec timeline, cause racine, impact et actions correctives.
+
+--------------------------------------------------
+
+TP 4 : Solution ✅
+
+**Timeline :**
+- J0 09:42 : Commit du `.env` sur `main` (push sans revue)
+- J0–J3 : Fichier visible publiquement, scanné par des bots
+- J3 14:15 : Alerte du prestataire de paiement
+- J3 14:30 : Rotation de la clé API
+- J3 15:00 : Nettoyage historique git + audit des transactions
+
+**Cause racine (5 Whys) :** Pas de hook pre-commit pour détecter les secrets → `.gitignore` incomplet → pas de revue de code obligatoire sur `main` → aucun scan dans la CI
+
+--------------------------------------------------
+
+TP 4 : Actions correctives ✅
+
+**Actions immédiates :**
+- ✅ Rotation de toutes les clés API et credentials
+- ✅ Supprimer le fichier de l'historique git (`git filter-repo`)
+
+**Actions de fond (intégrées dans le backlog) :**
+- ✅ Installer `gitleaks` en hook pre-commit (obligatoire)
+- ✅ Ajouter GitLeaks dans le pipeline CI
+- ✅ Template `.gitignore` avec `.env*` par défaut
+- ✅ Règle : toute PR sur `main` doit être relue par un pair
+- ✅ Alerting sur usage anormal de l'API de paiement
+
+> **Pas de blame :** le développeur a fait une erreur humaine. Le système n'avait pas de filet de sécurité — c'est ça qu'on corrige.
+
+--------------------------------------------------
+

@@ -1,0 +1,88 @@
+============================================================
+Exercice Final : Audit de sécurité d'un projet agile
+Développer de manière sécurisée et agile — 12-13 mars 2026
+============================================================
+
+[ ÉNONCÉ — À REMETTRE AUX ÉTUDIANTS ]
+
+Contexte général 📋
+
+**Vous êtes Security Champion** d'une startup qui développe une appli de **e-commerce** en Scrum.
+
+L'équipe est au **Sprint 8**. Le projet a été développé vite, sans processus sécurité. Le CTO veut un bilan avant la mise en prod.
+
+**Stack :**
+- Backend : Node.js + Express
+- Base de données : PostgreSQL
+- Frontend : React
+- CI/CD : GitLab CI (actuellement : uniquement `npm test`)
+- Hébergement : Docker sur AWS
+
+--------------------------------------------------
+
+Partie 1 : Audit de code (20 min)
+
+**Analysez ce code et listez TOUTES les vulnérabilités avec leur catégorie OWASP :**
+
+```javascript
+const express = require('express')
+const app = express()
+
+const JWT_SECRET = 'monsecretjwt2025'
+
+app.post('/api/login', (req, res) => {
+  const { email, password } = req.body
+  const user = db.query(
+    `SELECT * FROM users WHERE email='${email}'`
+  )
+  if (user && user.password === password) {
+    const token = jwt.sign(
+      { id: user.id, role: user.role },
+      JWT_SECRET
+    )
+    res.json({ token, user })
+  }
+})
+```
+
+--------------------------------------------------
+
+Partie 2 : Remédiation (20 min)
+
+**Consigne :** Réécrivez le endpoint `/api/login` avec toutes les corrections.
+
+**Attendu :**
+- Requête SQL paramétrée
+- Vérification bcrypt du mot de passe
+- JWT avec expiration
+- Rate limiting
+- Validation des inputs
+- Gestion des erreurs
+
+--------------------------------------------------
+
+Partie 3 : Audit du projet agile (20 min)
+
+**Observations sur le projet au Sprint 8 :**
+
+| Élément | État |
+|---------|------|
+| DoD de l'équipe | Aucun critère sécurité |
+| Backlog | 3 CVE haute non traitées depuis 2 sprints |
+| CI/CD GitLab | Uniquement `npm test` |
+| Secrets | `.env.production` présent dans le repo git |
+| Logs | Emails clients présents en clair |
+| Mots de passe | Stockés en MD5 |
+
+**Consigne :** Rédigez le rapport d'audit avec risques priorisés et plan de correction par sprint.
+
+--------------------------------------------------
+
+Partie 4 : Pipeline GitLab CI sécurisé (15 min)
+
+**Consigne :** Rédigez le `.gitlab-ci.yml` complet pour ce projet.
+
+**Inclure :** scan secrets, SAST, SCA, build + scan Docker, déploiement conditionnel.
+
+--------------------------------------------------
+

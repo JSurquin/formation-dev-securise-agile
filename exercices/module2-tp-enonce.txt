@@ -1,0 +1,63 @@
+============================================================
+Module 2 : Intégration de la sécurité dans les projets agiles
+Développer de manière sécurisée et agile — 12-13 mars 2026
+============================================================
+
+[ ÉNONCÉ — À REMETTRE AUX ÉTUDIANTS ]
+
+TP 1 : Gestion des accès — RBAC (15 min)
+
+**Contexte :** Vous développez une plateforme RH en ligne. Les utilisateurs peuvent être : **employé**, **manager**, **RH**, **admin**.
+
+**Consigne :** Concevez la matrice RBAC pour ces fonctionnalités :
+- Voir sa fiche de paie
+- Voir la fiche de paie de son équipe
+- Modifier les salaires
+- Créer/supprimer des comptes utilisateurs
+
+--------------------------------------------------
+
+TP 2 : Cryptographie appliquée (15 min)
+
+**Contexte :** La plateforme RH stocke des données sensibles. Vous devez décider comment les protéger.
+
+**Consigne :** Pour chaque donnée, choisissez la protection adaptée et justifiez :
+1. Mot de passe de connexion
+2. Numéro de sécurité sociale
+3. Données en transit (API REST)
+4. Fichiers de bulletins de paie (PDF)
+
+--------------------------------------------------
+
+TP 3 : Evil User Stories & mitigations (20 min)
+
+**Contexte :** Votre équipe Scrum travaille sur une app de **gestion de notes médicales**.
+
+**User Stories existantes :**
+1. "Je veux me connecter avec mon email et mot de passe"
+2. "Je veux consulter le dossier médical d'un patient"
+3. "Je veux envoyer un message à un autre praticien"
+4. "Je veux exporter le dossier d'un patient en PDF"
+
+**Consigne :** Rédigez une Evil User Story + mitigation pour chacune.
+
+--------------------------------------------------
+
+TP 4 : Construire un Sprint avec sécurité intégrée (15 min)
+
+**Contexte :** Sprint 3 de la plateforme RH. Backlog disponible :
+
+| Story | Points | Type |
+|-------|--------|------|
+| Upload de documents RH | 8 | Feature |
+| Evil Story : limite type de fichier | 3 | Sécu |
+| CVE critique sur multer (lib upload) | 2 | Bug sécu |
+| Notifications par email | 5 | Feature |
+| XSS sur la page de profil | 3 | Bug sécu |
+| Tableau de bord manager | 8 | Feature |
+| Mise à jour dépendances | 3 | Tech |
+
+**Capacité : 30 points. Consigne :** composez le sprint en justifiant l'ordre de priorité.
+
+--------------------------------------------------
+
