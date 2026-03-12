@@ -23,7 +23,7 @@ routeAlias: 'owasp-top10'
 
 ---
 
-# OWASP Top 10 - Vue d'ensemble 📊
+#### OWASP Top 10 - Vue d'ensemble 📊
 
 <div class="text-xs">
 

@@ -245,6 +245,8 @@ Le Manifeste Agile contient 12 principes. Voici ceux directement applicables à 
 - Prédire combien de sprints pour livrer le backlog restant
 - Détecter les sprints où l'équipe a été ralentie (incident, dette technique)
 
+<div class="text-xs">
+
 **Exemple de suivi sur 5 sprints :**
 
 | Sprint | Vélocité | Observation |
@@ -254,6 +256,8 @@ Le Manifeste Agile contient 12 principes. Voici ceux directement applicables à 
 | 3 | 12 pts | CVE critique traité en urgence |
 | 4 | 26 pts | Productivité au top |
 | 5 | 22 pts | Stable |
+
+</div>
 
 ---
 

@@ -84,6 +84,8 @@
 
 **Contexte :** Sprint 3 de la plateforme RH. Backlog disponible :
 
+<div class="text-xs">
+
 | Story | Points | Type |
 |-------|--------|------|
 | Upload de documents RH | 8 | Feature |
@@ -93,6 +95,8 @@
 | XSS sur la page de profil | 3 | Bug sécu |
 | Tableau de bord manager | 8 | Feature |
 | Mise à jour dépendances | 3 | Tech |
+
+</div>
 
 **Capacité : 30 points. Consigne :** composez le sprint en justifiant l'ordre de priorité.
 

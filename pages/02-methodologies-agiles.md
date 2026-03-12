@@ -378,6 +378,8 @@ $ npm audit
 - Délai moyen avant détection : **204 jours**
 - Délai moyen avant confinement : **73 jours** supplémentaires
 
+<div class="text-xs">
+
 **Par type de faille :**
 | Vecteur | Coût moyen |
 |---------|-----------|
@@ -385,6 +387,8 @@ $ npm audit
 | Phishing | 4,76 M$ |
 | Cloud misconfiguration | 4,0 M$ |
 | Vulnérabilité logicielle | 4,5 M$ |
+
+</div>
 
 ---
 

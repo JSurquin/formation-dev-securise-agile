@@ -86,6 +86,8 @@
 
 # TP 4 : Planifier un Sprint 1 sécurisé (15 min)
 
+<div class="text-xs">
+
 **Capacité de l'équipe :** 40 story points sur 2 semaines.
 
 | Story | Points | Priorité |
@@ -99,6 +101,8 @@
 | Mise en place pipeline CI/CD sécurisé | 5 | Haute |
 
 **Consigne :** Sélectionnez les stories pour le Sprint 1 en justifiant.
+
+</div>
 
 ---
 
