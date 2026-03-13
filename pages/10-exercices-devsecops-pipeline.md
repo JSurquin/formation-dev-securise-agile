@@ -104,10 +104,14 @@ git push
 **3. Corriger et repusher**
 ```java
 // Supprimer la constante, utiliser une variable d'environnement
-String awsKey = System.getenv("AWS_KEY");
+String stripeKey = System.getenv("STRIPE_KEY");
 ```
 
-**✅ Critère de validation :** le pipeline échoue sur le stage secrets, puis repasse au vert après correction.
+**⚠️ Attention :** si vous repushzez simplement sans la clé, Gitleaks **trouvera quand même la clé dans l'historique git** des commits précédents. Pour que le pipeline repasse au vert, il faut **recréer le projet** (ou faire un `git rebase` pour réécrire l'historique).
+
+> C'est volontairement la leçon la plus importante : **un secret committé même une seule fois doit être révoqué**. Réécrire l'historique ne suffit pas si quelqu'un a déjà cloné le repo.
+
+**✅ Critère de validation :** comprendre pourquoi Gitleaks bloque même après correction du fichier.
 
 ---
 
