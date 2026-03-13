@@ -313,6 +313,8 @@ sast-bearer:
 
 ---
 
+# Chemin A : pipeline Java — `.gitlab-ci.yml` (2/2)
+
 ```yaml
 sca-owasp:
   stage: build
@@ -496,6 +498,8 @@ networks:
     driver: bridge
 ```
 
+---
+
 > **Tout est local dans le même réseau Docker.** Webhook = `http://jenkins:8080/...`  
 > Pas de Cloudflare Tunnel — GitLab et Jenkins se parlent directement.
 
@@ -558,6 +562,8 @@ Scan Multibranch Pipeline Triggers → Interval : 1 minute → Save
 ```
 
 Jenkins détecte toutes les branches avec un `Jenkinsfile` et crée un pipeline par branche.
+
+---
 
 **Étape 3 : Dans GitLab local — créer le webhook**
 
@@ -744,6 +750,8 @@ pipeline {
 | **GitLab self-hosted** | ❌ Indisponible | ✅ |
 | **Grouper les MR** | ❌ | ✅ (1 MR pour 10 deps) |
 
+---
+
 **Chemin A** → Renovate pointe vers `https://gitlab.com/api/v4` (cloud)  
 **Chemin B** → Renovate pointe vers `http://gitlab/api/v4` (GitLab local dans Docker)
 
@@ -897,6 +905,8 @@ bearer scan .
 | **SCA** | OWASP Dep-Check | Composer audit | CVE dans les dépendances |
 | **Image Docker** | Trivy | Trivy | CVE dans l'image finale |
 | **Dépendances** | Renovate | Renovate | MR auto quand dépendance obsolète |
+
+---
 
 **Pipeline = filet de sécurité à 4 couches :**
 ```
