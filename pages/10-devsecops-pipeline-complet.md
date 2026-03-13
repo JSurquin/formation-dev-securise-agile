@@ -16,6 +16,8 @@ routeAlias: 'devsecops-pipeline-complet'
 
 > **Analogie :** Jusqu'ici on a vu les ingrédients séparément (SAST, DAST, CI/CD, secrets...). Ce module, c'est la recette complète — on assemble tout, de la création du projet jusqu'au pipeline qui bloque automatiquement les failles.
 
+<small>
+
 **Ce qu'on va construire — deux chemins :**
 
 | | Chemin A | Chemin B |
@@ -27,6 +29,10 @@ routeAlias: 'devsecops-pipeline-complet'
 | **RAM nécessaire** | ~200 MB (Runner seul, pas de GitLab local) | ~3.8 GiB (GitLab + Jenkins) |
 | **Difficulté** | ⭐⭐ Simple | ⭐⭐⭐ Intermédiaire |
 
+</small>
+
+---
+
 > **Règle d'or :** Runner GitLab et Jenkins font le **même travail** (exécuter les pipelines). On choisit l'un **OU** l'autre, jamais les deux en même temps pour le même projet.
 
 ---
@@ -34,6 +40,8 @@ routeAlias: 'devsecops-pipeline-complet'
 # C'est quoi Docker ? (pour ceux qui ne connaissent pas) 🐳
 
 > **Analogie :** Docker, c'est comme des **appartements préfabriqués en kit**. Au lieu de construire une maison de A à Z (installer Linux, puis Java, puis GitLab...), tu télécharges une boîte déjà prête qui contient tout. Tu la poses sur ta machine, elle démarre, et tu l'utilises. Quand tu n'en veux plus, tu la supprimes sans laisser de trace.
+
+<div class="text-xs">
 
 **Concepts clés :**
 
@@ -43,6 +51,8 @@ routeAlias: 'devsecops-pipeline-complet'
 | **Conteneur** | L'appartement construit | L'image qui tourne sur ta machine |
 | **Docker Compose** | Le lotissement entier | Plusieurs conteneurs qui se parlent |
 | **Volume** | Le garde-meuble | Les données qui persistent si on relance |
+
+</div>
 
 ---
 
@@ -65,9 +75,13 @@ docker compose version    # Docker Compose version v2.x.x
 
 **Étape 3 : Augmenter la RAM allouée à Docker** ⚠️ CRITIQUE
 
+<div class="text-xs">
+
 ```
 Docker Desktop → Settings → Resources → Memory → 6144 MB minimum
 ```
+
+</div>
 
 > **⚠️ Testé en live :** avec moins de 6 GiB alloués à Docker, GitLab crashe (Puma, son serveur Rails, manque de mémoire). Jenkins seul ne nécessite que 400 MB.
 
@@ -86,12 +100,16 @@ system_profiler SPHardwareDataType | grep Memory
 free -h
 ```
 
+<div class="text-xs">
+
 | RAM machine | Alloué à Docker | Solution |
 |-------------|-----------------|----------|
 | **≥ 16 GB** | 8 GB | ✅ **Chemin A ou B** |
 | **12-15 GB** | 6 GB | ✅ **Chemin A ou B** — lent au 1er démarrage pour B |
 | **8-11 GB** | Max 5 GB | ⚠️ **Chemin A de préférence** — gitlab.com + Runner, ~200 MB seulement |
 | **< 8 GB** | Insuffisant | ❌ **Chemin A uniquement** — gitlab.com + Runner léger |
+
+</div>
 
 ---
 
@@ -118,11 +136,11 @@ docker run --rm -v $(pwd):/app bearer/bearer:latest scan /app
 ```
 
 ---
+layout: new-section
+---
 
-# ═══════════════════════════════════
 # CHEMIN A — gitlab.com + Runner local
-# `.gitlab-ci.yml` exécuté par le Runner
-# ═══════════════════════════════════
+#### `.gitlab-ci.yml` exécuté par le Runner
 
 ---
 
@@ -334,11 +352,11 @@ docker-build-scan:
 ```
 
 ---
+layout: new-section
+---
 
-# ═══════════════════════════════════
 # CHEMIN B — tout self-hosted
-# GitLab + Jenkins dans Docker
-# ═══════════════════════════════════
+### GitLab + Jenkins dans Docker
 
 ---
 
@@ -435,6 +453,8 @@ services:
 ```
 
 ---
+
+# Chemin B : docker-compose.yml 🗂️
 
 ```yaml
   jenkins:
