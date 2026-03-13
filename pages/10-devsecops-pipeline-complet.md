@@ -20,10 +20,11 @@ routeAlias: 'devsecops-pipeline-complet'
 
 | | Chemin A | Chemin B |
 |--|----------|----------|
-| **Outil CI** | GitLab CI + Runner | Jenkins |
-| **Déclenché par** | Push sur GitLab | Webhook GitLab → Jenkins |
-| **Config pipeline** | `.gitlab-ci.yml` | `Jenkinsfile` |
+| **GitLab** | **gitlab.com** (cloud, gratuit) | **Self-hosted** (conteneur local) |
+| **Outil CI** | GitLab Runner (Docker local) | Jenkins (Docker local) |
+| **Config pipeline** | `.gitlab-ci.yml` | `Jenkinsfile` (dans le repo) |
 | **Runner GitLab** | ✅ Nécessaire | ❌ Inutile — Jenkins joue ce rôle |
+| **RAM nécessaire** | ~200 MB (Runner seul, pas de GitLab local) | ~3.8 GiB (GitLab + Jenkins) |
 | **Difficulté** | ⭐⭐ Simple | ⭐⭐⭐ Intermédiaire |
 
 > **Règle d'or :** Runner GitLab et Jenkins font le **même travail** (exécuter les pipelines). On choisit l'un **OU** l'autre, jamais les deux en même temps pour le même projet.
@@ -87,15 +88,39 @@ free -h
 
 | RAM machine | Alloué à Docker | Solution |
 |-------------|-----------------|----------|
-| **≥ 16 GB** | 8 GB | ✅ **Chemin A ou B** — tout en local |
-| **12-15 GB** | 6-8 GB | ✅ **Chemin A ou B** — lent au 1er démarrage |
-| **8-11 GB** | Max 5 GB | ⚠️ **Chemin B uniquement** — Jenkins seul en local |
-| **< 8 GB** | Insuffisant | ❌ Utiliser gitlab.com + Jenkins sur [play-with-docker.com](https://labs.play-with-docker.com/) |
+| **≥ 16 GB** | 8 GB | ✅ **Chemin A ou B** |
+| **12-15 GB** | 6 GB | ✅ **Chemin A ou B** — lent au 1er démarrage pour B |
+| **8-11 GB** | Max 5 GB | ⚠️ **Chemin A de préférence** — gitlab.com + Runner, ~200 MB seulement |
+| **< 8 GB** | Insuffisant | ❌ **Chemin A uniquement** — gitlab.com + Runner léger |
+
+---
+
+# C'est quoi Bearer ? 🔍 (SAST — outil de la chaîne)
+
+> **Analogie :** Bearer, c'est un inspecteur de code qui lit **tout ton projet en quelques secondes** et te dit "ligne 4 : tu affiches une donnée utilisateur sans la nettoyer — risque d'injection XSS (CWE-79)". Il comprend le **flux des données** dans ton code, pas juste des patterns.
+
+**Pourquoi Bearer et pas autre chose ?**
+
+| | Semgrep CE | SonarQube | Bearer |
+|--|------------|-----------|--------|
+| **Open source** | ✅ | ⚠️ Freemium | ✅ 100% |
+| **Image Docker officielle** | ✅ | ✅ lourd | ✅ |
+| **Exit code 1 sur findings** | ⚠️ Nécessite `--error` | Complexe | ✅ Automatique |
+| **PHP + Java** | ✅ | ✅ | ✅ |
+| **Détection XSS, SQLi, secrets** | ✅ | ✅ | ✅ |
+| **CWE dans le rapport** | ✅ | ✅ | ✅ avec liens |
+
+**→ Bearer sort automatiquement en exit code 1 s'il trouve des failles. Pas de flag `--error` à ne pas oublier.**
+
+```bash
+# Tester Bearer en local (avant de mettre en CI/CD)
+docker run --rm -v $(pwd):/app bearer/bearer:latest scan /app
+```
 
 ---
 
 # ═══════════════════════════════════
-# CHEMIN A — GitLab CI + Runner
+# CHEMIN A — gitlab.com + Runner local
 # `.gitlab-ci.yml` exécuté par le Runner
 # ═══════════════════════════════════
 
@@ -103,68 +128,34 @@ free -h
 
 # Chemin A : architecture 🏗️
 
-> **Analogie :** GitLab est le chef de chantier. Le Runner est l'ouvrier sur le terrain. Quand tu pousses du code, GitLab dit au Runner "exécute ce pipeline". Jenkins n'intervient pas du tout.
+> **Analogie :** gitlab.com est le chef de chantier dans le cloud. Le Runner (sur ta machine, dans Docker) est l'ouvrier qui exécute les tâches. Le Runner se connecte *lui-même* vers gitlab.com — pas besoin de tunnel car c'est lui qui initie la connexion.
 
 ```
-┌─────────────────────────────────────────────┐
-│              Docker Compose — Chemin A       │
-│                                              │
-│  ┌─────────────┐    ┌──────────────────┐    │
-│  │  GitLab CE  │───►│  GitLab Runner   │    │
-│  │  port 8080  │    │  (exécute la CI) │    │
-│  └─────────────┘    └──────────────────┘    │
-│                                              │
-│  ┌──────────────────────────────────────┐   │
-│  │  Renovate (optionnel, cron)          │   │
-│  └──────────────────────────────────────┘   │
-└─────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────┐
+│  Internet              │  Machine locale (Docker Compose) │
+│                        │                                  │
+│  ┌────────────────┐    │  ┌──────────────────────────┐   │
+│  │   gitlab.com   │◄───┼──│    GitLab Runner         │   │
+│  │  (ton projet)  │    │  │  (exécute .gitlab-ci.yml)│   │
+│  └────────────────┘    │  └──────────────────────────┘   │
+│                        │                                  │
+│                        │  ┌──────────────────────────┐   │
+│                        │  │  Renovate (optionnel)    │   │
+│                        │  └──────────────────────────┘   │
+└──────────────────────────────────────────────────────────┘
 ```
 
-**Ce qu'on n'installe PAS dans ce chemin : Jenkins.**  
-Le Runner GitLab suffit pour exécuter `.gitlab-ci.yml`.
+**Pas de conteneur GitLab local.** Le Runner se connecte vers gitlab.com pour récupérer les jobs.  
+**Pas de Jenkins. Pas de Cloudflare Tunnel.** Le Runner initie la connexion sortante vers gitlab.com.
 
 ---
 
 # Chemin A : docker-compose.yml 🗂️
 
 ```yaml
-# devsecops-lab/docker-compose.yml — CHEMIN A (GitLab CI + Runner)
+# devsecops-lab/docker-compose.yml — CHEMIN A (gitlab.com + Runner local)
+# Pas de conteneur GitLab — on utilise gitlab.com directement
 services:
-  gitlab:
-    image: gitlab/gitlab-ce:18.9.2-ce.0
-    container_name: gitlab
-    hostname: gitlab.local
-    environment:
-      GITLAB_OMNIBUS_CONFIG: |
-        external_url 'http://gitlab.local'
-        nginx['listen_port'] = 80
-        nginx['listen_https'] = false
-        gitlab_rails['gitlab_shell_ssh_port'] = 2222
-        puma['worker_processes'] = 2
-        puma['min_threads'] = 1
-        puma['max_threads'] = 4
-        sidekiq['concurrency'] = 5
-        prometheus_monitoring['enable'] = false
-        gitlab_exporter['enable'] = false
-        node_exporter['enable'] = false
-        redis_exporter['enable'] = false
-        postgres_exporter['enable'] = false
-    ports:
-      - "8080:80"
-      - "2222:22"
-    volumes:
-      - gitlab-config:/etc/gitlab
-      - gitlab-logs:/var/log/gitlab
-      - gitlab-data:/var/opt/gitlab
-    networks:
-      - devsecops-net
-    restart: unless-stopped
-    shm_size: '256m'
-```
-
----
-
-```yaml
   gitlab-runner:
     image: gitlab/gitlab-runner:latest
     container_name: gitlab-runner
@@ -172,64 +163,57 @@ services:
     volumes:
       - runner-config:/etc/gitlab-runner
       - /var/run/docker.sock:/var/run/docker.sock
-    networks:
-      - devsecops-net
-    depends_on:
-      - gitlab
 
-  renovate:                         # optionnel — MR auto pour les dépendances
+  renovate:              # optionnel — MR auto pour les dépendances sur gitlab.com
     image: renovate/renovate:latest
     environment:
       - RENOVATE_PLATFORM=gitlab
-      - RENOVATE_ENDPOINT=http://gitlab/api/v4
+      - RENOVATE_ENDPOINT=https://gitlab.com/api/v4   # ← gitlab.com, pas local
       - RENOVATE_TOKEN=${RENOVATE_GITLAB_TOKEN}
       - RENOVATE_AUTODISCOVER=true
-    networks:
-      - devsecops-net
     profiles:
       - renovate
 
 volumes:
-  gitlab-config:
-  gitlab-logs:
-  gitlab-data:
   runner-config:
-
-networks:
-  devsecops-net:
-    driver: bridge
 ```
+
+> **Beaucoup plus léger que le Chemin B** : pas de GitLab à héberger en local.  
+> Le Runner se connecte vers gitlab.com tout seul — aucun port à exposer, aucun tunnel.
 
 ---
 
 # Chemin A : lancer et configurer 🚀
 
+**Étape 1 : Créer un projet sur gitlab.com**
+```
+→ https://gitlab.com → New Project → Create blank project
+→ Nom : php-devsecops-demo  (ou java-devsecops-demo)
+→ Visibility : Private
+→ ✅ Initialize with a README
+```
+
+**Étape 2 : Créer un Runner sur gitlab.com**
+```
+gitlab.com → Projet → Settings → CI/CD → Runners → New project runner
+→ Tag : docker
+→ Create runner → Copier le token (glrt-xxxx)
+```
+
+**Étape 3 : Lancer le Runner en local et l'enregistrer**
 ```bash
 docker compose up -d
 
-# Attendre ~3-5 min que GitLab soit prêt
-until [ "$(docker inspect gitlab --format='{{.State.Health.Status}}')" = "healthy" ]; do
-  echo "$(date +%H:%M:%S) — en attente..." && sleep 30
-done && echo "✅ GitLab prêt !"
-
-# Mot de passe root
-docker exec gitlab cat /etc/gitlab/initial_root_password | grep Password:
-```
-
-**Enregistrer le Runner** (après avoir créé un token dans GitLab → Admin → Runners) :
-
-```bash
 docker exec gitlab-runner gitlab-runner register \
   --non-interactive \
-  --url "http://gitlab" \
+  --url "https://gitlab.com" \
   --token "glrt-VOTRE_TOKEN" \
   --executor "docker" \
   --docker-image "alpine:latest" \
-  --docker-network-mode "devsecops-lab_devsecops-net" \
-  --description "docker-runner"
+  --description "runner-local"
 ```
 
-> `devsecops-lab` = nom du dossier. Vérifier avec `docker network ls | grep devsecops`.
+**Résultat :** le Runner apparaît en vert dans gitlab.com → Projet → Settings → CI/CD → Runners ✅
 
 ---
 
@@ -249,17 +233,16 @@ secrets-scan:
     entrypoint: [""]    # ⚠️ obligatoire — image sans shell
   script:
     - gitleaks detect --source . -v
-  allow_failure: false  # security gate bloquant
+  allow_failure: false
 
-sast-semgrep:
+sast-bearer:
   stage: sast
   image:
-    name: returntocorp/semgrep:latest
-    entrypoint: [""]    # ⚠️ obligatoire — même raison
+    name: bearer/bearer:latest
+    entrypoint: [""]    # ⚠️ obligatoire — image sans shell
   script:
-    - semgrep --config=p/php --config=p/owasp-top-ten --error .
-    #                                                  ^^^^^^
-    #   Sans --error, Semgrep retourne exit 0 même avec des failles !
+    - bearer scan /builds/$CI_PROJECT_PATH
+    # Exit code 1 automatique si failles → pas besoin de --error
   allow_failure: false
 
 sca-composer:
@@ -300,13 +283,13 @@ secrets-scan:
     - gitleaks detect --source . -v
   allow_failure: false
 
-sast:
+sast-bearer:
   stage: sast
   image:
-    name: returntocorp/semgrep:latest
+    name: bearer/bearer:latest
     entrypoint: [""]
   script:
-    - semgrep --config=p/java --config=p/owasp-top-ten --error .
+    - bearer scan /builds/$CI_PROJECT_PATH
   allow_failure: false
 ```
 
@@ -353,28 +336,63 @@ docker-build-scan:
 ---
 
 # ═══════════════════════════════════
-# CHEMIN B — GitLab + Jenkins
-# `Jenkinsfile` exécuté par Jenkins
+# CHEMIN B — tout self-hosted
+# GitLab + Jenkins dans Docker
 # ═══════════════════════════════════
 
 ---
 
 # Chemin B : architecture 🏗️
 
-> **Analogie :** GitLab est la sonnette d'alarme. Jenkins est le vigile qui patrouille. Quand quelqu'un pousse du code (ding !), GitLab envoie un webhook à Jenkins, Jenkins récupère le code et exécute le `Jenkinsfile`. Le Runner GitLab n'existe pas — Jenkins prend toute la place.
+> **Analogie :** GitLab est la sonnette d'alarme et Jenkins est le vigile — ils sont dans **le même bâtiment** (le même réseau Docker). GitLab envoie un webhook à Jenkins directement par le réseau interne. Pas besoin de passer par Internet, pas de tunnel.
 
 ```
-┌─────────────────────────────────────────────┐
-│              Docker Compose — Chemin B       │
-│                                              │
-│  ┌─────────────┐  webhook  ┌─────────────┐  │
-│  │  GitLab CE  │──────────►│   Jenkins   │  │
-│  │  port 8080  │           │  port 9090  │  │
-│  └─────────────┘           └─────────────┘  │
-│                                              │
-│  Pas de gitlab-runner ici !                 │
-│  Jenkins = l'exécuteur des pipelines        │
-└─────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────┐
+│              Machine locale — Docker Compose              │
+│                                                          │
+│  ┌─────────────┐  webhook interne  ┌─────────────────┐  │
+│  │  GitLab CE  │──────────────────►│    Jenkins      │  │
+│  │  port 8080  │  http://jenkins   │   port 9090     │  │
+│  └─────────────┘       :8080       └─────────────────┘  │
+│                                                          │
+│  ┌──────────────────────────────────────────────────┐   │
+│  │  Renovate (optionnel, pointe vers GitLab local)  │   │
+│  └──────────────────────────────────────────────────┘   │
+│                                                          │
+│  Pas de gitlab-runner — Jenkins remplace le Runner       │
+│  Pas de Cloudflare Tunnel — tout est en réseau local     │
+└──────────────────────────────────────────────────────────┘
+```
+
+> **Le `Jenkinsfile` est dans le repo GitLab** (à la racine). Jenkins le détecte automatiquement via le Multibranch Pipeline — c'est lui qui clone le repo et lit le fichier.
+
+---
+
+# Chemin B : Dockerfile.jenkins ⚠️ obligatoire
+
+> **Problème :** `jenkins/jenkins:lts-jdk17` ne contient pas le client `docker`.  
+> Or le Jenkinsfile utilise `docker.image(...).inside(...)` — il a besoin de `docker` en CLI.  
+> On monte le socket `/var/run/docker.sock` pour parler au daemon de l'hôte,  
+> **mais il faut aussi installer le client Docker à l'intérieur du conteneur Jenkins.**
+
+```dockerfile
+# Dockerfile.jenkins — à créer dans le même dossier que docker-compose.yml
+FROM jenkins/jenkins:lts-jdk17
+USER root
+RUN apt-get update && \
+    apt-get install -y ca-certificates curl && \
+    install -m 0755 -d /etc/apt/keyrings && \
+    curl -fsSL https://download.docker.com/linux/debian/gpg \
+      -o /etc/apt/keyrings/docker.asc && \
+    chmod a+r /etc/apt/keyrings/docker.asc && \
+    echo "deb [arch=$(dpkg --print-architecture) \
+      signed-by=/etc/apt/keyrings/docker.asc] \
+      https://download.docker.com/linux/debian \
+      $(. /etc/os-release && echo "$VERSION_CODENAME") stable" \
+      > /etc/apt/sources.list.d/docker.list && \
+    apt-get update && \
+    apt-get install -y docker-ce-cli && \
+    rm -rf /var/lib/apt/lists/*
 ```
 
 ---
@@ -382,7 +400,7 @@ docker-build-scan:
 # Chemin B : docker-compose.yml 🗂️
 
 ```yaml
-# devsecops-lab/docker-compose.yml — CHEMIN B (GitLab + Jenkins)
+# devsecops-lab/docker-compose.yml — CHEMIN B (tout self-hosted)
 services:
   gitlab:
     image: gitlab/gitlab-ce:18.9.2-ce.0
@@ -420,7 +438,9 @@ services:
 
 ```yaml
   jenkins:
-    image: jenkins/jenkins:lts-jdk17
+    build:
+      context: .
+      dockerfile: Dockerfile.jenkins   # image custom — Jenkins + Docker CLI
     container_name: jenkins
     user: root
     ports:
@@ -433,7 +453,17 @@ services:
       - devsecops-net
     restart: unless-stopped
 
-  # Pas de gitlab-runner ici — Jenkins remplace le Runner
+  renovate:              # optionnel — pointe vers GitLab local
+    image: renovate/renovate:latest
+    environment:
+      - RENOVATE_PLATFORM=gitlab
+      - RENOVATE_ENDPOINT=http://gitlab/api/v4   # ← GitLab local dans Docker
+      - RENOVATE_TOKEN=${RENOVATE_GITLAB_TOKEN}
+      - RENOVATE_AUTODISCOVER=true
+    networks:
+      - devsecops-net
+    profiles:
+      - renovate
 
 volumes:
   gitlab-config:
@@ -446,7 +476,8 @@ networks:
     driver: bridge
 ```
 
-> **La différence avec le Chemin A :** `gitlab-runner` est retiré, `jenkins` est ajouté. Le volume `runner-config` disparaît, `jenkins-data` le remplace.
+> **Tout est local dans le même réseau Docker.** Webhook = `http://jenkins:8080/...`  
+> Pas de Cloudflare Tunnel — GitLab et Jenkins se parlent directement.
 
 ---
 
@@ -481,30 +512,43 @@ Jenkins → Manage Jenkins → Credentials → Global → Add credentials
 
 # Chemin B : connecter GitLab → Jenkins 🔗
 
-**Étape 1 : Dans Jenkins — créer le pipeline**
+**Étape 1 : Dans Jenkins — ajouter les credentials GitLab**
+
+```
+Manage Jenkins → Credentials → (global) → Add Credentials
+→ Kind     : Username with password   ← PAS "GitLab API Token"
+→ Username : root
+→ Password : [mot de passe root GitLab]
+→ ID       : gitlab-root-creds
+```
+
+> **Pourquoi pas le Personal Access Token ?** Jenkins clone le repo via Git HTTP — Git attend un username/password. Le type "GitLab API Token" ne sert qu'à l'API REST, pas au clone.
+
+**Étape 2 : Dans Jenkins — créer le pipeline Multibranch**
 
 ```
 New Item → "php-devsecops-demo" → Multibranch Pipeline
 
-Branch Sources → Add Source → Git
+Branch Sources → Add Source → Git   ← "Git", PAS "GitLab"
   → Project Repository : http://gitlab/root/php-devsecops-demo.git
-  → Credentials        : gitlab-token (créé ci-dessus)
+  →                              ↑ nom du conteneur Docker dans le réseau
+  → Credentials : gitlab-root-creds → Validate → "Credentials OK"
 
-Scan Multibranch Pipeline Triggers
-  → Interval : 1 minute
-  → Save
+Scan Multibranch Pipeline Triggers → Interval : 1 minute → Save
 ```
 
-**Étape 2 : Dans GitLab — créer le webhook**
+Jenkins détecte toutes les branches avec un `Jenkinsfile` et crée un pipeline par branche.
+
+**Étape 3 : Dans GitLab local — créer le webhook**
 
 ```
 GitLab → Projet → Settings → Webhooks → Add new webhook
-  → URL   : http://jenkins:9090/project/php-devsecops-demo
-  → Trigger : Push events + Merge request events
-  → Add webhook
+  → URL     : http://jenkins:8080/project/php-devsecops-demo
+  →                  ↑ nom Docker    ↑ port interne (pas 9090 !)
+  → Trigger  : Push events
+  → SSL      : décocher (HTTP local)
+  → Add webhook → Test → Push events → HTTP 200 ✅
 ```
-
-> **Jenkins détecte automatiquement** toutes les branches qui contiennent un `Jenkinsfile` et crée un pipeline par branche. Chaque push déclenche le webhook → Jenkins démarre immédiatement.
 
 ---
 
@@ -530,11 +574,12 @@ pipeline {
             }
         }
 
-        stage('🔍 SAST — Semgrep PHP') {
+        stage('🔍 SAST — Bearer PHP') {
             steps {
                 script {
-                    docker.image('returntocorp/semgrep:latest').inside('--entrypoint=""') {
-                        sh 'semgrep --config=p/php --config=p/owasp-top-ten --error .'
+                    docker.image('bearer/bearer:latest').inside('--entrypoint=""') {
+                        sh 'bearer scan .'
+                        // Exit code 1 automatique si failles — pas de flag à ajouter
                     }
                 }
             }
@@ -547,7 +592,7 @@ pipeline {
         stage('📦 SCA — Composer Audit') {
             steps {
                 script {
-                    docker.image('composer:2.7').inside {
+                    docker.image('composer:2.7').inside('--entrypoint=""') {
                         sh '''
                             composer install --no-interaction -q
                             composer audit
@@ -604,11 +649,11 @@ pipeline {
             }
         }
 
-        stage('🔍 SAST — Semgrep Java') {
+        stage('🔍 SAST — Bearer Java') {
             steps {
                 script {
-                    docker.image('returntocorp/semgrep:latest').inside('--entrypoint=""') {
-                        sh 'semgrep --config=p/java --config=p/owasp-top-ten --error .'
+                    docker.image('bearer/bearer:latest').inside('--entrypoint=""') {
+                        sh 'bearer scan .'
                     }
                 }
             }
@@ -679,12 +724,23 @@ pipeline {
 | **GitLab self-hosted** | ❌ Indisponible | ✅ |
 | **Grouper les MR** | ❌ | ✅ (1 MR pour 10 deps) |
 
-**→ Sur GitLab self-hosted : Renovate est le seul choix.**
-
-**Disponible dans les deux chemins** (ajouter au docker-compose avec `profiles: [renovate]`) :
+**Chemin A** → Renovate pointe vers `https://gitlab.com/api/v4` (cloud)  
+**Chemin B** → Renovate pointe vers `http://gitlab/api/v4` (GitLab local dans Docker)
 
 ```bash
+# Même commande pour les deux — l'endpoint est déjà dans le docker-compose.yml
 RENOVATE_GITLAB_TOKEN=glpat-xxx docker compose --profile renovate run --rm renovate
+```
+
+**`renovate.json`** à ajouter à la racine du projet GitLab :
+
+```json
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "automerge": false,
+  "labels": ["dependencies"]
+}
 ```
 
 ---
@@ -693,15 +749,16 @@ RENOVATE_GITLAB_TOKEN=glpat-xxx docker compose --profile renovate run --rm renov
 
 > **Analogie :** Chemin A = voiture automatique, facile à prendre en main. Chemin B = voiture manuelle avec plus d'options mais plus de configuration.
 
-| Critère | Chemin A — GitLab CI | Chemin B — Jenkins |
-|---------|---------------------|--------------------|
-| **Composants** | GitLab + Runner | GitLab + Jenkins |
-| **Config pipeline** | `.gitlab-ci.yml` | `Jenkinsfile` (Groovy) |
-| **RAM nécessaire** | GitLab (~3 GB) + Runner (~30 MB) | GitLab (~3 GB) + Jenkins (~800 MB) |
-| **Résultats visibles** | Directement dans GitLab | Dans l'interface Jenkins |
-| **Plugins disponibles** | ~30 natifs | 1800+ |
-| **Courbe d'apprentissage** | ⭐⭐ Faible | ⭐⭐⭐ Moyenne |
-| **Usage** | Startups, projets agiles | Entreprises, pipelines complexes |
+| Critère | Chemin A — gitlab.com + Runner | Chemin B — tout self-hosted |
+|---------|--------------------------------|-----------------------------|
+| **GitLab** | gitlab.com (cloud) | Self-hosted (Docker local) |
+| **Outil CI** | GitLab Runner | Jenkins |
+| **Config pipeline** | `.gitlab-ci.yml` | `Jenkinsfile` (dans le repo) |
+| **RAM Docker** | ~200 MB (Runner seul) | ~3.8 GiB (GitLab + Jenkins) |
+| **Résultats** | Directement dans gitlab.com | Dans l'interface Jenkins |
+| **Webhook** | Pas nécessaire (Runner sort vers gitlab.com) | Interne Docker `http://jenkins:8080` |
+| **Plugins** | ~30 natifs | 1800+ |
+| **Usage** | Étudiants, petites équipes | Entreprises avec Jenkins existant |
 
 **→ Pour débuter :** Chemin A. **Pour les entreprises déjà sur Jenkins :** Chemin B.
 
@@ -774,7 +831,7 @@ external_url 'http://gitlab.local'
 nginx['listen_port'] = 80
 ```
 
-**2. `entrypoint: [""]` — obligatoire sur Gitleaks et Semgrep**
+**2. `entrypoint: [""]` — obligatoire sur Gitleaks et Bearer**
 ```yaml
 # ❌ Crash : "Error: unknown command sh for gitleaks"
 image: zricethezav/gitleaks:latest
@@ -783,17 +840,18 @@ image: zricethezav/gitleaks:latest
 image:
   name: zricethezav/gitleaks:latest
   entrypoint: [""]
+# Idem pour bearer/bearer:latest
 ```
 
 ---
 
-**3. `--error` — obligatoire sur Semgrep**
+**3. Bearer — exit code automatique (pas de flag à oublier)**
 ```bash
-# ❌ Retourne exit 0 même avec des failles → pipeline vert à tort !
-semgrep --config=p/php .
+# ✅ Bearer retourne exit 1 si findings — aucun flag requis
+bearer scan .
 
-# ✅ Retourne exit 1 si findings bloquants
-semgrep --config=p/php --error .
+# Contrairement à Semgrep qui nécessitait --error :
+# semgrep --config=p/php --error .    ← l'oubli de --error = pipeline vert à tort
 ```
 
 **4. Gitleaks scanne tout l'historique git**
@@ -815,7 +873,7 @@ semgrep --config=p/php --error .
 | Étape | Outil Java | Outil PHP | Rôle |
 |-------|-----------|-----------|------|
 | **Secrets** | Gitleaks | Gitleaks | Bloque les tokens/mots de passe |
-| **SAST** | Semgrep | Semgrep | Failles dans le code source |
+| **SAST** | Bearer | Bearer | Failles dans le code source (XSS, SQLi, secrets...) |
 | **SCA** | OWASP Dep-Check | Composer audit | CVE dans les dépendances |
 | **Image Docker** | Trivy | Trivy | CVE dans l'image finale |
 | **Dépendances** | Renovate | Renovate | MR auto quand dépendance obsolète |
@@ -836,12 +894,13 @@ Code pushé
 
 # En résumé : Module 10 📝
 
-- **Chemin A** = GitLab + **Runner** → `.gitlab-ci.yml` — simple, tout dans GitLab
-- **Chemin B** = GitLab + **Jenkins** → `Jenkinsfile` — Runner inutile, Jenkins remplace le Runner
+- **Chemin A** = **gitlab.com** + Runner local → `.gitlab-ci.yml` — léger, pas de GitLab à héberger
+- **Chemin B** = **tout self-hosted** (GitLab + Jenkins dans Docker) → `Jenkinsfile` dans le repo
 - **Ne pas mélanger** Runner GitLab et Jenkins pour le même projet — ils font le même travail
-- **RAM minimum** : 6 GiB alloués à Docker (testé en live)
+- **Chemin B : RAM minimum 6 GiB** à allouer à Docker (GitLab seul en consomme ~3 GiB)
 - **`external_url 'http://gitlab.local'`** — jamais `localhost:8080` (crash Puma)
-- **`entrypoint: [""]`** — obligatoire sur Gitleaks et Semgrep dans GitLab CI
-- **`--error`** — obligatoire sur Semgrep, sinon exit 0 même avec des failles
+- **Webhook Chemin B** = `http://jenkins:8080/project/...` — nom Docker, port interne, pas localhost
+- **Credentials Jenkins** = Username/Password (root + mdp GitLab), pas "GitLab API Token"
+- **`entrypoint: [""]`** — obligatoire sur Gitleaks et Bearer dans GitLab CI et Jenkinsfile
+- **Bearer** — exit code 1 automatique sur findings (pas de `--error` à ne pas oublier)
 - **Gitleaks scanne l'historique** — supprimer le fichier ne suffit pas, il faut révoquer la clé
-- **Renovate** = seul outil de MR automatique sur GitLab self-hosted

@@ -1,0 +1,40 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Secrets — Gitleaks') {
+            steps {
+                script {
+                    docker.image('zricethezav/gitleaks:latest').inside('--entrypoint=""') {
+                        sh 'gitleaks detect --source . -v'
+                    }
+                }
+            }
+        }
+
+        stage('SAST — Bearer PHP') {
+            steps {
+                script {
+                    docker.image('bearer/bearer:latest').inside('--entrypoint=""') {
+                        sh 'bearer scan .'
+                    }
+                }
+            }
+        }
+
+        stage('SCA — Composer Audit') {
+            steps {
+                script {
+                    docker.image('composer:2.7').inside('--entrypoint=""') {
+                        sh 'composer install --no-interaction -q && composer audit'
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        failure { echo 'Security gate bloqué' }
+        success { echo 'Tous les security gates passés' }
+    }
+}

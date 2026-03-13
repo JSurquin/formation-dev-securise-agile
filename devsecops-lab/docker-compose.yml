@@ -1,0 +1,70 @@
+services:
+  gitlab:
+    image: gitlab/gitlab-ce:18.9.2-ce.0
+    container_name: gitlab
+    hostname: gitlab.local
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'http://gitlab.local'
+        nginx['listen_port'] = 80
+        nginx['listen_https'] = false
+        gitlab_rails['gitlab_shell_ssh_port'] = 2222
+        puma['worker_processes'] = 2
+        puma['min_threads'] = 1
+        puma['max_threads'] = 4
+        sidekiq['concurrency'] = 5
+        prometheus_monitoring['enable'] = false
+        gitlab_exporter['enable'] = false
+        node_exporter['enable'] = false
+        redis_exporter['enable'] = false
+        postgres_exporter['enable'] = false
+    ports:
+      - "8080:80"
+      - "2222:22"
+    volumes:
+      - gitlab-config:/etc/gitlab
+      - gitlab-logs:/var/log/gitlab
+      - gitlab-data:/var/opt/gitlab
+    networks:
+      - devsecops-net
+    restart: unless-stopped
+    shm_size: '256m'
+
+  jenkins:
+    build:
+      context: .
+      dockerfile: Dockerfile.jenkins
+    container_name: jenkins
+    user: root
+    ports:
+      - "9090:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins-data:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - devsecops-net
+    restart: unless-stopped
+
+  renovate:
+    image: renovate/renovate:latest
+    container_name: renovate
+    environment:
+      - RENOVATE_PLATFORM=gitlab
+      - RENOVATE_ENDPOINT=http://gitlab/api/v4
+      - RENOVATE_TOKEN=${RENOVATE_GITLAB_TOKEN}
+      - RENOVATE_AUTODISCOVER=true
+    networks:
+      - devsecops-net
+    profiles:
+      - renovate
+
+volumes:
+  gitlab-config:
+  gitlab-logs:
+  gitlab-data:
+  jenkins-data:
+
+networks:
+  devsecops-net:
+    driver: bridge

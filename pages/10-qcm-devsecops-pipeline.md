@@ -53,12 +53,12 @@ layout: new-section
 
 - A) Trivy
 - B) Composer audit
-- C) Semgrep ✅
+- C) Bearer ✅
 - D) Gitleaks
 
 **✅ Réponse : C**
 
-> **Semgrep** avec `--config=p/java` analyse le code source Java pour détecter les patterns de failles (injection, XSS, etc.). Trivy scanne les images Docker, Gitleaks cherche les secrets, Composer audit est pour PHP/Composer.
+> **Bearer** (`bearer scan .`) analyse le code source Java et PHP pour détecter les failles (XSS, SQLi, secrets hardcodés...) en suivant le **flux des données**. Il retourne automatiquement un exit code 1 sur findings — contrairement à Semgrep qui nécessitait `--error`. Trivy scanne les images Docker, Gitleaks cherche les secrets, Composer audit est pour les CVE sur les dépendances PHP.
 
 </v-clicks>
 

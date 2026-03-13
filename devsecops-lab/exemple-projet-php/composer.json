@@ -1,0 +1,7 @@
+{
+    "name": "demo/php-devsecops",
+    "description": "Projet PHP de démonstration DevSecOps",
+    "require": {
+        "php": ">=8.0"
+    }
+}

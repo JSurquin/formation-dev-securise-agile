@@ -129,12 +129,14 @@ String stripeKey = System.getenv("STRIPE_KEY");
 # Pusher le code avec la faille XSS volontaire dans index.php
 ```
 
-**2. Observer la détection Semgrep**
+**2. Observer la détection Bearer**
 ```
-Le stage "sast-semgrep" doit échouer avec :
-→ php.lang.security.audit.xss.tainted-html-response.tainted-html-response
+Le stage "sast-bearer" doit échouer avec :
+→ HIGH: Unsanitized user input in 'echo' function (XSS) [CWE-79]
+   https://docs.bearer.com/reference/rules/php_lang_raw_output_using_user_input
    public/index.php line 3
    Détecté : echo "<h1>Hello, " . $name . "!</h1>";
+→ 1 check, 1 finding — exit code 1
 ```
 
 **3. Corriger la faille**
